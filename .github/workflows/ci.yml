@@ -50,6 +50,12 @@ jobs:
       - name: Generated files match the last design system sync
         run: npm run check:generated
 
+      - name: The data contract is valid
+        run: npm run api:lint
+
+      - name: Generated API types match the contract
+        run: npm run api:types && git diff --exit-code -- packages/api-contract/src/schema.d.ts
+
       - run: npm run typecheck
 
       - run: npm run build

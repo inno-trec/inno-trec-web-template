@@ -86,6 +86,16 @@ The reader's own time zone would be simpler, and for readers in the community's 
 
 **Revisit when** a tool compares communities in different time zones on one chart. That chart needs one shared clock, probably UTC, and says so.
 
+### 12. OpenAPI as the data contract; one identity for all tools
+
+The template proposes to WP2 that every data provider describes its interface in OpenAPI 3.1, versions it and checks it in CI ([API contract](api-contract.md)). The first draft is `packages/api-contract/openapi.yaml`; the starter imports types generated from it and simulates the provider in the contract's shapes.
+
+Users and roles belong to the community: one identity provider (OpenID Connect) signs people in for every tool, and the shared data API keeps one list of users and roles. The tools read them; only one place manages them.
+
+**Consequence.** A change to the contract changes the generated types, and the compiler shows every screen it affects. The template has no sign-in of its own. Energy credits, device control and events are not in the draft yet.
+
+**Revisit when** WP2 answers the proposal (tracking D1 and D7).
+
 ## Open
 
 These need an owner and an answer. None blocks using the template today.

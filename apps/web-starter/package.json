@@ -11,6 +11,7 @@
     "test": "playwright test"
   },
   "dependencies": {
+    "@inno-trec/api-contract": "*",
     "@inno-trec/tokens": "*",
     "@inno-trec/ui-web": "*",
     "echarts": "^6.1.0",

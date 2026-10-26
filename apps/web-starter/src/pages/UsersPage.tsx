@@ -14,19 +14,26 @@ import {
   type Column,
 } from '@inno-trec/ui-web';
 import { useEffect, useState, type FormEvent } from 'react';
-import { ApiError, getUsers, inviteUser, setUserActive, updateUser, type Role, type RoleId, type User, type UserStatus } from '../data/api';
+import { formatDate, formatRelative } from '../charts/format';
+import { ApiError, inviteUser, listUsers, updateUser, type Role, type RoleId, type User } from '../data/api';
+
+type UserStatus = User['status'];
 
 const STATUS: Record<UserStatus, { tone: 'success' | 'info' | 'neutral'; label: string }> = {
-  ACTIVE: { tone: 'success', label: 'Active' },
-  INVITED: { tone: 'info', label: 'Invited' },
-  DEACTIVATED: { tone: 'neutral', label: 'Deactivated' },
+  active: { tone: 'success', label: 'Active' },
+  invited: { tone: 'info', label: 'Invited' },
+  deactivated: { tone: 'neutral', label: 'Deactivated' },
 };
 
 type Load = { state: 'loading' } | { state: 'error' } | { state: 'ready'; users: User[]; roles: Role[] };
 type Open = 'invite' | 'edit' | 'deactivate' | null;
 
 /**
- * Pattern: a list with detail, and forms in dialogs. The page has one primary button (Invite user).
+ * Pattern: a list with detail, and forms in dialogs.
+ *
+ * Users and roles belong to the community, not to one tool: the shared data API (WP2) keeps one list
+ * for every INNO-TREC tool, and people sign in once through the project's identity provider (decision 12).
+ * Only one place in the platform should manage them; this page shows how that screen works. The page has one primary button (Invite user).
  * Each dialog is one short task; a form shows the backend's errors next to the fields.
  * Add ?demo=empty or ?demo=error to the address to see the other states.
  */
@@ -41,7 +48,7 @@ export function UsersPage() {
   useEffect(() => {
     let current = true;
     setLoad({ state: 'loading' });
-    getUsers().then(
+    listUsers().then(
       ({ users, roles }) => current && setLoad({ state: 'ready', users, roles }),
       () => current && setLoad({ state: 'error' }),
     );
@@ -74,7 +81,8 @@ export function UsersPage() {
   }
 
   const { users, roles } = load;
-  const roleLabel = (id: RoleId) => roles.find((r) => r.value === id)?.label ?? id;
+  const roleLabel = (id: RoleId) => roles.find((r) => r.id === id)?.label ?? id;
+  const roleOptions = roles.map((r) => ({ value: r.id, label: r.label, description: r.description }));
   const selected = users.find((u) => u.id === selectedId) ?? users[0];
 
   // Put the backend's answer into the list, select that user and say what happened.
@@ -130,7 +138,7 @@ export function UsersPage() {
             onActivate={() => {
               setNotice(undefined);
               setProblem(undefined);
-              setUserActive(selected.id, true).then(
+              updateUser(selected.id, { status: 'active' }).then(
                 (u) => saved(u, `${u.name} is active again`),
                 () => setProblem(`${selected.name} could not be activated`),
               );
@@ -139,10 +147,10 @@ export function UsersPage() {
         </div>
       )}
 
-      <InviteDialog open={open === 'invite'} roles={roles} onClose={() => setOpen(null)} onSaved={(u) => saved(u, `Invitation sent to ${u.email}`)} />
+      <InviteDialog open={open === 'invite'} roles={roleOptions} onClose={() => setOpen(null)} onSaved={(u) => saved(u, `Invitation sent to ${u.email}`)} />
       {selected && (
         <>
-          <EditDialog open={open === 'edit'} user={selected} roles={roles} onClose={() => setOpen(null)} onSaved={(u) => saved(u, `${u.name} is updated`)} />
+          <EditDialog open={open === 'edit'} user={selected} roles={roleOptions} onClose={() => setOpen(null)} onSaved={(u) => saved(u, `${u.name} is updated`)} />
           <DeactivateDialog open={open === 'deactivate'} user={selected} onClose={() => setOpen(null)} onSaved={(u) => saved(u, `${u.name} is deactivated`)} />
         </>
       )}
@@ -154,8 +162,8 @@ function UserDetail({ user, roleLabel, onEdit, onDeactivate, onActivate }: { use
   const facts: Array<[string, string]> = [
     ['Email', user.email],
     ['Role', roleLabel],
-    ['Last active', user.lastActive],
-    ['Access until', user.accessUntil || 'No end date'],
+    ['Last active', formatRelative(user.lastActiveAt)],
+    ['Access until', user.accessUntil ? formatDate(user.accessUntil) : 'No end date'],
     ['Email alerts', user.emailAlerts ? 'On' : 'Off'],
   ];
   return (
@@ -174,7 +182,7 @@ function UserDetail({ user, roleLabel, onEdit, onDeactivate, onActivate }: { use
           <Button size="sm" onClick={onEdit}>
             Edit
           </Button>
-          {user.status === 'DEACTIVATED' ? (
+          {user.status === 'deactivated' ? (
             <Button size="sm" onClick={onActivate}>
               Activate
             </Button>
@@ -210,9 +218,11 @@ function useSubmit() {
   return { working, fields, failed, setFields, run };
 }
 
+type RoleOption = { value: RoleId; label: string; description: string };
+
 const FAILED = 'The change could not be saved. Check your connection and try again. Nothing was changed.';
 
-function InviteDialog({ open, roles, onClose, onSaved }: { open: boolean; roles: Role[]; onClose: () => void; onSaved: (u: User) => void }) {
+function InviteDialog({ open, roles, onClose, onSaved }: { open: boolean; roles: RoleOption[]; onClose: () => void; onSaved: (u: User) => void }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [role, setRole] = useState<RoleId>('viewer');
@@ -264,9 +274,9 @@ function InviteDialog({ open, roles, onClose, onSaved }: { open: boolean; roles:
   );
 }
 
-function EditDialog({ open, user, roles, onClose, onSaved }: { open: boolean; user: User; roles: Role[]; onClose: () => void; onSaved: (u: User) => void }) {
+function EditDialog({ open, user, roles, onClose, onSaved }: { open: boolean; user: User; roles: RoleOption[]; onClose: () => void; onSaved: (u: User) => void }) {
   const [role, setRole] = useState<RoleId>(user.role);
-  const [accessUntil, setAccessUntil] = useState(user.accessUntil);
+  const [accessUntil, setAccessUntil] = useState(user.accessUntil ?? '');
   const [emailAlerts, setEmailAlerts] = useState(user.emailAlerts);
   const [note, setNote] = useState(user.note);
   const submit = useSubmit();
@@ -275,7 +285,7 @@ function EditDialog({ open, user, roles, onClose, onSaved }: { open: boolean; us
   useEffect(() => {
     if (!open) return;
     setRole(user.role);
-    setAccessUntil(user.accessUntil);
+    setAccessUntil(user.accessUntil ?? '');
     setEmailAlerts(user.emailAlerts);
     setNote(user.note);
     submit.setFields({});
@@ -283,7 +293,7 @@ function EditDialog({ open, user, roles, onClose, onSaved }: { open: boolean; us
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
-    submit.run(() => updateUser(user.id, { role, accessUntil, emailAlerts, note }), onSaved);
+    submit.run(() => updateUser(user.id, { role, accessUntil: accessUntil || null, emailAlerts, note }), onSaved);
   }
 
   return (
@@ -322,7 +332,7 @@ function DeactivateDialog({ open, user, onClose, onSaved }: { open: boolean; use
       actions={
         <>
           <Button onClick={onClose}>Cancel</Button>
-          <Button variant="danger" disabled={submit.working} onClick={() => submit.run(() => setUserActive(user.id, false), onSaved)}>
+          <Button variant="danger" disabled={submit.working} onClick={() => submit.run(() => updateUser(user.id, { status: 'deactivated' }), onSaved)}>
             {submit.working ? 'Deactivating…' : 'Deactivate'}
           </Button>
         </>

@@ -1,0 +1,507 @@
+openapi: 3.1.0
+info:
+  title: INNO-TREC data API
+  version: 0.1.0-draft
+  summary: Draft contract between INNO-TREC data providers (WP2) and the INNO-TREC web tools.
+  description: |
+    DRAFT for discussion with WP2. It describes the data the web tools read and the actions they send.
+    The rationale and the conventions are in docs/api-contract.md of the INNO-TREC template.
+
+    Conventions that apply to every operation:
+
+    - JSON in UTF-8. Field names in camelCase.
+    - Instants are RFC 3339 strings in UTC with a `Z` suffix. Calendar days are `YYYY-MM-DD`.
+    - Every community has an IANA time zone. Periods and daily totals use it.
+    - Every quantity names its unit, in the field name (`pvKw`, `energyKwh`) or in a `unit` field.
+    - A missing value is `null`, never `0`.
+    - The provider computes every figure (totals, shares, indicators, statuses). Clients display them.
+    - Errors use RFC 9457 problem details (`application/problem+json`), with field errors in `errors`.
+    - Texts meant for people (`title`, `text`) are written by the provider in the reader's language.
+servers:
+  - url: https://api.example.org/v1
+    description: Placeholder. Each deployment sets its own address.
+security:
+  - bearerAuth: []
+tags:
+  - name: Energy
+    description: Readings and energy totals of consumption, PV production, storage and grid.
+  - name: Performance
+    description: Performance indicators of each PV system.
+  - name: Data checks
+    description: Agreement between the data sources.
+  - name: Alerts
+    description: Corrective and predictive maintenance alerts.
+  - name: Assets
+    description: The community's PV systems, inverters, batteries and meters.
+  - name: Users
+    description: The people who use the tools, and their roles.
+
+paths:
+  /communities/{communityId}/energy:
+    get:
+      tags: [Energy]
+      operationId: getEnergyReport
+      summary: Readings and totals of consumption, PV production, storage and grid for a period
+      parameters:
+        - $ref: '#/components/parameters/CommunityId'
+        - $ref: '#/components/parameters/Period'
+      responses:
+        '200':
+          description: The report. `readings` is empty when no reading arrived in the period.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/EnergyReport' }
+        default: { $ref: '#/components/responses/Problem' }
+
+  /communities/{communityId}/pv-performance:
+    get:
+      tags: [Performance]
+      operationId: getPvPerformance
+      summary: Performance indicators of each PV system, against historical and community references
+      parameters:
+        - $ref: '#/components/parameters/CommunityId'
+        - name: period
+          in: query
+          required: true
+          schema: { type: string, enum: [last30days, last12months] }
+      responses:
+        '200':
+          description: One entry per PV system.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PvPerformanceReport' }
+        default: { $ref: '#/components/responses/Problem' }
+
+  /communities/{communityId}/source-checks:
+    get:
+      tags: [Data checks]
+      operationId: getSourceChecks
+      summary: How well the data sources agree, per quantity, for a period
+      description: |
+        For each quantity, one source is the reference (usually the meter). Every other source is compared with it.
+      parameters:
+        - $ref: '#/components/parameters/CommunityId'
+        - $ref: '#/components/parameters/Period'
+      responses:
+        '200':
+          description: One entry per quantity.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SourceCheckReport' }
+        default: { $ref: '#/components/responses/Problem' }
+
+  /communities/{communityId}/alerts:
+    get:
+      tags: [Alerts]
+      operationId: listAlerts
+      summary: Corrective and predictive alerts, newest first
+      parameters:
+        - $ref: '#/components/parameters/CommunityId'
+        - name: state
+          in: query
+          description: Leave out for every state.
+          schema: { type: array, items: { $ref: '#/components/schemas/AlertState' } }
+          style: form
+          explode: false
+      responses:
+        '200':
+          description: The alerts.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [alerts]
+                properties:
+                  alerts: { type: array, items: { $ref: '#/components/schemas/Alert' } }
+        default: { $ref: '#/components/responses/Problem' }
+
+  /alerts/{alertId}/acknowledge:
+    post:
+      tags: [Alerts]
+      operationId: acknowledgeAlert
+      summary: Say that someone is handling the alert
+      parameters: [{ $ref: '#/components/parameters/AlertId' }]
+      responses:
+        '200':
+          description: The alert after the change.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Alert' }
+        default: { $ref: '#/components/responses/Problem' }
+
+  /alerts/{alertId}/resolve:
+    post:
+      tags: [Alerts]
+      operationId: resolveAlert
+      summary: Close the alert and record what was done
+      parameters: [{ $ref: '#/components/parameters/AlertId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [resolution]
+              properties:
+                resolution: { type: string, minLength: 1, maxLength: 500, description: What was done. }
+      responses:
+        '200':
+          description: The alert after the change.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Alert' }
+        default: { $ref: '#/components/responses/Problem' }
+
+  /communities/{communityId}/assets:
+    get:
+      tags: [Assets]
+      operationId: listAssets
+      summary: The community's assets, with their open alerts
+      parameters: [{ $ref: '#/components/parameters/CommunityId' }]
+      responses:
+        '200':
+          description: The assets.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [assets]
+                properties:
+                  assets: { type: array, items: { $ref: '#/components/schemas/Asset' } }
+        default: { $ref: '#/components/responses/Problem' }
+
+  /communities/{communityId}/users:
+    get:
+      tags: [Users]
+      operationId: listUsers
+      summary: The people who may use the tools, and the roles they can have
+      parameters: [{ $ref: '#/components/parameters/CommunityId' }]
+      responses:
+        '200':
+          description: Users and roles.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [users, roles]
+                properties:
+                  users: { type: array, items: { $ref: '#/components/schemas/User' } }
+                  roles: { type: array, items: { $ref: '#/components/schemas/Role' } }
+        default: { $ref: '#/components/responses/Problem' }
+
+  /communities/{communityId}/invitations:
+    post:
+      tags: [Users]
+      operationId: inviteUser
+      summary: Invite a person to use the tools
+      parameters: [{ $ref: '#/components/parameters/CommunityId' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Invitation' }
+      responses:
+        '201':
+          description: The new user, with status `invited`.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/User' }
+        default: { $ref: '#/components/responses/Problem' }
+
+  /users/{userId}:
+    patch:
+      tags: [Users]
+      operationId: updateUser
+      summary: Change a user's role, access, alerts, note or status
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/UserChanges' }
+      responses:
+        '200':
+          description: The user after the change.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/User' }
+        default: { $ref: '#/components/responses/Problem' }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: An access token from the project's identity provider (to be agreed with WP2).
+
+  parameters:
+    CommunityId:
+      name: communityId
+      in: path
+      required: true
+      schema: { type: string }
+    AlertId:
+      name: alertId
+      in: path
+      required: true
+      schema: { type: string }
+    Period:
+      name: period
+      in: query
+      required: true
+      description: A period that starts at midnight in the community's time zone and ends now.
+      schema: { type: string, enum: [today, last7days, last30days] }
+
+  responses:
+    Problem:
+      description: An error, as RFC 9457 problem details.
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+
+  schemas:
+    Problem:
+      type: object
+      required: [type, title, status]
+      properties:
+        type: { type: string, format: uri-reference, description: 'A code for the kind of error, for example `/errors/validation`.' }
+        title: { type: string, description: A short sentence for people. }
+        status: { type: integer }
+        detail: { type: string }
+        errors:
+          type: array
+          description: One entry per field that failed validation.
+          items:
+            type: object
+            required: [field, message]
+            properties:
+              field: { type: string, description: 'The request field, for example `email`.' }
+              code: { type: string, description: 'A stable code, for example `email_taken`.' }
+              message: { type: string, description: A sentence for people that says what to do. }
+
+    Quantity:
+      type: object
+      required: [value, unit]
+      properties:
+        value: { type: number }
+        unit: { type: string, enum: [kW, kWh, kWp, '%'] }
+
+    # ---------- Energy ----------
+    Reading:
+      type: object
+      description: One interval of power readings. Power in kW, averaged over the interval.
+      required: [time, consumptionKw, pvKw, storageKw, gridKw, storageSocPct, estimated]
+      properties:
+        time: { type: string, format: date-time, description: Start of the interval. }
+        consumptionKw: { type: [number, 'null'] }
+        pvKw: { type: [number, 'null'] }
+        storageKw: { type: [number, 'null'], description: Positive while the battery charges. }
+        gridKw: { type: [number, 'null'], description: Positive while the community imports. }
+        storageSocPct: { type: [number, 'null'], description: Battery state of charge. }
+        estimated: { type: boolean, description: True until the meters confirm the reading. }
+    EnergyRow:
+      type: object
+      description: Energy of one hour (period `today`) or one day (longer periods).
+      required: [time, consumptionKwh, pvKwh, storageKwh, gridKwh, missingReadings]
+      properties:
+        time: { type: string, format: date-time }
+        consumptionKwh: { type: [number, 'null'] }
+        pvKwh: { type: [number, 'null'] }
+        storageKwh: { type: [number, 'null'], description: Net energy into the battery. }
+        gridKwh: { type: [number, 'null'], description: Net import; negative for net export. }
+        missingReadings: { type: integer, minimum: 0 }
+    EnergyReport:
+      type: object
+      required: [timeZone, from, to, resolutionMinutes, readings, rowUnit, rows, totals]
+      properties:
+        timeZone: { type: string, description: 'IANA name, for example `Europe/Lisbon`.' }
+        from: { type: string, format: date-time }
+        to: { type: string, format: date-time }
+        resolutionMinutes: { type: integer, minimum: 1 }
+        readings: { type: array, items: { $ref: '#/components/schemas/Reading' } }
+        rowUnit: { type: string, enum: [hour, day] }
+        rows: { type: array, items: { $ref: '#/components/schemas/EnergyRow' } }
+        totals:
+          type: object
+          required: [consumptionKwh, pvKwh, gridImportKwh, selfConsumptionPct]
+          properties:
+            consumptionKwh: { type: number }
+            pvKwh: { type: number }
+            gridImportKwh: { type: number }
+            selfConsumptionPct: { type: number, description: Share of the PV energy used inside the community. }
+
+    # ---------- Performance ----------
+    Indicator:
+      type: object
+      description: |
+        One performance indicator with its references. Definitions are still to be agreed (tracking D2).
+      required: [value, unit, historicalReference, communityReference, status]
+      properties:
+        value: { type: [number, 'null'] }
+        unit: { type: string, enum: ['%', kWh/kWp] }
+        historicalReference: { type: [number, 'null'], description: The same system's value in comparable past periods. }
+        communityReference: { type: [number, 'null'], description: The value of the community's systems as a whole. }
+        status: { type: string, enum: [normal, below_normal, unknown], description: Decided by the provider. }
+    SystemPerformance:
+      type: object
+      required: [assetId, name, peakPowerKwp, performanceRatio, availability, specificYield, efficiency]
+      properties:
+        assetId: { type: string }
+        name: { type: string }
+        peakPowerKwp: { type: number }
+        performanceRatio: { $ref: '#/components/schemas/Indicator' }
+        availability: { $ref: '#/components/schemas/Indicator' }
+        specificYield: { $ref: '#/components/schemas/Indicator' }
+        efficiency: { $ref: '#/components/schemas/Indicator' }
+    PvPerformanceReport:
+      type: object
+      required: [timeZone, from, to, systems, community]
+      properties:
+        timeZone: { type: string }
+        from: { type: string, format: date-time }
+        to: { type: string, format: date-time }
+        systems: { type: array, items: { $ref: '#/components/schemas/SystemPerformance' } }
+        community:
+          type: object
+          description: The community's systems taken together.
+          required: [performanceRatioPct, availabilityPct, specificYieldKwhPerKwp, efficiencyPct]
+          properties:
+            performanceRatioPct: { type: [number, 'null'] }
+            availabilityPct: { type: [number, 'null'] }
+            specificYieldKwhPerKwp: { type: [number, 'null'] }
+            efficiencyPct: { type: [number, 'null'] }
+
+    # ---------- Data checks ----------
+    SourceComparison:
+      type: object
+      required: [source, label, energyKwh, coveragePct, deviationPct, status, deviations]
+      properties:
+        source: { type: string, description: 'A stable code, for example `inverter` or `dss`.' }
+        label: { type: string, description: 'For people, for example "Inverter monitoring".' }
+        energyKwh: { type: [number, 'null'] }
+        coveragePct: { type: number, description: Share of the expected readings that arrived. }
+        deviationPct: { type: [number, 'null'], description: Difference from the reference source over the period. }
+        status: { type: string, enum: [within_tolerance, outside_tolerance, missing] }
+        deviations:
+          type: array
+          description: Daily (or hourly, for `today`) deviation from the reference source.
+          items:
+            type: object
+            required: [time, deviationPct]
+            properties:
+              time: { type: string, format: date-time }
+              deviationPct: { type: [number, 'null'] }
+    QuantityCheck:
+      type: object
+      required: [quantity, referenceSource, referenceLabel, referenceEnergyKwh, tolerancePct, comparisons]
+      properties:
+        quantity: { type: string, enum: [consumption, pv, storage, grid] }
+        referenceSource: { type: string }
+        referenceLabel: { type: string }
+        referenceEnergyKwh: { type: [number, 'null'] }
+        tolerancePct: { type: number, description: Deviations up to this value count as agreement. }
+        comparisons: { type: array, items: { $ref: '#/components/schemas/SourceComparison' } }
+    SourceCheckReport:
+      type: object
+      required: [timeZone, from, to, quantities]
+      properties:
+        timeZone: { type: string }
+        from: { type: string, format: date-time }
+        to: { type: string, format: date-time }
+        quantities: { type: array, items: { $ref: '#/components/schemas/QuantityCheck' } }
+
+    # ---------- Alerts ----------
+    AlertState:
+      type: string
+      enum: [new, acknowledged, resolved]
+    Alert:
+      type: object
+      required: [id, kind, severity, state, assetId, assetName, title, text, raisedAt]
+      properties:
+        id: { type: string }
+        kind:
+          type: string
+          enum: [corrective, predictive]
+          description: Corrective, a failure that needs repair; predictive, an indicator below normal.
+        severity: { type: string, enum: [info, warning, critical] }
+        state: { $ref: '#/components/schemas/AlertState' }
+        assetId: { type: string }
+        assetName: { type: string }
+        title: { type: string }
+        text: { type: string, description: 'What happened and what to do, written by the provider.' }
+        raisedAt: { type: string, format: date-time }
+        indicator:
+          description: For predictive alerts, the indicator that triggered it.
+          type: object
+          required: [name, value, reference, unit]
+          properties:
+            name: { type: string }
+            value: { type: number }
+            reference: { type: number }
+            unit: { type: string }
+        acknowledgedAt: { type: [string, 'null'], format: date-time }
+        acknowledgedBy: { type: [string, 'null'] }
+        resolvedAt: { type: [string, 'null'], format: date-time }
+        resolution: { type: [string, 'null'] }
+
+    # ---------- Assets ----------
+    Asset:
+      type: object
+      required: [id, name, type, site, status, dataQuality, ratings, installedOn, lastReadingAt, openAlerts]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        type: { type: string, enum: [pv_system, inverter, battery, meter] }
+        site: { type: string }
+        status: { type: string, enum: [running, attention, fault, offline] }
+        dataQuality: { type: string, enum: [CERTIFIED, MEASURED, ESTIMATED, MANUAL] }
+        ratings: { type: array, items: { $ref: '#/components/schemas/Quantity' } }
+        installedOn: { type: string, format: date }
+        lastReadingAt: { type: [string, 'null'], format: date-time }
+        openAlerts: { type: array, items: { $ref: '#/components/schemas/Alert' } }
+
+    # ---------- Users ----------
+    RoleId:
+      type: string
+      enum: [viewer, technician, manager, admin]
+    Role:
+      type: object
+      required: [id, label, description]
+      properties:
+        id: { $ref: '#/components/schemas/RoleId' }
+        label: { type: string }
+        description: { type: string, description: What the role may do. The provider decides it. }
+    User:
+      type: object
+      required: [id, name, email, role, status, lastActiveAt, accessUntil, emailAlerts, note]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        email: { type: string, format: email }
+        role: { $ref: '#/components/schemas/RoleId' }
+        status: { type: string, enum: [active, invited, deactivated] }
+        lastActiveAt: { type: [string, 'null'], format: date-time }
+        accessUntil: { type: [string, 'null'], format: date, description: Last day of access; null for no end. }
+        emailAlerts: { type: boolean }
+        note: { type: string, description: Visible to administrators only. }
+    Invitation:
+      type: object
+      required: [name, email, role, sendEmail]
+      properties:
+        name: { type: string, minLength: 1 }
+        email: { type: string, format: email }
+        role: { $ref: '#/components/schemas/RoleId' }
+        sendEmail: { type: boolean }
+    UserChanges:
+      type: object
+      minProperties: 1
+      properties:
+        role: { $ref: '#/components/schemas/RoleId' }
+        accessUntil: { type: [string, 'null'], format: date }
+        emailAlerts: { type: boolean }
+        note: { type: string, maxLength: 300 }
+        status: { type: string, enum: [active, deactivated] }

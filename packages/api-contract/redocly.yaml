@@ -1,0 +1,6 @@
+# Rules for `npm run api:lint`. The recommended set, plus the conventions in docs/api-contract.md.
+extends:
+  - recommended
+rules:
+  operation-4xx-response: off # errors use a `default` problem-details response
+  info-license: off           # the contract belongs to the INNO-TREC consortium and has no public license

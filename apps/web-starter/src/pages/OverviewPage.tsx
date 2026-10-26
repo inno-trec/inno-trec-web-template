@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react';
 import { formatDay, formatHour, formatNumber } from '../charts/format';
 import { LazyTimeSeriesChart as TimeSeriesChart } from '../charts/LazyTimeSeriesChart';
 import type { SeriesSpec } from '../charts/TimeSeriesChart';
-import { getEnergyReport, PERIODS, type EnergyReport, type EnergyRow, type Period } from '../data/api';
-import type { Reading } from '../data/synthetic';
+import { getEnergyReport, PERIODS, type EnergyReport, type EnergyRow, type Period, type Reading } from '../data/api';
 
 /*
  * Each series always has its own color token, in every chart. Kept outside the component
