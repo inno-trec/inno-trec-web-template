@@ -46,6 +46,22 @@ The packages are not published to npm. A team copies the repository with **Use t
 
 The components and the design system documents are in English, and the template follows American English.
 
+### 7. Newest stable versions, including Node
+
+The template runs on the newest LTS release of Node (pinned in `.nvmrc`) and the newest stable release of every dependency, except where another decision holds one back (Tailwind, decision 3). Teams copy the template, so a copy made from an old version stays old for a long time. Starting each copy current gives it the longest support window.
+
+**Consequence.** Dependabot proposes updates every week, and CI warns when a newer Node LTS exists. CI also runs on the newest Node release, so a break shows up before that release becomes LTS. Release candidates and odd-numbered Node versions are not used.
+
+**Revisit when** keeping up costs more than the support window is worth, for example when updates break the starter often.
+
+### 8. Browser smoke tests, not unit tests
+
+The starter has almost no logic: the backend computes values, and the components come from the design system. What breaks is layout and wiring. Playwright tests open the production build at 1440px and 400px wide and check every page in the side navigation for its heading, sideways scroll and console errors. A hash check fails CI when a generated file was edited by hand.
+
+**Consequence.** The tests cover the checks that `docs/contributing.md` used to ask for by hand. They do not judge whether a pattern reads well.
+
+**Revisit when** a tool adds logic of its own. That tool should add a unit test runner (Vitest fits the Vite setup).
+
 ## Open
 
 These need an owner and an answer. None blocks using the template today.
@@ -56,7 +72,5 @@ These need an owner and an answer. None blocks using the template today.
 | **Publishing the packages** (decision 5). | Decides how teams receive design system updates. |
 | **Fonts on restricted networks.** The stylesheet loads fonts from Google Fonts. | Deployments inside closed networks fall back to system fonts. |
 | **Top bar on phones.** The `TopBar` does not fit on narrow screens. | The starter works around it in `index.css`. Every team would otherwise rediscover it. |
-| **Tests.** The template checks types and the production build only. | Pattern changes are verified by hand. |
-| **License.** The template repository has no license file. | Needed before the repository is shared outside the project. |
 | **Dark mode.** The design system has one light theme. | Tools used in low light have no alternative. |
 | **Questions about the ECMS specification** in the [open questions](reference/open-questions.md). | Several decide what a screen shows, for example how a negative balance is explained. |

@@ -8,7 +8,7 @@
     "apps/*"
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   },
   "scripts": {
     "dev": "npm run dev -w web-starter",
@@ -16,6 +16,8 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "tokens": "npm run build -w @inno-trec/tokens",
     "sync:ds": "node scripts/sync-design-system.mjs",
-    "export:tokens": "node scripts/export-tokens.mjs"
+    "export:tokens": "node scripts/export-tokens.mjs",
+    "test": "npm run test --workspaces --if-present",
+    "check:generated": "node scripts/check-generated.mjs"
   }
 }

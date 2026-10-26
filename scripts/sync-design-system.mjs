@@ -13,7 +13,8 @@
  *   4. project/components/bundle.css       -> packages/ui-web/src/styles.css (fonts + tokens + component styles)
  *   5. uploads/Logos/*.png                 -> packages/ui-web/assets/logos/
  *   6. reference documents                 -> docs/reference/ (brand book, DESIGN.md, open questions, component guide)
- *   7. writes design-system.lock.json with the version that was copied
+ *   7. writes design-system.lock.json with the version that was copied and a hash of every generated file
+ *      (npm run check:generated compares them)
  *
  * The design system repository stays the source of truth. Never edit the generated files by hand.
  */
@@ -21,6 +22,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { hashGenerated } from './generated-files.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ds = path.resolve(process.argv[2] ?? process.env.INNO_TREC_DS ?? path.join(root, '..', 'inno-trec-design-system'));
@@ -109,6 +111,7 @@ const lock = {
   components: names.length,
   logos: logos.length,
   referenceDocs: ['brand-book.md', 'DESIGN.md', 'open-questions.md', 'components.md'],
+  files: hashGenerated(root),
 };
 fs.writeFileSync(path.join(root, 'design-system.lock.json'), `${JSON.stringify(lock, null, 2)}\n`);
 

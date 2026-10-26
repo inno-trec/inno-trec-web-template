@@ -25,17 +25,17 @@ The sync script stops with a message when the design system's `bundle.js` change
 ## Checks before a pull request
 
 ```sh
+npm run check:generated   # generated files match the last sync
 npm run typecheck
 npm run build
+npm test                  # every page at 1440px and 400px wide
 ```
 
-Then open the starter app and look at every page at 1440px and at 400px wide:
+CI runs the same four commands on every pull request, on the Node version in `.nvmrc` and on the newest Node release. Only the `.nvmrc` run blocks a merge; a failure on the newest Node is an early warning to look into.
 
-```sh
-npm run dev
-```
+`npm test` opens every page in the side navigation at 1440px and 400px wide. It fails when the page scrolls sideways (a wide table in its own container is fine), when the heading is missing, or when the console shows an error. It cannot judge whether a pattern reads well, so still click through a changed pattern with `npm run dev`.
 
-Nothing may scroll sideways except a wide table in its own container, and the browser console must show no errors. Test a change to a pattern by clicking through it, because a build proves only that the code compiles.
+Add a line for your change under `## [Unreleased]` in `CHANGELOG.md`.
 
 ## Adding an example app
 
@@ -57,7 +57,28 @@ Nothing may scroll sideways except a wide table in its own container, and the br
 
 In the repository settings on GitHub, turn on **Template repository**. Teams then get **Use this template** on the repository page.
 
-Tag releases (`v0.1.0`, `v0.2.0`) when the template changes in ways teams should know about, and describe the change in the release notes. Teams do not receive updates automatically, because their copy has diverged.
+Teams do not receive updates automatically, because their copy has diverged. They learn about changes from the releases.
+
+## Releasing a version
+
+The template version is the `version` in the root `package.json`. It follows semantic versioning: a minor version for new patterns, docs or a design system sync, a major version when a team must change its own code to take the update.
+
+1. On `main`, move the entries under `## [Unreleased]` in `CHANGELOG.md` into a new section, for example `## [0.2.0] - 2026-11-03`, and commit.
+2. Bump the version and create the tag:
+
+   ```sh
+   npm version minor -m "Release v%s"    # or patch / major
+   git push --follow-tags
+   ```
+
+3. The `Release` workflow runs all checks, confirms that the tag matches `package.json` and that `CHANGELOG.md` has a section for it, and publishes a GitHub release with that section as its notes.
+
+## Keeping versions current
+
+The template uses the newest stable release of Node and of every dependency (decision 7 in [Decisions](decisions.md)).
+
+- **Dependencies.** Dependabot opens a weekly pull request that groups minor and patch updates, and one pull request per major update. Merge them when CI passes. Read the changelog of a major update first. Dependabot skips Tailwind 4 (decision 3).
+- **Node.** CI warns when a newer LTS release exists than the one in `.nvmrc`. Then change `.nvmrc` and `engines.node` in `package.json` to the new major version, and update the Node version in `README.md` and `docs/getting-started.md`.
 
 ## Telling teams about changes
 

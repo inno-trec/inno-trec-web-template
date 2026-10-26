@@ -9,3 +9,8 @@ apps/*/dist/
 
 # Generated tokens are committed (they come from npm run sync:ds)
 !packages/tokens/dist/
+apps/*/test-results/
+apps/*/playwright-report/
+
+# Project instructions for AI agents are shared with every team
+!CLAUDE.md
