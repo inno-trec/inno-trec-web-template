@@ -79,7 +79,7 @@ apps/web-starter/src/
   App.tsx               the list of routes
   index.css             Tailwind, and one workaround for the top bar on phones
   layouts/ToolShell.tsx top bar, side navigation, page heading, footer
-  pages/                one file per screen (Overview, Assets, not found)
+  pages/                one file per screen (Overview, Assets, Users, not found)
   charts/               TimeSeriesChart (ECharts), its lazy loader, number and time formats
   data/synthetic.ts     synthetic 15-minute readings, replace with your API
   data/api.ts           fake backend (delay, ?demo=empty, ?demo=error), replace with your API

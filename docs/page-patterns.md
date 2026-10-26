@@ -145,6 +145,39 @@ When a page needs more than one pattern, stack them in a column and keep each in
 
 Components that already look like cards (`WalletBalance`, `EnergySummary`, `BalanceStatement`, `AccountCard`, `TransactionDetail`) do not go inside another `Card`. Nesting them draws a box inside a box.
 
+## 6. Forms in dialogs
+
+Source: [`web-starter/src/pages/UsersPage.tsx`](../apps/web-starter/src/pages/UsersPage.tsx)
+
+Use it for short tasks that create or change one thing: invite a user, edit a role, confirm a deactivation. The list stays visible behind the dialog, so the person keeps their place.
+
+```tsx
+<Dialog
+  open={open}
+  title="Invite a user"
+  onClose={close}
+  actions={<>
+    <Button onClick={close}>Cancel</Button>
+    <Button variant="primary" type="submit" form="invite-user">Invite user</Button>
+  </>}
+>
+  <form id="invite-user" onSubmit={onSubmit} noValidate>
+    <TextField label="Email" required value={email} onChange={…} error={errors.email} />
+    <RadioGroup label="Role" options={roles} value={role} onChange={setRole} />
+  </form>
+</Dialog>
+```
+
+Rules for this pattern:
+
+- **One task per dialog.** A form with more than about six fields, or with sections, gets its own page.
+- **Cancel first, main action last.** The main action is a verb ("Invite user", "Save changes"). It reads "Inviting…" and is disabled while the request runs.
+- **The form checks only that required fields are filled in.** The backend checks everything else (a taken email, a date in the past) and answers with a message per field. Show each message under its field with `error`, and show a general failure as an error `InlineAlert` at the top of the form that says nothing was changed.
+- **Confirm before taking something away.** Deactivating a user opens a small `Dialog` with a `danger` button. The question names the person ("Deactivate Rosa Almeida?") and the text says what happens and whether it can be undone.
+- **Say what happened.** After a save, the dialog closes, the list shows the backend's answer, and a success `InlineAlert` names the change.
+- **Choose the right control.** `RadioGroup` for one of two to five options (with a description when the effect is not obvious), `Select` for longer lists, `Checkbox` for a yes or no confirmed with the form, `Switch` for a setting that is on or off, `DateField` for one day, `Textarea` for long text.
+- **The backend owns the options.** The roles and their descriptions come from the backend, which also decides what each role may do.
+
 ## Loading, empty and error
 
 Data from a backend arrives late, can be empty and can fail. Every page that loads data in both apps shows all three. Add `?demo=empty` or `?demo=error` to the address to see them.

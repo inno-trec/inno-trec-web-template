@@ -35,6 +35,77 @@ Use Select to pick one value from a short fixed list (up to about 10 options).
 - `placeholder` adds a disabled first option; pair it with `defaultValue=""`.
 - Same `hint`/`error` behaviour as TextField.
 
+## Textarea
+
+Group: Forms
+
+Use Textarea for text longer than one line, such as a description or a note, always with a visible `label`.
+
+- Provide: `label`, `value`/`onChange` (or `defaultValue`), and native textarea props such as `rows` and `maxLength`.
+- Say in `hint` what to write and how long it may be ("Up to 500 characters").
+- Member screens set `large`.
+
+## DateField
+
+Group: Forms
+
+Use DateField to pick one day with the browser's own date picker, always with a visible `label`.
+
+- Provide: `label`, `value` and `onChange` (the value is "YYYY-MM-DD"), and `min`/`max` when only some days are allowed.
+- The browser shows the date in the reader's format and keeps the picker accessible.
+- For a period with a start and an end, use DateRangeField.
+
+## DateRangeField
+
+Group: Forms
+
+Use DateRangeField to pick a period with a start day and an end day, under one label.
+
+- Provide: `label`, `value` (`{ from, to }`, each "YYYY-MM-DD") and `onChange`. `min` and `max` limit both days.
+- The end cannot be before the start: each picker limits the other.
+- Put it in the filter row above charts and tables, next to a period Select when there are preset periods.
+
+## Checkbox
+
+Group: Forms
+
+Use Checkbox for one yes-or-no choice that the person confirms with the form, such as "Send an invitation email".
+
+- Provide: `label`, `checked`/`onChange` (or `defaultChecked`). The label says what happens when it is ticked.
+- For a setting that applies at once, use Switch. For one choice from several, use RadioGroup.
+- Member screens set `large`.
+
+## RadioGroup
+
+Group: Forms
+
+Use RadioGroup to choose one option from two to five, all visible at once.
+
+- Provide: `label` (the question), `options` (`{ value, label, description? }`), and `value`/`onChange` or `defaultValue`.
+- Put a short `description` under an option when its effect is not obvious, for example what a role may do.
+- For longer lists, use Select. Member screens set `large`.
+
+## Switch
+
+Group: Forms
+
+Use Switch for a setting that is either on or off, such as "Account active" or "Email alerts".
+
+- Provide: `label`, `checked`/`onChange` (or `defaultChecked`). The current state is also written beside the label ("On", "Off", or your own `onLabel`/`offLabel`).
+- A Switch applies its setting at once, or with the form it belongs to: say which in the `hint` when it is not clear.
+- Ask for confirmation in a Dialog before a switch takes access away from someone.
+
+## Dialog
+
+Group: Forms
+
+Use Dialog for a short task that needs the person's full attention, such as a form to invite a user or a confirmation before an action that is hard to undo.
+
+- Provide: `open`, `title`, `onClose`, `actions` (the buttons) and `children` (the content).
+- Put the cancel button first and the main action last. The main action is a verb ("Invite user", "Deactivate"); use `variant="danger"` for an action that takes something away.
+- The Dialog keeps focus inside, closes on Escape and hides the page behind it. Its content is created each time it opens, so a form inside starts empty.
+- Keep it short: one task, no tabs, no second Dialog on top. A long form gets its own page.
+
 ## Card
 
 Group: Layout

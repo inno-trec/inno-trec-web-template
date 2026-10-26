@@ -13,6 +13,8 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ### Added
 
+- Form components (design system): `Textarea`, `DateField`, `DateRangeField`, `Checkbox`, `RadioGroup`, `Switch`, and `Dialog` on the browser's `<dialog>` element.
+- "Users" page in the starter: invite, edit and deactivate users with forms in dialogs, field errors from the backend and a confirmation before deactivating. A smoke test runs the whole flow. New "Forms in dialogs" pattern and form rules in the docs.
 - Chart series colors (design system): `series-consumption`, `series-pv`, `series-storage` and `series-grid`. Each has a fixed meaning. They were checked together for contrast and for colorblind readers. They are in `DESIGN.md` and in the brand book's new "Charts" section.
 - `TimeSeriesChart` in the starter, built on Apache ECharts 6. It applies the chart rules (fixed colors, one y-axis, legend, dashed estimates, gaps for missing data) and loads on demand.
 - Synthetic 15-minute readings for a small community (`src/data/synthetic.ts`), and a fake backend (`src/data/api.ts`) with loading, empty and error states. Add `?demo=empty` or `?demo=error` to the address.

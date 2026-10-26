@@ -13,7 +13,14 @@ import { COMMUNITY, generateReadings, type Reading } from './synthetic';
  */
 
 export class ApiError extends Error {
-  constructor(public code: string) {
+  /**
+   * @param code A code for the whole request, for example UNAVAILABLE or VALIDATION.
+   * @param fields Messages per form field, written by the backend, for example { email: 'Someone already uses this email.' }.
+   */
+  constructor(
+    public code: string,
+    public fields: Record<string, string> = {},
+  ) {
     super(code);
   }
 }
@@ -253,4 +260,87 @@ export async function getAssets(): Promise<Asset[]> {
   if (demo() === 'error') throw new ApiError('UNAVAILABLE');
   if (demo() === 'empty') return [];
   return ASSETS;
+}
+
+/* ---------- Users ---------- */
+
+export type RoleId = 'viewer' | 'technician' | 'manager' | 'admin';
+export type UserStatus = 'ACTIVE' | 'INVITED' | 'DEACTIVATED';
+
+/** A role as the backend describes it. The backend decides what each role may do. */
+export interface Role {
+  value: RoleId;
+  label: string;
+  description: string;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: RoleId;
+  status: UserStatus;
+  /** Already formatted by the backend, for example "Today at 09:12". */
+  lastActive: string;
+  /** Last day of access, "YYYY-MM-DD", or "" for no end date. */
+  accessUntil: string;
+  emailAlerts: boolean;
+  /** Visible to administrators only. */
+  note: string;
+}
+
+export interface UserChanges {
+  role: RoleId;
+  accessUntil: string;
+  emailAlerts: boolean;
+  note: string;
+}
+
+const ROLES: Role[] = [
+  { value: 'viewer', label: 'Viewer', description: 'Sees energy data and assets.' },
+  { value: 'technician', label: 'Technician', description: 'Also handles maintenance suggestions and work orders.' },
+  { value: 'manager', label: 'Community manager', description: 'Also manages members, assets and settings.' },
+  { value: 'admin', label: 'Administrator', description: 'Also manages users and roles.' },
+];
+
+// Kept in memory, so changes last until the page reloads.
+let users: User[] = [
+  { id: 'u-1', name: 'Ana Ribeiro', email: 'ana.ribeiro@example.org', role: 'admin', status: 'ACTIVE', lastActive: 'Today at 09:12', accessUntil: '', emailAlerts: true, note: '' },
+  { id: 'u-2', name: 'Manuel Ferreira', email: 'manuel.ferreira@example.org', role: 'manager', status: 'ACTIVE', lastActive: 'Yesterday', accessUntil: '', emailAlerts: true, note: '' },
+  { id: 'u-3', name: 'Carla Sousa', email: 'carla.sousa@example.org', role: 'technician', status: 'ACTIVE', lastActive: '3 days ago', accessUntil: '2027-03-31', emailAlerts: true, note: 'Installer contract until the end of March.' },
+  { id: 'u-4', name: 'José Pinto', email: 'jose.pinto@example.org', role: 'viewer', status: 'INVITED', lastActive: 'Never', accessUntil: '', emailAlerts: false, note: '' },
+  { id: 'u-5', name: 'Rosa Almeida', email: 'rosa.almeida@example.org', role: 'viewer', status: 'DEACTIVATED', lastActive: '2 months ago', accessUntil: '', emailAlerts: false, note: 'Moved out of the community.' },
+];
+
+export async function getUsers(): Promise<{ users: User[]; roles: Role[] }> {
+  await delay(400);
+  if (demo() === 'error') throw new ApiError('UNAVAILABLE');
+  return { users: demo() === 'empty' ? [] : users, roles: ROLES };
+}
+
+export async function inviteUser(input: { name: string; email: string; role: RoleId; sendEmail: boolean }): Promise<User> {
+  await delay(600);
+  if (demo() === 'error') throw new ApiError('UNAVAILABLE');
+  // The backend validates the rules. The form only checked that the fields are filled in.
+  const email = input.email.trim().toLowerCase();
+  if (users.some((u) => u.email === email)) throw new ApiError('VALIDATION', { email: 'Someone already uses this email. Choose that person in the list instead.' });
+  const user: User = { id: `u-${Date.now()}`, name: input.name.trim(), email, role: input.role, status: 'INVITED', lastActive: 'Never', accessUntil: '', emailAlerts: false, note: '' };
+  users = [...users, user];
+  return user;
+}
+
+export async function updateUser(id: string, changes: UserChanges): Promise<User> {
+  await delay(500);
+  if (demo() === 'error') throw new ApiError('UNAVAILABLE');
+  const today = new Date().toISOString().slice(0, 10);
+  if (changes.accessUntil && changes.accessUntil < today) throw new ApiError('VALIDATION', { accessUntil: 'Choose today or a later day.' });
+  users = users.map((u) => (u.id === id ? { ...u, ...changes } : u));
+  return users.find((u) => u.id === id)!;
+}
+
+export async function setUserActive(id: string, active: boolean): Promise<User> {
+  await delay(500);
+  if (demo() === 'error') throw new ApiError('UNAVAILABLE');
+  users = users.map((u) => (u.id === id ? { ...u, status: active ? 'ACTIVE' : 'DEACTIVATED' } : u));
+  return users.find((u) => u.id === id)!;
 }

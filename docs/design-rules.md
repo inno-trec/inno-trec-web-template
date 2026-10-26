@@ -41,6 +41,14 @@ The design system has four series colors with a fixed meaning. Use them through 
 - **Show times in the community's time zone**, which the backend sends, and name it on the page ("Times in Europe/Lisbon"). Never the reader's: days, totals, solar peaks and alarm times must match what the community sees.
 - **Offer a table** with the same numbers, for readers who cannot use the chart.
 
+## Forms
+
+- **Every field has a visible label.** Mark required fields with `required`.
+- **The form checks only that required fields are filled in.** The backend validates the rest and answers per field. Show its message under the field.
+- **Write errors as one sentence** that says what to do: "Enter an email address, for example name@example.org."
+- **Confirm in a `Dialog` before an action that takes something away** (deactivate, delete, restart). Use a `danger` button with a verb.
+- **One task per dialog.** Longer forms get their own page.
+
 ## Accessibility
 
 - Text contrast of at least 4.5:1. Borders, icons, chart lines and focus rings at least 3:1.
@@ -83,6 +91,8 @@ The ECMS specification and user stories are ambiguous in places (how members aut
 - [ ] No shadows, gradients or rounded corners that you added
 - [ ] Every number has its unit, and missing data is not shown as zero
 - [ ] Every chart uses the series colors, one y-axis and a legend
+- [ ] Every form field has a label, and the backend's errors show under their fields
+- [ ] Actions that take something away ask for confirmation
 - [ ] Every table in a `Card` uses `flush` and has no `caption`
 - [ ] The footer with the EU funding emblem is still on every page
 - [ ] Checked at 400px and at 1440px wide

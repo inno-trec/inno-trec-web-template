@@ -1,6 +1,6 @@
 # web-starter
 
-The starter for an INNO-TREC web tool. Copy this app to start a tool of your own. Its pages fit the monitoring, PV performance and maintenance tools; for a credit tool, take the credit pages from [`credits-example`](../credits-example) as well.
+The starter for an INNO-TREC web tool. Copy this app to start a tool of your own. Its pages fit the monitoring, PV performance and maintenance tools, and every tool needs its user management; for a credit tool, take the credit pages from [`credits-example`](../credits-example) as well.
 
 ## What it shows
 
@@ -8,6 +8,7 @@ The starter for an INNO-TREC web tool. Copy this app to start a tool of your own
 | --- | --- | --- |
 | Overview | Monitoring over time: a period filter, totals, a power chart (kW), a battery chart (%) and a table view | `src/pages/OverviewPage.tsx` |
 | Assets | A list with detail: status, data quality and maintenance suggestions | `src/pages/AssetsPage.tsx` |
+| Users | Forms in dialogs: invite, edit (role, access end date, alerts, note) and confirm deactivation, with the backend's errors under each field | `src/pages/UsersPage.tsx` |
 | Any other address | A page not found | `src/pages/NotFoundPage.tsx` |
 
 The frame around the pages (top bar, side navigation, page heading, footer) is `src/layouts/ToolShell.tsx`. The routes are in `src/App.tsx`. The footer shows the EU funding emblem and statement. Every INNO-TREC tool keeps it.

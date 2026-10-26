@@ -72,3 +72,31 @@ test('the overview draws its charts', async ({ page }) => {
   await expect(page.locator('[data-chart] canvas')).toHaveCount(2);
   expect(errors).toEqual([]);
 });
+
+test('a user can be invited and deactivated', async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto('/users');
+  await page.getByRole('button', { name: 'Invite user' }).click();
+  const dialog = page.getByRole('dialog', { name: 'Invite a user' });
+
+  // The form checks empty fields; the backend checks the rest and answers per field.
+  await dialog.getByRole('button', { name: 'Invite user' }).click();
+  await expect(dialog.getByText('Enter the person’s name.')).toBeVisible();
+  await dialog.getByRole('textbox', { name: 'Name' }).fill('Teresa Lima');
+  await dialog.getByRole('textbox', { name: 'Email' }).fill('ana.ribeiro@example.org');
+  await dialog.getByRole('button', { name: 'Invite user' }).click();
+  await expect(dialog.getByText(/already uses this email/)).toBeVisible();
+
+  await dialog.getByRole('textbox', { name: 'Email' }).fill('teresa.lima@example.org');
+  await dialog.getByLabel('Technician').check();
+  await dialog.getByRole('button', { name: 'Invite user' }).click();
+  await expect(dialog).toBeHidden();
+  await expect(page.getByText('Invitation sent to teresa.lima@example.org')).toBeVisible();
+
+  // Taking access away asks for confirmation first.
+  await page.getByRole('button', { name: 'Deactivate' }).click();
+  const confirm = page.getByRole('dialog', { name: 'Deactivate Teresa Lima?' });
+  await confirm.getByRole('button', { name: 'Deactivate' }).click();
+  await expect(page.getByText('Teresa Lima is deactivated')).toBeVisible();
+  expect(errors).toEqual([]);
+});

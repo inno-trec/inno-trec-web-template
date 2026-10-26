@@ -11,7 +11,7 @@ npm install
 npm run dev          # serves the starter at http://localhost:5173
 ```
 
-You get a tool with a top bar, side navigation, the EU funding footer and two example pages on synthetic data: an energy overview with time-series charts, and an asset list with status and maintenance suggestions. Edit `apps/web-starter/src/pages/` and the browser updates.
+You get a tool with a top bar, side navigation, the EU funding footer and three example pages on synthetic data: an energy overview with time-series charts, an asset list with status and maintenance suggestions, and user management with forms in dialogs. Edit `apps/web-starter/src/pages/` and the browser updates.
 
 The template serves the INNO-TREC web tools: energy monitoring (consumption, PV, storage), PV yield and performance, asset maintenance, and the energy credit system. The starter fits the first three. For credit screens, run `npm run dev:credits` and copy pages from `apps/credits-example/`.
 
@@ -39,7 +39,7 @@ The two packages are generated from the design system repository. Do not edit th
 | [Getting started](docs/getting-started.md) | Create a tool, add a page, connect your backend, deploy |
 | [Page patterns](docs/page-patterns.md) | Build an overview, a list with detail, a step flow, or a form the way the design system expects |
 | [Design rules](docs/design-rules.md) | Check what the design system requires before you design a screen |
-| [Components](docs/reference/components.md) | Look up when to use each of the 26 components and what it needs |
+| [Components](docs/reference/components.md) | Look up when to use each of the 33 components and what it needs |
 | [Tokens and Tailwind](docs/tokens-and-tailwind.md) | Use the right class names, colors and spacing |
 | [Architecture](docs/architecture.md) | Understand how the repository fits together |
 | [Troubleshooting](docs/troubleshooting.md) | Fix a problem someone has already hit |
