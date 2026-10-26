@@ -65,3 +65,10 @@ test('side navigation changes page without a full reload', async ({ page, viewpo
   await expect(page.locator('.it-shell-main > h1')).toHaveText(target!.label);
   expect(await page.evaluate(() => (window as unknown as { __marker?: boolean }).__marker)).toBe(true);
 });
+
+test('the overview draws its charts', async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto('/');
+  await expect(page.locator('[data-chart] canvas')).toHaveCount(2);
+  expect(errors).toEqual([]);
+});

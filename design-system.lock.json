@@ -1,8 +1,8 @@
 {
   "designSystem": "inno-trec-design-system",
-  "publishedVersion": "1793007993-2749",
+  "publishedVersion": "1793009004-c4c9",
   "publishedAt": "2026-10-26",
-  "syncedAt": "2026-10-26T09:46:49.568Z",
+  "syncedAt": "2026-10-26T10:10:01.211Z",
   "components": 26,
   "logos": 8,
   "funding": 2,
@@ -13,15 +13,16 @@
     "components.md"
   ],
   "files": {
-    "docs/reference/brand-book.md": "900e364eaa6f74cbe80b47ae06d1b2e944338341aadbb98e34c8035540bb976c",
+    "docs/reference/brand-book.md": "550debde73d309bc22dfddb8af3c2bf0aeee34179aaa0834ce8488fd4e51900e",
     "docs/reference/components.md": "4efee8d063a63be927ea24186a5b2af3e284268fbaba9fd148be4c6dd0f58c79",
-    "docs/reference/DESIGN.md": "9d65759faed92a8c7145c1b4adf2c7aedfacf7e56eeff11817b617470731317c",
+    "docs/reference/DESIGN.md": "2c035c0dfd22735d8bf48faaef48505d94775e830a746db3a13979f70a2a073e",
     "docs/reference/open-questions.md": "437864536fe551500dadf03d10836f3fefeaee1c09885bb398ef964022dd5eaf",
-    "packages/tokens/dist/tailwind-preset.cjs": "964d127b56c67621fef159a572753077e38049ce351786c5db1f924384a69784",
-    "packages/tokens/dist/tokens.cjs": "5d2fd1f73fc41dd8db238dfd9b24f8c0ec19bd24ae6b753e60eda204840e4241",
-    "packages/tokens/dist/tokens.css": "b1510285fa03112f75ceb95508797191a9ed805aef7517b9bc8207e42a3fd325",
-    "packages/tokens/dist/tokens.d.ts": "edc32418e16cfa1abf230e90b614d1e93599e8265b87f64f71d998ab8d014ffa",
-    "packages/tokens/tokens.json": "5bcfe57ceea724583b2c446351e00097de7c6859d7845f8c5013bb1d3ddbfce0",
+    "packages/tokens/dist/tailwind-preset.cjs": "6800aba7d7daaab3910ad79b978a4317dc49e2fd0c31c528118aef84621574f6",
+    "packages/tokens/dist/tokens.cjs": "932ffd24537af5d6cf2a187a570824c86c281c91910c0fb07b1a3110dd27d0f7",
+    "packages/tokens/dist/tokens.css": "6489c4d0efe0eba365a1d15e379adcdf3122921ad97ada43193819c0476d169c",
+    "packages/tokens/dist/tokens.d.ts": "ef7484d8f34294087d3e862acbfb596bfd1d531d5b351292504e71e34022d010",
+    "packages/tokens/dist/tokens.mjs": "8c6147c7ab390c06b0b8a63775c4a804598e1d4302301d1ba7185e942e650c2a",
+    "packages/tokens/tokens.json": "6683cfdbb417e0b2d2888054355cf9e93b99e2b3212cef135d5a09c1f1c527c9",
     "packages/ui-web/assets/funding/eu-funded-colour.png": "d075e964f944e97fbc543ef883415da8397a1fe148c324724612109dc7735375",
     "packages/ui-web/assets/funding/eu-funded-negative.png": "33ab3e480137737b84567345f5ec62f14933ab3e1514a3869fd7d4bac397c44b",
     "packages/ui-web/assets/logos/logo-curved-colour.png": "ff8dab2ab35957da6554a28495dafe2e864fe8aea6811982328bddc7691a28e0",
@@ -34,6 +35,6 @@
     "packages/ui-web/assets/logos/logo-vertical-grey.png": "4944b8ba4c71b8289cf0f47ee24628643c1dd3fdcf91b5e1b4697bbffe44f35d",
     "packages/ui-web/src/index.d.ts": "5048995a4bccfff38378d33d946d900adc23b0b5dc8e92b3d546254c6c9410e6",
     "packages/ui-web/src/index.js": "1185a0fa63358623852e3a91cf882c651029575f5bff5dc5b4daf0c228bfdf83",
-    "packages/ui-web/src/styles.css": "a37c51dbb151734d0cae1c225624c5e268fe29b3d622813124b68076aa3b0b7f"
+    "packages/ui-web/src/styles.css": "4c548df3788f2b7879b8c668dfbf28a8fc9d520bac85fa5b80429adf52f7c033"
   }
 }

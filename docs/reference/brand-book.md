@@ -81,6 +81,29 @@ Three brand colours, each tied to a project theme:
 - Mark a section label with a short `green` rule above it, as the manual does throughout.
 - Space with `space-1`, `space-2`, `space-4`, `space-8`.
 
+## Charts
+
+INNO-TREC tools chart energy over time: consumption, PV production, storage and the grid. Every chart uses the same four series colours, so a reader learns them once.
+
+| Token | Series | Value | On surface |
+| --- | --- | --- | --- |
+| `series-consumption` | Consumption | `light-blue` #1978b8 | 4.75:1 |
+| `series-pv` | PV production | #d26a12 | 3.6:1 |
+| `series-storage` | Storage | #2f6b1a | 6.5:1 |
+| `series-grid` | Grid import and export | #6b3fa0 | 7.4:1 |
+
+- A series keeps its colour in every chart and every tool. Never assign the colours in order of appearance; when a chart shows only PV, PV is still `series-pv`.
+- The four colours were checked as a set: each pair stays apart for protanopia and deuteranopia (ΔE 8.2 or more) and every colour reaches 3:1 on `surface` and `surface-muted`. Do not swap in the brand `green` or `orange`: they fail contrast as marks, and together they look the same to colour-blind readers.
+- Series colours are for marks only (lines, bars, areas, legend swatches). Axis labels, values, legends and tooltips stay in `ink` and `ink-muted`.
+- One y-axis per chart. Two measures with different units (kW and %) go in two charts, one above the other, sharing the time axis.
+- Always show the unit (kW, kWh, %) in the axis title or the tooltip, and the time zone where readers are in more than one.
+- Every chart with two or more series has a legend with the series names; with up to four series also label the lines directly. Never identify a series by colour alone.
+- Lines are 2px. Grid lines use `line`; axes and tick labels use `ink-muted`. No shadows, gradients or 3D.
+- Estimated or forecast values use a dashed line of the same series colour, and the legend or tooltip says "estimated". Missing data is a gap in the line, never a zero.
+- Status (an alarm, a fault) is not a series: show it with a `Badge` or `InlineAlert`, with a word and an icon.
+- Offer the numbers as a table as well, for readers who cannot use the chart.
+- The backend computes every figure a chart shows (energy totals, yield, performance ratio). The interface plots and formats it.
+
 ## Writing for members
 
 Most members have little experience with digital tools. Member screens follow these rules; manager and administrator screens may show more detail.
@@ -101,7 +124,7 @@ React 18 components under the global `InnoTrec` (load React and ReactDOM 18, the
 - **Member screens:** `WalletBalance`, `BalanceStatement`, `EnergySummary`, `TransactionList`, `TransactionDetail`, `RecipientPicker`, `TransferForm`, `SettlementRequestForm`.
 - **Manager screens:** `AccountCard`, `AccountList`, `StatTile`, `DataTable`, `Identifier`, `ConfidenceBadge`, `PurposeTag` (technical mode).
 - **Shared:** `Button`, `TextField`, `Select`, `Card`, `Badge`, `InlineAlert`, `Icon`, `PurposeTag`.
-- **Shell:** `TopBar`, `SideNav`, `AppShell`.
+- **Shell:** `TopBar`, `SideNav`, `Footer`, `AppShell`.
 
 Rules that apply to all of them:
 

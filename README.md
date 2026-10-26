@@ -11,7 +11,9 @@ npm install
 npm run dev          # serves the starter at http://localhost:5173
 ```
 
-You get a tool with a top bar, side navigation and three example pages: an overview with a table, a wallet list with a detail panel, and a three-step send flow. Edit `apps/web-starter/src/pages/` and the browser updates.
+You get a tool with a top bar, side navigation, the EU funding footer and two example pages on synthetic data: an energy overview with time-series charts, and an asset list with status and maintenance suggestions. Edit `apps/web-starter/src/pages/` and the browser updates.
+
+The template serves the INNO-TREC web tools: energy monitoring (consumption, PV, storage), PV yield and performance, asset maintenance, and the energy credit system. The starter fits the first three. For credit screens, run `npm run dev:credits` and copy pages from `apps/credits-example/`.
 
 To build a tool of your own, read [Getting started](docs/getting-started.md).
 
@@ -19,7 +21,8 @@ To build a tool of your own, read [Getting started](docs/getting-started.md).
 
 | Path | What it is |
 | --- | --- |
-| `apps/web-starter/` | The starter app: Vite, React 19, TypeScript, Tailwind. Copy it to start a tool. |
+| `apps/web-starter/` | The starter app: Vite, React 19, TypeScript, Tailwind, ECharts. Monitoring and maintenance pages. Copy it to start a tool. |
+| `apps/credits-example/` | Example pages for energy credit tools (ECMS): ledger overview, wallets, send flow, member wallet. |
 | `packages/ui-web/` | The design system components for React on the web, with their styles and logos. Generated. |
 | `packages/tokens/` | The design tokens as a Tailwind preset, CSS variables and JavaScript constants. Generated. |
 | `docs/` | The documentation. Start with the table below. |
@@ -50,6 +53,7 @@ The two packages are generated from the design system repository. Do not edit th
 | Command | What it does |
 | --- | --- |
 | `npm run dev` | Starts the starter app with hot reload |
+| `npm run dev:credits` | Starts the credits example |
 | `npm run typecheck` | Checks types in every workspace |
 | `npm run build` | Type checks and builds every app into its own `dist/` folder |
 | `npm test` | Runs the browser smoke tests of every app at 1440px and 400px wide |
@@ -61,10 +65,10 @@ The two packages are generated from the design system repository. Do not edit th
 ## What this template does not include
 
 - **A mobile app.** The mobile app lives elsewhere and shares only the tokens. See [Mobile](docs/mobile.md).
-- **Authentication, an API client or state management.** The starter uses sample data in `src/data/sample.ts`. Replace it with your backend.
+- **Authentication, an API client or state management.** The starter uses synthetic data and a fake backend in `src/data/`. Replace them with your backend.
 - **Unit tests.** The starter has browser smoke tests (`npm test`), not unit tests. Add a unit test runner when your tool has logic of its own.
 - **Deployment setup.** `npm run build` produces static files. Where they go is your team's choice.
 
 ## Versions this was verified with
 
-Node 24 (LTS) and 26, npm 11, React 19.3, Vite 8, TypeScript 7, Tailwind 3.4, React Router 8. The design system components were written for React 18 and render correctly on 19 in the starter. See [Decisions](docs/decisions.md) for why Tailwind stays on 3.4.
+Node 24 (LTS) and 26, npm 11, React 19.3, Vite 8, TypeScript 7, Tailwind 3.4, React Router 8, Apache ECharts 6.1. The design system components were written for React 18 and render correctly on 19 in the starter. See [Decisions](docs/decisions.md) for why Tailwind stays on 3.4.

@@ -3,7 +3,7 @@
 ---
 version: alpha
 name: INNO-TREC
-description: Visual identity and interface system for the INNO-TREC project and its Energy Credit Management System (ECMS) web tools.
+description: Visual identity and interface system for the INNO-TREC project and its web tools for energy monitoring, PV performance, asset maintenance and energy credits (ECMS).
 colors:
   primary: "{colors.light-blue}"
   secondary: "{colors.green}"
@@ -32,6 +32,10 @@ colors:
   danger: "#b42318"
   danger-tint: "#fbe4e2"
   focus: "#1978b8"
+  series-consumption: "#1978b8"
+  series-pv: "#d26a12"
+  series-storage: "#2f6b1a"
+  series-grid: "#6b3fa0"
 typography:
   display:
     fontFamily: Figtree
@@ -228,13 +232,28 @@ components:
     textColor: "{colors.surface}"
     rounded: "{rounded.none}"
     padding: 32px
+  chart-series-consumption:
+    backgroundColor: "{colors.series-consumption}"
+    height: 2px
+  chart-series-pv:
+    backgroundColor: "{colors.series-pv}"
+    height: 2px
+  chart-series-storage:
+    backgroundColor: "{colors.series-storage}"
+    height: 2px
+  chart-series-grid:
+    backgroundColor: "{colors.series-grid}"
+    height: 2px
+  chart-grid-line:
+    backgroundColor: "{colors.line}"
+    height: 1px
 ---
 
 # INNO-TREC
 
 ## Overview
 
-INNO-TREC is a Horizon Europe project on renewable and citizen energy communities. This system covers its visual identity (from the INNO-TREC Brand Manual) and the interface of its web tools, starting with the Energy Credit Management System (ECMS), where community members hold, send and use energy credits.
+INNO-TREC is a Horizon Europe project on renewable and citizen energy communities. This system covers its visual identity (from the INNO-TREC Brand Manual) and the interface of its web tools: monitoring of consumption, PV production and storage; PV yield and performance; maintenance of community assets; and the Energy Credit Management System (ECMS), where community members hold, send and use energy credits.
 
 The look is plain, flat and square: white grounds, a pale grey app background, square corners, thin borders instead of shadows, and the brand's green, blue and orange used as large fills and accents, never as text on white.
 
@@ -266,6 +285,7 @@ Three brand colours, each tied to a project theme:
 - `line` for dividers and card borders; `line-strong` for input and secondary-button borders (3:1 or more).
 - `danger` (#b42318) for errors and destructive actions only. A balance below zero is not an error: show it with a minus sign in `ink`.
 - Status always has a word and an icon as well as a colour: success (`green-tint`), information (`light-blue-tint`), warning (`orange-tint`), danger (`danger-tint`).
+- Charts use four fixed series colours: `series-consumption` (= `light-blue`), `series-pv` (#d26a12), `series-storage` (#2f6b1a) and `series-grid` (#6b3fa0). Each series keeps its colour in every chart. The set was validated together: every pair stays apart for protanopia and deuteranopia, and every colour reaches 3:1 on `surface` and `surface-muted`. They colour marks only; chart text stays `ink` and `ink-muted`.
 - `black`, `stone`, `stone-light`, `logo-grey` and `logo-grey-light` describe logo backgrounds and the greyscale logo files; they are not interface colours.
 
 ## Typography
@@ -333,4 +353,6 @@ React 18 components are published under the global `InnoTrec`; the values above 
 - Don't add shadows, gradients or rounded cards; keep surfaces flat and square.
 - Do keep text contrast at 4.5:1 or more and borders, icons and focus rings at 3:1 or more.
 - Do use the logo files as supplied: full colour on light grounds, greyscale on dark grounds, clear space of logo height ÷ 4 on every side. Don't recolour, redraw, stretch or invert the logo.
+- Do give each energy series its own fixed colour (`series-consumption`, `series-pv`, `series-storage`, `series-grid`) in every chart, with a legend and the unit. Don't use the brand `green` or `orange` for chart marks.
+- Don't put two y-axes on one chart; use two charts that share the time axis. Show estimated values dashed and missing data as a gap, never as zero.
 - Do write the project name as INNO-TREC in text; INNOTREC (no hyphen) appears only in the logo.

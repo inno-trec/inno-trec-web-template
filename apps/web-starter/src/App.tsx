@@ -1,10 +1,8 @@
 import { Route, Routes } from 'react-router';
 import { ToolShell } from './layouts/ToolShell';
-import { DashboardPage } from './pages/DashboardPage';
-import { MyWalletPage } from './pages/MyWalletPage';
+import { AssetsPage } from './pages/AssetsPage';
 import { NotFoundPage } from './pages/NotFoundPage';
-import { SendCreditsPage } from './pages/SendCreditsPage';
-import { WalletsPage } from './pages/WalletsPage';
+import { OverviewPage } from './pages/OverviewPage';
 
 /**
  * Add a page in three steps:
@@ -16,10 +14,8 @@ export function App() {
   return (
     <Routes>
       <Route element={<ToolShell />}>
-        <Route index element={<DashboardPage />} />
-        <Route path="wallets" element={<WalletsPage />} />
-        <Route path="send" element={<SendCreditsPage />} />
-        <Route path="my-wallet" element={<MyWalletPage />} />
+        <Route index element={<OverviewPage />} />
+        <Route path="assets" element={<AssetsPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

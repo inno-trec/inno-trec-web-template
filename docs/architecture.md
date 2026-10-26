@@ -12,7 +12,8 @@ INNO-TREC design system repository          (source of truth: tokens, components
 │  packages/ui-web     components as an ES module + one stylesheet + logos │
 │  docs/reference      brand book, component guide, open questions         │
 │                                                                          │
-│  apps/web-starter    React app that uses both packages                   │
+│  apps/web-starter    starter app: monitoring and maintenance pages       │
+│  apps/credits-example  example pages for energy credit tools             │
 └──────────────────────────────────────────────────────────────────────────┘
         │
         │  "Use this template"
@@ -55,7 +56,7 @@ Built by `packages/tokens/scripts/build.mjs` from `tokens.json`. It produces:
 | --- | --- |
 | `@inno-trec/tokens/tailwind-preset` | The Tailwind preset. Add it to `presets` in `tailwind.config.js`. |
 | `@inno-trec/tokens/tokens.css` | The CSS variables on their own. `ui-web/styles.css` already includes them. |
-| `@inno-trec/tokens` | Plain constants (`colors`, `fontSize`, `spacing`) for places a class name cannot go, such as chart colors. |
+| `@inno-trec/tokens` | Plain constants (`colors`, `fontSize`, `spacing`) for places a class name cannot go, such as chart colors. It ships as an ES module (`tokens.mjs`, used by Vite) and as CommonJS (`tokens.cjs`). |
 
 The preset holds literal values only, with no CSS variables. That keeps it usable by NativeWind in the mobile app. See [Mobile](mobile.md).
 
@@ -78,10 +79,13 @@ apps/web-starter/src/
   App.tsx               the list of routes
   index.css             Tailwind, and one workaround for the top bar on phones
   layouts/ToolShell.tsx top bar, side navigation, page heading, footer
-  pages/                one file per screen
-  data/sample.ts        sample data, replace with your API
+  pages/                one file per screen (Overview, Assets, not found)
+  charts/               TimeSeriesChart (ECharts), its lazy loader, number and time formats
+  data/synthetic.ts     synthetic 15-minute readings, replace with your API
   data/api.ts           fake backend (delay, ?demo=empty, ?demo=error), replace with your API
 ```
+
+`apps/credits-example` has the same structure, with the credit pages (ledger overview, wallets, send flow, member wallet) and ECMS sample data.
 
 `ToolShell` uses the design system's `AppShell` and turns its navigation items into router links. Pages render inside it.
 

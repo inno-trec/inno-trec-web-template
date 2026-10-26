@@ -12,6 +12,7 @@
   },
   "scripts": {
     "dev": "npm run dev -w web-starter",
+    "dev:credits": "npm run dev -w credits-example",
     "build": "npm run build --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "tokens": "npm run build -w @inno-trec/tokens",

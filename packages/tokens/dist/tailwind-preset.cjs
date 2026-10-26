@@ -28,7 +28,11 @@ module.exports = {
         "orange-tint": "#fde5d0",
         "danger": "#b42318",
         "danger-tint": "#fbe4e2",
-        "focus": "#1978b8"
+        "focus": "#1978b8",
+        "series-consumption": "#1978b8",
+        "series-pv": "#d26a12",
+        "series-storage": "#2f6b1a",
+        "series-grid": "#6b3fa0"
       },
       "fontFamily": {
         "display": [

@@ -4,20 +4,30 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ## [Unreleased]
 
+### Changed
+
+- **The starter is no longer about credits.** `web-starter` now fits the monitoring, PV performance and maintenance tools: an energy overview with time-series charts and an asset list with maintenance suggestions, on synthetic data.
+- **The credit pages moved to `apps/credits-example`** (ledger overview, wallets, send flow, "My wallet"). Run it with `npm run dev:credits`.
+- The design rules separate the rules for every tool from the rules for credit screens, and add rules for charts.
+
 ### Added
 
-- `Footer` component (design system): the EU funding emblem, the Horizon Europe funding statement and legal links. The starter shows it on every page with a link to the privacy policy, and the smoke tests check for the emblem.
-- `wallet` icon (design system). The Wallets entry in the side navigation uses it.
-- "My wallet" page in the starter: a member screen with loading, empty and error states.
-- `src/data/api.ts`: a fake backend with a delay. Add `?demo=empty` or `?demo=error` to the address to see the other states.
+- Chart series colors (design system): `series-consumption`, `series-pv`, `series-storage` and `series-grid`. Each has a fixed meaning. They were checked together for contrast and for colorblind readers. They are in `DESIGN.md` and in the brand book's new "Charts" section.
+- `TimeSeriesChart` in the starter, built on Apache ECharts 6. It applies the chart rules (fixed colors, one y-axis, legend, dashed estimates, gaps for missing data) and loads on demand.
+- Synthetic 15-minute readings for a small community (`src/data/synthetic.ts`), and a fake backend (`src/data/api.ts`) with loading, empty and error states. Add `?demo=empty` or `?demo=error` to the address.
+- "My wallet" page in `credits-example`: a member screen with loading, empty and error states.
+- `Footer` component (design system): the EU funding emblem, the Horizon Europe funding statement and legal links. Both apps show it on every page with a link to the privacy policy, and the smoke tests check for the emblem.
+- `wallet` icon (design system).
 - `npm run sync:ds` also copies the EU funding emblem to `packages/ui-web/assets/funding/`.
+- Decisions 9 (Apache ECharts) and 10 (one neutral starter, one example per domain).
 
 ### Fixed
 
+- `import { colors } from '@inno-trec/tokens'` failed in Vite, because the package shipped CommonJS only. It now also ships an ES module (`tokens.mjs`).
 - The send flow no longer calculates the new balance in the interface. It reads `newBalance` from the (fake) backend and shows the backend's error code when the transfer is refused.
-- The History and Suspend buttons on the Wallets page say in a comment that they are not connected yet.
 - `TransferForm` (design system) no longer shows "After this you will have…" on the check step. That line subtracted the amount from the available credits in the interface.
 - Every failed send or request now says "Your credits were not moved.", also for `INSUFFICIENT_BALANCE` and for a custom `errorMessage`.
+- The History and Suspend buttons on the Wallets page say in a comment that they are not connected yet.
 
 ## [0.1.0] - 2026-10-26
 
