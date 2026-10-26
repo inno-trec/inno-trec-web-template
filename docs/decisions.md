@@ -86,15 +86,15 @@ The reader's own time zone would be simpler, and for readers in the community's 
 
 **Revisit when** a tool compares communities in different time zones on one chart. That chart needs one shared clock, probably UTC, and says so.
 
-### 12. OpenAPI as the data contract; one identity for all tools
+### 12. Account screens in the template; each system owns its data API
 
-The template proposes to WP2 that every data provider describes its interface in OpenAPI 3.1, versions it and checks it in CI ([API contract](api-contract.md)). The first draft is `packages/api-contract/openapi.yaml`; the starter imports types generated from it and simulates the provider in the contract's shapes.
+The template gives every tool the screens around accounts: sign in, ask for an account (a manager approves it), accept an invitation, reset a password, the person's own account, and the list of users with roles. It does not define how a tool talks to its backend. Each system owns its API and its description; the starter's `src/data/types.ts` and `src/data/fakeServer.ts` are examples to replace.
 
-Users and roles belong to the community: one identity provider (OpenID Connect) signs people in for every tool, and the shared data API keeps one list of users and roles. The tools read them; only one place manages them.
+An earlier draft of this decision put a data contract (OpenAPI) for all providers in the template. It was removed: the contract belongs to the systems that provide the data, and the template's job is the interface that teams in the work package reuse.
 
-**Consequence.** A change to the contract changes the generated types, and the compiler shows every screen it affects. The template has no sign-in of its own. Energy credits, device control and events are not in the draft yet.
+**Consequence.** The starter keeps its sample session in the browser so it runs without a server; a real tool takes the session from its backend or identity provider. If the tools adopt one OpenID Connect provider (for example Keycloak), the provider shows its own sign-in pages, and the template's screens are the design for its theme. Hiding a page by role is for clarity only; the backend checks the role on every request.
 
-**Revisit when** WP2 answers the proposal (tracking D1 and D7).
+**Revisit when** the project chooses an identity provider (tracking D7).
 
 ## Open
 

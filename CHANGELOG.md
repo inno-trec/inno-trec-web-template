@@ -13,7 +13,11 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ### Added
 
-- Draft data contract with WP2 (`packages/api-contract`, OpenAPI 3.1) with generated TypeScript types; CI validates it and fails when the types drift. The starter's data layer follows it: `fakeServer.ts` plays the provider, `api.ts` is the client. The rationale is in `docs/api-contract.md` (decision 12, which also keeps users and roles in one shared identity).
+- Account screens in the starter: sign in (with "keep me signed in" and a return to the page asked for), ask for an account with a manager's approval on the Users page, accept an invitation, forgot and reset password, "Your account" (profile and password) and sign out. Pages without a session redirect to sign in, and `roles` in `NAV` hide pages from other roles. Pattern 10 and decision 12 describe them.
+- `AuthLayout` and `PasswordField` (design system): the frame of the screens without a session, and a password field with a Show/Hide button.
+- Documentation website (VitePress) built from `docs/`, with the starter as a live demo; `.github/workflows/pages.yml` publishes it to GitHub Pages. `npm run docs:dev` previews it.
+- The starter's router follows `base` in `vite.config.ts`, so the app also works under a sub-path.
+- The starter's sample backend answers in the shapes of `src/data/types.ts`; `api.ts` turns every failure into an `ApiError` with messages per field.
 - PV performance page: indicators per system against history and the community, `BarChart` with a dotted reference line.
 - Data checks page: agreement between data sources, with a tolerance band in `TimeSeriesChart`.
 - Alerts page: corrective and predictive alerts with filters, acknowledge and resolve. Assets show their open alerts.

@@ -20,7 +20,10 @@
     "export:tokens": "node scripts/export-tokens.mjs",
     "test": "npm run test --workspaces --if-present",
     "check:generated": "node scripts/check-generated.mjs",
-    "api:types": "npm run types -w @inno-trec/api-contract",
-    "api:lint": "npm run lint -w @inno-trec/api-contract"
+    "docs:dev": "vitepress dev docs",
+    "pages:build": "node scripts/build-pages.mjs"
+  },
+  "devDependencies": {
+    "vitepress": "1.6.4"
   }
 }

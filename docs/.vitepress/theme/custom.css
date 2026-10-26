@@ -1,0 +1,27 @@
+/* The site's colors and fonts follow the INNO-TREC design system (light-blue for links and buttons). */
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@600;700&family=Open+Sans:wght@400;600;700&display=swap');
+
+:root {
+  --vp-font-family-base: 'Open Sans', system-ui, sans-serif;
+  --vp-c-brand-1: #1978b8;
+  --vp-c-brand-2: #156399;
+  --vp-c-brand-3: #1978b8;
+  --vp-c-brand-soft: rgba(25, 120, 184, 0.12);
+  --vp-button-brand-bg: #1978b8;
+  --vp-button-brand-hover-bg: #3c3a3b;
+}
+
+.dark {
+  --vp-c-brand-1: #6cb2e3;
+  --vp-c-brand-2: #8fc4ea;
+  --vp-c-brand-3: #1978b8;
+}
+
+h1, h2, h3, .VPHero .name, .VPHero .text, .VPNavBarTitle .title {
+  font-family: 'Figtree', 'Open Sans', system-ui, sans-serif;
+}
+
+/* Square corners, as in the design system. */
+.VPButton, .VPFeature, div[class*='language-'], .custom-block, .DocSearch-Button, .VPLocalSearchBox .shell {
+  border-radius: 0 !important;
+}

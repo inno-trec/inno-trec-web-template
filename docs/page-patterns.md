@@ -230,6 +230,22 @@ Rules for this pattern:
 - **Acknowledge says someone is on it; resolve asks what was done.** Resolving opens a `Dialog` with a required `Textarea`. The record keeps who acknowledged and what was done.
 - **The asset page links here.** An asset shows its open alerts and an "Open alerts" button.
 
+## 10. Account screens
+
+Sources: [`web-starter/src/pages/auth/`](../apps/web-starter/src/pages/auth/SignInPage.tsx) (sign in, ask for an account, accept an invitation, forgot and reset password), [`AccountPage.tsx`](../apps/web-starter/src/pages/AccountPage.tsx) and the approval on [`UsersPage.tsx`](../apps/web-starter/src/pages/UsersPage.tsx)
+
+Use them for everything around an account. People join in two ways: a manager invites them, or they ask for an account and a manager approves it on the Users page.
+
+Rules for this pattern:
+
+- **Screens without a session use `AuthLayout`**: the tool's top bar, one panel with one task and one primary button, and the same footer. The way to the other screen goes below the panel ("New here? Ask for an account").
+- **Ask for a new password once, with `PasswordField`.** Its Show button replaces a second "repeat the password" field. The hint says the rule; the backend checks it.
+- **Set `autoComplete` on every field**: `username` or `email`, `current-password`, `new-password`, `name`. Password managers depend on it.
+- **Do not help an attacker.** Say "The email or password is wrong", not which one. After a reset request, show the same message whether the email exists or not.
+- **Say why the person is on the sign-in screen**: signed out, session ended, or new password saved (`?reason=`). After signing in, return to the page they asked for (`?next=`), and only within the tool.
+- **An expired link is a normal state**: say what happened and link to the step that sends a new one.
+- **Roles hide pages, the backend enforces them.** A page with `roles` in `NAV` disappears from the navigation for other roles, and its address explains that access is missing.
+
 ## Loading, empty and error
 
 Data from a backend arrives late, can be empty and can fail. Every page that loads data in both apps shows all three. Add `?demo=empty` or `?demo=error` to the address to see them.

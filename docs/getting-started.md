@@ -73,7 +73,17 @@ For the shape of common pages (overview, list with detail, step flow), see [Page
 
 ## 4. Connect your backend
 
-The pages call `src/data/api.ts`, the client of the INNO-TREC data API. Today it calls a simulated provider (`src/data/fakeServer.ts`) that answers in the shapes of the draft contract (`packages/api-contract/openapi.yaml`, see [API contract](api-contract.md)). To connect your backend, replace those calls with `fetch` and delete `fakeServer.ts` and `synthetic.ts`. When the contract changes, run `npm run api:types`: the compiler then lists every screen that must follow. Keep the loading, empty and error states that the pages show.
+The pages call `src/data/api.ts`. Today it calls a sample backend (`src/data/fakeServer.ts`) that answers in the shapes of `src/data/types.ts`. To connect your backend:
+
+1. Replace the types in `types.ts` with your backend's. If your backend publishes an OpenAPI description, `npx openapi-typescript <url> -o src/data/schema.d.ts` generates them.
+2. Replace each call in `api.ts` with `fetch`. Turn your backend's errors into `ApiError`: a code for the whole request, and one message per field when it rejects a value. The forms show those messages under the fields.
+3. Delete `fakeServer.ts` and `synthetic.ts`, and follow the compiler.
+
+Keep the loading, empty and error states that the pages show.
+
+### Accounts and sign-in
+
+The screens without a session are in `src/pages/auth/` (sign in, ask for an account, accept an invitation, forgot and reset password); the person's own account is `src/pages/AccountPage.tsx`. `src/auth/session.tsx` holds who is signed in, sends people without a session to `/sign-in`, and hides pages by role (`roles` in `NAV`). The sample keeps the session in the browser; replace it with what your backend or identity provider gives you, and delete the "Sample accounts" note on the sign-in screen. If your tools share an OpenID Connect provider such as Keycloak, its sign-in pages replace these screens, and these screens are the design for its theme.
 
 The design system has one rule here: **the interface displays what the backend reports and collects input.** Energy totals, shares, performance indicators, credit amounts and balances all come from the API. Do not calculate them in a component. The [design rules](design-rules.md#numbers-and-units) explain why.
 
@@ -117,4 +127,4 @@ Never edit the files the script writes. The next sync overwrites them. If someth
 
 The app uses client-side routes such as `/wallets`. Configure the host to answer every unknown path with `index.html`, or opening `/wallets` directly returns a 404. If your host cannot do that, switch the router in `src/main.tsx` from `BrowserRouter` to `HashRouter`.
 
-If the tool is served from a sub-path such as `/ledger/`, set `base: '/ledger/'` in `vite.config.ts` and `basename="/ledger"` on the router.
+If the tool is served from a sub-path such as `/ledger/`, set `base: '/ledger/'` in `vite.config.ts`. The router and the navigation links follow it.

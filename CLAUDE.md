@@ -23,8 +23,8 @@ npm run build                        # typecheck + vite build for every app (app
 npm test                             # Playwright smoke tests (needs: npx -w web-starter playwright install chromium)
 npx -w web-starter playwright test -g "unknown"   # run one test by name
 npm run check:generated              # fail if a generated file differs from its hash in design-system.lock.json
-npm run api:lint                     # validate the draft data contract (packages/api-contract/openapi.yaml)
-npm run api:types                    # regenerate the contract's TypeScript types (CI fails if they drift)
+npm run docs:dev                     # preview the documentation website (VitePress, docs/.vitepress/)
+npm run pages:build                  # build the website with the starter as demo/ into docs/.vitepress/dist
 npm run build -w web-starter         # build one app
 npm run tokens                       # rebuild packages/tokens/dist from tokens.json
 npm run sync:ds [-- <path-to-ds>]    # copy the design system in (or set INNO_TREC_DS)
@@ -71,14 +71,15 @@ Generated files start with a `GENERATED` banner. The sync records a SHA-256 hash
 
 ### Starter app wiring (`apps/web-starter`)
 
-- `src/main.tsx`: `BrowserRouter`, imports `styles.css` and then `index.css`.
-- `src/App.tsx`: routes nested under `ToolShell`.
-- `src/layouts/ToolShell.tsx`: wraps the design system `AppShell`. The `NAV` array drives both the side navigation and the page heading (`label`). `TOOL_NAME` and `USER` are placeholders. It passes a `Footer` with the EU funding emblem (`@inno-trec/ui-web/assets/funding/eu-funded-negative.png`) and `FOOTER_LINKS`; every tool keeps the footer.
+- `src/main.tsx`: `BrowserRouter` (with `basename` from `BASE_URL`) and `SessionProvider`, imports `styles.css` and then `index.css`.
+- `src/App.tsx`: the screens without a session (`sign-in`, `sign-up`, `invitation`, `forgot-password`, `reset-password`, `sign-out`), then the routes nested under `RequireSession` and `ToolShell`.
+- `src/auth/session.tsx`: who is signed in (`SessionProvider`, `useSession`), the redirect to `/sign-in?next=…`, and `allowed(role, roles)`. The sample keeps the session in browser storage; a real tool takes it from its backend or identity provider. `src/config.ts` holds `TOOL_NAME`, `PRIVACY_URL` and `FOOTER_LINKS`.
+- `src/layouts/ToolShell.tsx`: wraps the design system `AppShell`. The `NAV` array drives the side navigation, the page heading (`label`) and who sees each page (`roles`). The top bar shows the signed-in person, "Account" and "Sign out". Nav links get the base path from `import.meta.env.BASE_URL`. Screens without a session use `src/layouts/SignedOutFrame.tsx` (the design system's `AuthLayout`). It passes a `Footer` with the EU funding emblem (`@inno-trec/ui-web/assets/funding/eu-funded-negative.png`) and `FOOTER_LINKS`; every tool keeps the footer.
 - Adding a page takes three edits: a file in `src/pages/`, a `<Route>` in `App.tsx`, and a `NAV` entry.
-- Pages: `OverviewPage.tsx` (monitoring: period filter, totals, power chart in kW, battery chart in %, table view), `PerformancePage.tsx` (PV indicators per system against history and community references, `BarChart` with a dotted reference line), `DataChecksPage.tsx` (agreement between data sources: table of deviations, one source's deviation over time with a tolerance band), `AlertsPage.tsx` (corrective and predictive alerts: filters, acknowledge, resolve in a `Dialog`), `AssetsPage.tsx` (list with detail and the asset's open alerts) and `UsersPage.tsx` (forms in `Dialog`s). All show loading, empty and error states. `src/labels.ts` holds the words and tones for API codes.
+- Pages: `OverviewPage.tsx` (monitoring: period filter, totals, power chart in kW, battery chart in %, table view), `PerformancePage.tsx` (PV indicators per system against history and community references, `BarChart` with a dotted reference line), `DataChecksPage.tsx` (agreement between data sources: table of deviations, one source's deviation over time with a tolerance band), `AlertsPage.tsx` (corrective and predictive alerts: filters, acknowledge, resolve in a `Dialog`), `AssetsPage.tsx` (list with detail and the asset's open alerts), `UsersPage.tsx` (forms in `Dialog`s; approve or decline account requests), `AccountPage.tsx` (profile and password) and `pages/auth/` (sign in, ask for an account, accept an invitation, forgot and reset password). All show loading, empty and error states. `src/forms/useSubmit.ts` sends a form and keeps the backend's messages per field. `src/labels.ts` holds the words and tones for API codes.
 - `src/charts/TimeSeriesChart.tsx` wraps Apache ECharts (tree-shaken imports from `echarts/core`). It takes `SeriesSpec`s whose `color` must be a series token (`colors['series-pv']` from `@inno-trec/tokens`), draws one y-axis, a legend, end labels when they fit, dashed estimates and gaps for `null`. Pages import `LazyTimeSeriesChart`, which loads ECharts on demand. `src/charts/format.ts` holds the shared number and time formats.
 - Times follow the community's time zone, sent by the backend (`EnergyReport.timeZone`), never the reader's. `src/time/zone.ts` converts with `Intl` only; `TimeSeriesChart` shifts instants by the zone offset and sets `useUTC`, because ECharts has no time zone option. Pass `timeZone` to the chart and to the `format.ts` functions.
-- Data layer follows the draft contract `@inno-trec/api-contract` (`packages/api-contract`, hand-maintained, decision 12): `src/data/fakeServer.ts` plays the WP2 provider in the contract's shapes (it computes totals, indicators and statuses; `?demo=empty` / `?demo=error`), over `src/data/synthetic.ts` (deterministic 15-minute samples). `src/data/api.ts` is the client the pages call: it adapts the JSON (ISO times to numbers) and turns RFC 9457 problems into `ApiError.fields`. Replacing the provider means changing `api.ts` and deleting `fakeServer.ts`. Change the contract first, run `npm run api:types`, then follow the compiler. Users and roles come from one shared identity, not from each tool.
+- Data layer: `src/data/fakeServer.ts` is a sample backend in the shapes of `src/data/types.ts` (it computes totals, indicators and statuses, keeps the sample accounts; `?demo=empty` / `?demo=error`), over `src/data/synthetic.ts` (deterministic 15-minute samples). `src/data/api.ts` is the client the pages call: it adapts the JSON (ISO times to numbers) and turns every failure into `ApiError` (`src/data/errors.ts`: a `code` and `fields`). Replacing the backend means changing `types.ts` and `api.ts` and deleting `fakeServer.ts`. Data APIs and their contracts belong to each system, not to the template (decision 12).
 - `src/index.css` holds a workaround that hides the `TopBar` title and user below 560px. Remove it when the design system fixes the gap.
 
 `apps/credits-example` holds the ECMS pages (ledger overview, wallets, send flow, member wallet) with ECMS sample data, its own fake backend and the same smoke tests on port 4174. `apps/*` may hold more example apps. Each one depends on `@inno-trec/tokens` and `@inno-trec/ui-web` at version `*`, should teach one domain or pattern, and needs its own Playwright port (see `docs/contributing.md`).
@@ -108,10 +109,10 @@ Credit screens only:
 
 - Stay on Tailwind 3.4. NativeWind 4 (mobile) needs `tailwindcss ~3`, and web and mobile share the preset. Never run `npm audit fix --force`, because it upgrades to Tailwind 4.
 - Web and mobile share tokens, not components. The Expo app lives in a separate repository and receives tokens via `export:tokens`.
-- Use Vite with client-side routing, not a framework. Deployment is static; for sub-path hosting set `base` in `vite.config.ts` and `basename` on the router.
+- Use Vite with client-side routing, not a framework. Deployment is static; for sub-path hosting set `base` in `vite.config.ts` (the router and nav links follow it).
 - The packages are copied into each team's repository, not published.
 - Charts use Apache ECharts with tree-shaken imports, loaded on demand (decision 9).
 
 ## Documentation map
 
-The `docs/` files were checked against a running copy; keep them accurate when behavior changes. Start with `docs/getting-started.md` (team workflow), `docs/architecture.md`, `docs/tokens-and-tailwind.md` (class names), `docs/troubleshooting.md` (known issues) and `docs/reference/components.md` (when to use each of the 33 components; props are typed in `packages/ui-web/src/index.d.ts`).
+The `docs/` files were checked against a running copy; keep them accurate when behavior changes. Start with `docs/getting-started.md` (team workflow), `docs/architecture.md`, `docs/tokens-and-tailwind.md` (class names), `docs/troubleshooting.md` (known issues) and `docs/reference/components.md` (when to use each of the 35 components; props are typed in `packages/ui-web/src/index.d.ts`).

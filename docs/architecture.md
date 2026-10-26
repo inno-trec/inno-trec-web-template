@@ -11,7 +11,6 @@ INNO-TREC design system repository          (source of truth: tokens, components
 │  packages/tokens     tokens.json → Tailwind preset, CSS variables, JS    │
 │  packages/ui-web     components as an ES module + one stylesheet + logos │
 │  docs/reference      brand book, component guide, open questions         │
-│  packages/api-contract  draft data contract with WP2 (OpenAPI) and types │
 │                                                                          │
 │  apps/web-starter    starter app: monitoring and maintenance pages       │
 │  apps/credits-example  example pages for energy credit tools             │
@@ -79,12 +78,19 @@ apps/web-starter/src/
   main.tsx              entry: router, global styles
   App.tsx               the list of routes
   index.css             Tailwind, and one workaround for the top bar on phones
-  layouts/ToolShell.tsx top bar, side navigation, page heading, footer
-  pages/                one file per screen (Overview, PV performance, Data checks, Alerts, Assets, Users, not found)
+  config.ts             the tool's name and legal links
+  auth/session.tsx      who is signed in, the redirect to sign in, roles per page
+  layouts/ToolShell.tsx top bar (Account, Sign out), side navigation, page heading, footer
+  layouts/SignedOutFrame.tsx  the frame of the screens without a session (AuthLayout)
+  pages/                one file per screen (Overview, PV performance, Data checks, Alerts, Assets, Users, Your account, not found)
+  pages/auth/           sign in, ask for an account, accept an invitation, forgot and reset password
+  forms/useSubmit.ts    sends a form and keeps the backend's messages per field
   charts/               TimeSeriesChart (ECharts), its lazy loader, number and time formats
-  data/api.ts           the API client the pages call (types from @inno-trec/api-contract)
-  data/fakeServer.ts    simulated WP2 provider in the contract's shapes (?demo=empty, ?demo=error)
-  data/synthetic.ts     synthetic 15-minute readings behind the simulated provider
+  data/api.ts           the client the pages call; replace its calls with fetch
+  data/types.ts         the shapes of the backend's data (examples)
+  data/errors.ts        ApiError: a code, and one message per field
+  data/fakeServer.ts    sample backend (?demo=empty, ?demo=error)
+  data/synthetic.ts     synthetic 15-minute readings behind the sample backend
   labels.ts             words and tones for the codes the API sends
 ```
 
