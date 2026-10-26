@@ -17,6 +17,7 @@ jobs:
   checks:
     name: Checks (Node ${{ matrix.label }})
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     # The Node pinned in .nvmrc must pass. The newest Node release is an early warning only.
     continue-on-error: ${{ matrix.label == 'current' }}
     strategy:
@@ -53,8 +54,10 @@ jobs:
 
       - run: npm run build
 
+      # Headless Chromium only. The runner image already has the system libraries (it ships Google Chrome),
+      # and --with-deps would pull fonts and xvfb from apt, which has taken over 10 minutes.
       - name: Install Playwright browser
-        run: npx -w web-starter playwright install --with-deps chromium
+        run: npx -w web-starter playwright install --only-shell chromium
 
       - run: npm test
 
