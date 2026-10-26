@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> **This repository moved to https://gitlab.up.pt/inno-trec/inno-trec-web-template** (University of Porto GitLab). This copy is archived and no longer updated.
+
 # INNO-TREC template
 
 A starting point for INNO-TREC web tools. It packages the INNO-TREC design system (colors, type, components) with a working React app, so a team can build a new tool by changing pages instead of setting up styling and navigation from scratch.
