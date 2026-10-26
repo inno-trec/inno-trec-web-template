@@ -57,7 +57,7 @@ Add a line for your change under `## [Unreleased]` in `CHANGELOG.md`.
 
 ## The website and the demo
 
-`.github/workflows/pages.yml` publishes `docs/` and the starter (under `demo/`) to GitHub Pages after every push to `main`. It runs only in the template repository (`is_template`). Before the first run, turn on Pages in the repository settings with **Source: GitHub Actions**. On a private repository this needs a paid GitHub plan, and the site is public either way.
+`.github/workflows/pages.yml` publishes `docs/` and the starter (under `demo/`) to GitHub Pages after every push to `main`. It runs only in the template repository (`is_template`). Before the first run, turn on Pages in the repository settings with **Source: GitHub Actions**. The site is public (only GitHub Enterprise Cloud organizations can limit it to members), so internal pages stay out of it: `INTERNAL` in `docs/.vitepress/config.mts` lists them (decisions, tracking, ECMS open questions), and links to them open the file on GitHub. Add a page there when it should not be public.
 
 ## Preparing the repository as a GitHub template
 

@@ -28,7 +28,7 @@ Status: **To do**, **In progress**, **Done** (keep done items until the next rel
 | 16 | Map the ECMS credit data into the contract | 4 | — | Dropped | Went with item 1. |
 | 17 | Describe live updates in AsyncAPI | 1, 3 | — | Dropped | Went with item 1. |
 | 18 | Account screens: sign in, ask for an account with manager approval, accept an invitation, forgot and reset password, your account, sign out | All | 1 | Done | `src/pages/auth/`, `AccountPage`, approval on the Users page. Design system: `AuthLayout`, `PasswordField`. |
-| 19 | Documentation site on GitHub Pages, with the starter as a live demo | All | 1 | In progress | `npm run docs:dev`, `npm run pages:build`, `.github/workflows/pages.yml`. Needs Pages turned on (D8). |
+| 19 | Documentation site on GitHub Pages, with the starter as a live demo | All | 1 | Done | Pages is on; it publishes after the merge to `main`. The site is public, so decisions, tracking and the ECMS open questions stay out of it (`INTERNAL` in `docs/.vitepress/config.mts`). |
 | 20 | More shared components for the work package's tools (list to agree with the teams) | All | 1 | To do | Candidates: file upload (item 13), empty state, tabs, pagination, toast for saved changes. |
 
 ## Decisions waiting for an owner
@@ -41,7 +41,6 @@ Status: **To do**, **In progress**, **Done** (keep done items until the next rel
 | D5 | The mobile app (energy credits) lives in another repository and receives only tokens; check that it covers wallet management | The credit platform's interface is a mobile app | Mobile team |
 | D6 | Publishing the packages instead of copying them (decision 5) | How teams receive design system updates | Project |
 | D7 | Identity provider for all tools (OpenID Connect, for example Keycloak), if any | With one provider, its sign-in pages replace the template's screens and use them as the theme design (decision 12) | Project |
-| D8 | Turn on GitHub Pages for this repository: a paid plan for a private repository, or a public repository. The site is public either way | Without it, the documentation site and the demo are not published | Repository owner |
 
 ## Outside the template
 
