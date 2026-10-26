@@ -79,7 +79,8 @@ release-notes:
 
 release:
   stage: publish
-  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  # The release keyword runs glab (GitLab 18+ replaced release-cli with it).
+  image: registry.gitlab.com/gitlab-org/cli:latest
   rules:
     - if: $CI_COMMIT_TAG
   needs: [checks, release-notes]
