@@ -64,4 +64,4 @@ The two packages are generated from the design system repository. Do not edit th
 
 ## Versions this was verified with
 
-Node 26, npm 11, React 19.3, Vite 8, TypeScript 5.9, Tailwind 3.4, React Router 7. The design system components were written for React 18 and render correctly on 19 in the starter. See [Decisions](docs/decisions.md) for why Tailwind stays on 3.4.
+Node 24 (LTS) and 26, npm 11, React 19.3, Vite 8, TypeScript 7, Tailwind 3.4, React Router 8. The design system components were written for React 18 and render correctly on 19 in the starter. See [Decisions](docs/decisions.md) for why Tailwind stays on 3.4.

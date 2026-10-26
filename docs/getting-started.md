@@ -4,8 +4,8 @@ This guide takes you from nothing to a running tool with your own page, then cov
 
 ## Before you begin
 
-- Node 20 or newer. The repository pins 22 in `.nvmrc`, so `nvm use` picks it.
-- npm 10 or newer.
+- Node 24 or newer. The repository pins the current LTS release in `.nvmrc`, so `nvm use` picks it.
+- npm 11 or newer.
 - Git.
 
 ## 1. Create your repository from the template
