@@ -11,14 +11,18 @@
   --vp-button-brand-hover-bg: #3c3a3b;
 }
 
-.dark {
-  --vp-c-brand-1: #6cb2e3;
-  --vp-c-brand-2: #8fc4ea;
-  --vp-c-brand-3: #1978b8;
-}
-
 h1, h2, h3, .VPHero .name, .VPHero .text, .VPNavBarTitle .title {
   font-family: 'Figtree', 'Open Sans', system-ui, sans-serif;
+}
+
+/* The landscape logo is wide: give it the top bar's height, then the site name after a divider, as in TopBar. */
+.VPNavBarTitle .logo {
+  height: 32px;
+}
+.VPNavBarTitle .title span {
+  padding-left: 16px;
+  margin-left: 4px;
+  border-left: 1px solid var(--vp-c-divider);
 }
 
 /* Square corners, as in the design system. */

@@ -29,7 +29,7 @@ Status: **To do**, **In progress**, **Done** (keep done items until the next rel
 | 17 | Describe live updates in AsyncAPI | 1, 3 | — | Dropped | Went with item 1. |
 | 18 | Account screens: sign in, ask for an account with manager approval, accept an invitation, forgot and reset password, your account, sign out | All | 1 | Done | `src/pages/auth/`, `AccountPage`, approval on the Users page. Design system: `AuthLayout`, `PasswordField`. |
 | 19 | Documentation site with the starter as a live demo | All | 1 | Done | GitLab Pages (`pages` job in `.gitlab-ci.yml`). Decisions, tracking and the ECMS open questions stay out of the site (`INTERNAL` in `docs/.vitepress/config.mts`). |
-| 21 | Move to gitlab.up.pt: repository, CI, Pages, releases | All | 1 | In progress | The GitHub repositories are archived after the move. |
+| 21 | Move to gitlab.up.pt: repository, CI, Pages, releases | All | 1 | Done | GitHub repositories archived. CI runs on a temporary group runner on les2-turbo-01 until FEUP provides one. The release job runs for the first time at v0.2.0. |
 | 22 | Automatic dependency updates (Dependabot did this on GitHub) | All | 3 | To do | Today: `npm outdated` once a month. Renovate is an option if the runners allow it. |
 | 20 | More shared components for the work package's tools (list to agree with the teams) | All | 1 | To do | Candidates: file upload (item 13), empty state, tabs, pagination, toast for saved changes. |
 
