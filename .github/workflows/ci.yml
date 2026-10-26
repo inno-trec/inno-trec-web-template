@@ -38,6 +38,7 @@ jobs:
 
       - name: Warn when a newer Node LTS exists
         if: matrix.label == '.nvmrc'
+        continue-on-error: true # advisory: an unreachable nodejs.org must not block CI
         run: |
           pinned=$(cut -d. -f1 .nvmrc | tr -d 'v ')
           latest=$(curl -fsSL https://nodejs.org/dist/index.json | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>console.log(JSON.parse(s).find(r=>r.lts).version.slice(1).split(".")[0]))')

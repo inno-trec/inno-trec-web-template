@@ -33,6 +33,8 @@ test('every page renders its heading without sideways scroll or console errors',
     await test.step(href, async () => {
       await page.goto(href);
       await expect(page.locator('.it-shell-main > h1')).toHaveText(label);
+      // The heading comes from NAV, so also check that a route renders a real page, not the fallback.
+      await expect(page.locator('[data-not-found]'), `no route for ${href} in App.tsx`).toHaveCount(0);
       await expectNoSidewaysScroll(page);
     });
   }
@@ -44,6 +46,7 @@ test('an unknown address shows the not-found page', async ({ page }) => {
   const errors = collectErrors(page);
   await page.goto('/no-such-page');
   await expect(page.locator('.it-shell-main > h1')).toHaveText('Page not found');
+  await expect(page.locator('[data-not-found]')).toHaveCount(1);
   await expectNoSidewaysScroll(page);
   expect(errors).toEqual([]);
 });
