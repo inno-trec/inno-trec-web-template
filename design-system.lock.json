@@ -1,8 +1,8 @@
 {
   "designSystem": "inno-trec-design-system",
-  "publishedVersion": "1793011791-388c",
+  "publishedVersion": "1793034483-df47",
   "publishedAt": "2026-10-26",
-  "syncedAt": "2026-10-26T10:50:36.246Z",
+  "syncedAt": "2026-10-26T17:08:11.740Z",
   "components": 33,
   "logos": 8,
   "funding": 2,
@@ -13,9 +13,9 @@
     "components.md"
   ],
   "files": {
-    "docs/reference/brand-book.md": "bcc090780524fb0e615315f51965e97b0080b9d77a62768e040dc8db5514ecb3",
+    "docs/reference/brand-book.md": "e8079b7a06d8395fd1d724e83948042ebf570d153d82ad34823caa243e7ceb1a",
     "docs/reference/components.md": "88b11117b31eb17bf1215a7de9797242eeb58ea78079218b00c42e075da0388d",
-    "docs/reference/DESIGN.md": "0ccecd6257f520cfd2a4b281e54b2b1ffc1e3e036bb50d8f543a72625b088510",
+    "docs/reference/DESIGN.md": "36f389d1d652fe13fcd04925089d730da3a0df74cdd626bc6a66c23dfa041caa",
     "docs/reference/open-questions.md": "437864536fe551500dadf03d10836f3fefeaee1c09885bb398ef964022dd5eaf",
     "packages/tokens/dist/tailwind-preset.cjs": "6800aba7d7daaab3910ad79b978a4317dc49e2fd0c31c528118aef84621574f6",
     "packages/tokens/dist/tokens.cjs": "932ffd24537af5d6cf2a187a570824c86c281c91910c0fb07b1a3110dd27d0f7",

@@ -1,6 +1,6 @@
 # Page patterns
 
-Two apps show the patterns most tools need. `web-starter` holds the patterns every tool uses (monitoring over time, list with detail). `credits-example` holds the patterns of credit tools (ledger overview, step flow, member screen). Each pattern is a real file you can copy. This page explains what each one is for and which rules shape it.
+Two apps show the patterns most tools need. `web-starter` holds the patterns of the monitoring, PV performance and maintenance tools (monitoring over time, performance against references, data checks, alerts, lists with detail, forms). `credits-example` holds the patterns of credit tools (ledger overview, step flow, member screen). Each pattern is a real file you can copy. This page explains what each one is for and which rules shape it.
 
 All patterns sit inside `ToolShell`, which draws the top bar, the side navigation and the page heading. A page returns its content only.
 
@@ -177,6 +177,58 @@ Rules for this pattern:
 - **Say what happened.** After a save, the dialog closes, the list shows the backend's answer, and a success `InlineAlert` names the change.
 - **Choose the right control.** `RadioGroup` for one of two to five options (with a description when the effect is not obvious), `Select` for longer lists, `Checkbox` for a yes or no confirmed with the form, `Switch` for a setting that is on or off, `DateField` for one day, `Textarea` for long text.
 - **The backend owns the options.** The roles and their descriptions come from the backend, which also decides what each role may do.
+
+## 7. Performance against references
+
+Source: [`web-starter/src/pages/PerformancePage.tsx`](../apps/web-starter/src/pages/PerformancePage.tsx)
+
+Use it to evaluate PV systems: performance ratio, availability, specific yield and efficiency, each against the system's own history and the community as a whole.
+
+```tsx
+<LazyBarChart
+  categories={systems.map((s) => s.name)}
+  values={systems.map((s) => s.specificYield.value)}
+  name="Specific yield"
+  color={colors['series-pv']}
+  unit="kWh/kWp"
+  reference={{ name: 'Community', value: community.specificYieldKwhPerKwp }}
+  label="Specific yield of each PV system, compared with the community"
+/>
+```
+
+Rules for this pattern:
+
+- **The backend computes the indicators and decides their status.** The page shows "Below normal" when the API says so. The definitions are still open (tracking D2).
+- **A reference is a dotted line**, labeled with its name and value. Dashed lines mean estimates.
+- **Bars have one color**, the series color of what is measured. Never color a bar by its status: the table carries a `Badge` instead.
+- **Show the usual value next to each indicator** ("usually 81"), so a reader can judge it without a second chart.
+- **Horizontal bars** keep long system names readable on phones.
+
+## 8. Data checks: do the sources agree?
+
+Source: [`web-starter/src/pages/DataChecksPage.tsx`](../apps/web-starter/src/pages/DataChecksPage.tsx)
+
+Use it to validate the coherence between sources of the same quantity: a meter, inverter monitoring, a model such as the DSS. For each quantity the backend names one reference source and compares every other source with it.
+
+Rules for this pattern:
+
+- **List every source first**, with readings received, deviation, tolerance and status. Start with a source outside its tolerance selected, because that is what needs a look.
+- **Chart one source at a time**: its deviation (%) from the reference over time, in the quantity's series color, with the tolerance as a `surface-muted` band and a line at zero (`TimeSeriesChart` with `band`). Never overlay several sources of one quantity.
+- **A source with no data is a status, not a zero.** Say that nothing can be compared until it sends readings again.
+
+## 9. Alerts inbox
+
+Source: [`web-starter/src/pages/AlertsPage.tsx`](../apps/web-starter/src/pages/AlertsPage.tsx)
+
+Use it for corrective alerts (a failure to repair) and predictive alerts (performance below normal). The alert engine raises them, writes their text and notifies the people responsible; this page shows them and records who handles them.
+
+Rules for this pattern:
+
+- **Filters on top**: state (open by default) and type.
+- **Severity and state are words with color**: `Badge` in the list, an `InlineAlert` with the backend's text in the detail.
+- **A predictive alert shows its indicator** with the usual value ("Performance ratio 66 % (usually 81 %)").
+- **Acknowledge says someone is on it; resolve asks what was done.** Resolving opens a `Dialog` with a required `Textarea`. The record keeps who acknowledged and what was done.
+- **The asset page links here.** An asset shows its open alerts and an "Open alerts" button.
 
 ## Loading, empty and error
 

@@ -12,6 +12,9 @@ const USER = { name: 'Sample User', role: 'Community manager' };
 /** `id` is the route path. `label` is also the page heading. Manager tools may use more than five items; member tools should not. */
 const NAV: Array<NavItem & { href: string }> = [
   { id: '/', href: '/', label: 'Overview', icon: 'sun' },
+  { id: '/performance', href: '/performance', label: 'PV performance', icon: 'panel' },
+  { id: '/data-checks', href: '/data-checks', label: 'Data checks', icon: 'check' },
+  { id: '/alerts', href: '/alerts', label: 'Alerts', icon: 'alert' },
   { id: '/assets', href: '/assets', label: 'Assets', icon: 'wrench' },
   { id: '/users', href: '/users', label: 'Users', icon: 'person' },
 ];

@@ -4,6 +4,8 @@ import {
   AriaComponent,
   GridComponent,
   LegendComponent,
+  MarkAreaComponent,
+  MarkLineComponent,
   TooltipComponent,
   type GridComponentOption,
   type LegendComponentOption,
@@ -16,7 +18,7 @@ import { BROWSER_TIME_ZONE, zoneOffset } from '../time/zone';
 import { formatNumber, formatTime } from './format';
 
 // Load only the parts of ECharts this chart uses. Add others (BarChart, DataZoomComponent…) when you need them.
-use([LineChart, GridComponent, LegendComponent, TooltipComponent, AriaComponent, CanvasRenderer]);
+use([LineChart, GridComponent, LegendComponent, TooltipComponent, MarkAreaComponent, MarkLineComponent, AriaComponent, CanvasRenderer]);
 
 type Option = ComposeOption<LineSeriesOption | GridComponentOption | LegendComponentOption | TooltipComponentOption>;
 
@@ -47,13 +49,18 @@ export interface TimeSeriesChartProps<P extends Point> {
   height?: number;
   min?: number;
   max?: number;
+  /**
+   * A tolerance band, for example ±3% around zero when comparing data sources. It is drawn in
+   * surface-muted with its label, together with a line at zero.
+   */
+  band?: { from: number; to: number; label: string };
 }
 
 /**
  * A line chart over time, styled by the design system's chart rules: fixed series colors, one y-axis,
  * a legend, direct labels when there is room, dashed estimates and gaps for missing data.
  */
-export function TimeSeriesChart<P extends Point>({ points, series, unit, label, timeZone = BROWSER_TIME_ZONE, height = 320, min, max }: TimeSeriesChartProps<P>) {
+export function TimeSeriesChart<P extends Point>({ points, series, unit, label, timeZone = BROWSER_TIME_ZONE, height = 320, min, max, band }: TimeSeriesChartProps<P>) {
   const ref = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
 
@@ -72,7 +79,7 @@ export function TimeSeriesChart<P extends Point>({ points, series, unit, label, 
     const chart = init(el, undefined, { renderer: 'canvas' });
     chart.setOption(buildOption(points, series, unit, width));
     return () => chart.dispose();
-  }, [points, series, unit, width, min, max, timeZone]);
+  }, [points, series, unit, width, min, max, timeZone, band]);
 
   return <div ref={ref} data-chart role="img" aria-label={label} style={{ width: '100%', height }} />;
 
@@ -119,6 +126,25 @@ export function TimeSeriesChart<P extends Point>({ points, series, unit, label, 
       };
       return [measured, estimated];
     });
+
+    if (band && lines[0]) {
+      lines[0] = {
+        ...lines[0],
+        markArea: {
+          silent: true,
+          itemStyle: { color: colors['surface-muted'] },
+          label: { show: true, position: 'insideTopLeft', formatter: band.label, ...muted },
+          data: [[{ yAxis: band.from }, { yAxis: band.to }]],
+        },
+        markLine: {
+          silent: true,
+          symbol: 'none',
+          label: { show: false },
+          lineStyle: { color: colors['line-strong'], width: 1, type: 'solid' },
+          data: [{ yAxis: 0 }],
+        },
+      };
+    }
 
     return {
       animation: false,
@@ -181,8 +207,9 @@ export function TimeSeriesChart<P extends Point>({ points, series, unit, label, 
         type: 'value',
         name: yUnit,
         nameTextStyle: { ...muted, align: 'right' },
-        min,
-        max,
+        // A band must stay whole on the axis, even when every value lies outside it.
+        min: band ? (v: { min: number }) => Math.floor(Math.min(v.min, band.from) - 1) : min,
+        max: band ? (v: { max: number }) => Math.ceil(Math.max(v.max, band.to) + 1) : max,
         axisLabel: { ...muted, formatter: (v: number) => formatNumber(v) },
         splitLine: { lineStyle: { color: colors.line } },
       },

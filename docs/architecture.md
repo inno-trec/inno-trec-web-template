@@ -11,6 +11,7 @@ INNO-TREC design system repository          (source of truth: tokens, components
 │  packages/tokens     tokens.json → Tailwind preset, CSS variables, JS    │
 │  packages/ui-web     components as an ES module + one stylesheet + logos │
 │  docs/reference      brand book, component guide, open questions         │
+│  packages/api-contract  draft data contract with WP2 (OpenAPI) and types │
 │                                                                          │
 │  apps/web-starter    starter app: monitoring and maintenance pages       │
 │  apps/credits-example  example pages for energy credit tools             │
@@ -79,10 +80,12 @@ apps/web-starter/src/
   App.tsx               the list of routes
   index.css             Tailwind, and one workaround for the top bar on phones
   layouts/ToolShell.tsx top bar, side navigation, page heading, footer
-  pages/                one file per screen (Overview, Assets, Users, not found)
+  pages/                one file per screen (Overview, PV performance, Data checks, Alerts, Assets, Users, not found)
   charts/               TimeSeriesChart (ECharts), its lazy loader, number and time formats
-  data/synthetic.ts     synthetic 15-minute readings, replace with your API
-  data/api.ts           fake backend (delay, ?demo=empty, ?demo=error), replace with your API
+  data/api.ts           the API client the pages call (types from @inno-trec/api-contract)
+  data/fakeServer.ts    simulated WP2 provider in the contract's shapes (?demo=empty, ?demo=error)
+  data/synthetic.ts     synthetic 15-minute readings behind the simulated provider
+  labels.ts             words and tones for the codes the API sends
 ```
 
 `apps/credits-example` has the same structure, with the credit pages (ledger overview, wallets, send flow, member wallet) and ECMS sample data.

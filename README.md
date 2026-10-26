@@ -11,7 +11,7 @@ npm install
 npm run dev          # serves the starter at http://localhost:5173
 ```
 
-You get a tool with a top bar, side navigation, the EU funding footer and three example pages on synthetic data: an energy overview with time-series charts, an asset list with status and maintenance suggestions, and user management with forms in dialogs. Edit `apps/web-starter/src/pages/` and the browser updates.
+You get a tool with a top bar, side navigation, the EU funding footer and example pages on synthetic data: an energy overview with time-series charts, PV performance against references, checks of agreement between data sources, maintenance alerts, assets, and user management with forms in dialogs. Edit `apps/web-starter/src/pages/` and the browser updates.
 
 The template serves the INNO-TREC web tools: energy monitoring (consumption, PV, storage), PV yield and performance, asset maintenance, and the energy credit system. The starter fits the first three. For credit screens, run `npm run dev:credits` and copy pages from `apps/credits-example/`.
 
@@ -24,6 +24,7 @@ To build a tool of your own, read [Getting started](docs/getting-started.md).
 | `apps/web-starter/` | The starter app: Vite, React 19, TypeScript, Tailwind, ECharts. Monitoring and maintenance pages. Copy it to start a tool. |
 | `apps/credits-example/` | Example pages for energy credit tools (ECMS): ledger overview, wallets, send flow, member wallet. |
 | `packages/ui-web/` | The design system components for React on the web, with their styles and logos. Generated. |
+| `packages/api-contract/` | The draft data contract with WP2 (OpenAPI 3.1) and the TypeScript types generated from it. Hand-maintained. See [API contract](docs/api-contract.md). |
 | `packages/tokens/` | The design tokens as a Tailwind preset, CSS variables and JavaScript constants. Generated. |
 | `docs/` | The documentation. Start with the table below. |
 | `scripts/` | `sync-design-system.mjs` copies the design system into `packages/` and `docs/reference/`. `export-tokens.mjs` copies the tokens into another project. |
@@ -37,7 +38,7 @@ The two packages are generated from the design system repository. Do not edit th
 | Read this | When you want to |
 | --- | --- |
 | [Getting started](docs/getting-started.md) | Create a tool, add a page, connect your backend, deploy |
-| [Page patterns](docs/page-patterns.md) | Build an overview, a list with detail, a step flow, or a form the way the design system expects |
+| [Page patterns](docs/page-patterns.md) | Build monitoring, performance, data checks, alerts, lists with detail, step flows and forms the way the design system expects |
 | [Design rules](docs/design-rules.md) | Check what the design system requires before you design a screen |
 | [Components](docs/reference/components.md) | Look up when to use each of the 33 components and what it needs |
 | [Tokens and Tailwind](docs/tokens-and-tailwind.md) | Use the right class names, colors and spacing |
@@ -45,6 +46,8 @@ The two packages are generated from the design system repository. Do not edit th
 | [Troubleshooting](docs/troubleshooting.md) | Fix a problem someone has already hit |
 | [Contributing](docs/contributing.md) | Change the template itself |
 | [Decisions](docs/decisions.md) | Learn why it is built this way, and what is still open |
+| [API contract](docs/api-contract.md) | Read the data contract proposed to WP2 (OpenAPI) and its conventions |
+| [Tracking](docs/tracking.md) | See what is still pending and which decisions wait for an owner (provisional) |
 | [Mobile](docs/mobile.md) | See how the mobile app shares tokens with the web tools |
 | [Open questions](docs/reference/open-questions.md) | See where the ECMS specification is ambiguous. Components do not decide these. |
 
@@ -58,6 +61,8 @@ The two packages are generated from the design system repository. Do not edit th
 | `npm run build` | Type checks and builds every app into its own `dist/` folder |
 | `npm test` | Runs the browser smoke tests of every app at 1440px and 400px wide |
 | `npm run check:generated` | Fails if a generated file was edited by hand |
+| `npm run api:lint` | Validates the draft data contract |
+| `npm run api:types` | Regenerates the contract's TypeScript types |
 | `npm run tokens` | Rebuilds the tokens package from `tokens.json` |
 | `npm run sync:ds` | Copies the latest design system into this repository |
 | `npm run export:tokens -- <folder>` | Copies the tokens into another project, such as the mobile app |

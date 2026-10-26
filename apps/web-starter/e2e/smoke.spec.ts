@@ -100,3 +100,31 @@ test('a user can be invited and deactivated', async ({ page }) => {
   await expect(page.getByText('Teresa Lima is deactivated')).toBeVisible();
   expect(errors).toEqual([]);
 });
+
+test('the performance and data checks pages draw their charts', async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto('/performance');
+  await expect(page.locator('[data-chart] canvas')).toHaveCount(1);
+  await expect(page.getByText('Below normal').first()).toBeVisible();
+  await page.goto('/data-checks');
+  await expect(page.locator('[data-chart] canvas')).toHaveCount(1);
+  await expect(page.getByText('Outside tolerance').first()).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('an alert can be acknowledged and resolved', async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto('/alerts');
+  await expect(page.getByRole('heading', { name: 'Inverter 3 stopped with fault F07' })).toBeVisible();
+  await page.getByRole('button', { name: 'Acknowledge' }).click();
+  await expect(page.getByText('Alert acknowledged')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Resolve' }).click();
+  const dialog = page.getByRole('dialog', { name: 'Resolve the alert' });
+  await dialog.getByRole('button', { name: 'Resolve alert' }).click();
+  await expect(dialog.getByText('Write what was done.')).toBeVisible();
+  await dialog.getByRole('textbox', { name: 'What was done' }).fill('Inverter replaced.');
+  await dialog.getByRole('button', { name: 'Resolve alert' }).click();
+  await expect(page.getByText('Alert resolved')).toBeVisible();
+  expect(errors).toEqual([]);
+});

@@ -102,6 +102,9 @@ INNO-TREC tools chart energy over time: consumption, PV production, storage and 
 - Lines are 2px. Grid lines use `line`; axes and tick labels use `ink-muted`. No shadows, gradients or 3D.
 - Estimated or forecast values use a dashed line of the same series colour, and the legend or tooltip says "estimated". Missing data is a gap in the line, never a zero.
 - Status (an alarm, a fault) is not a series: show it with a `Badge` or `InlineAlert`, with a word and an icon.
+- **References** (a system's own history, the community's value, a target) are a dotted 2px line in `ink-muted`, labelled with the name and the value ("Community 101 kWh/kWp"). Never a series colour, and never dashed: dashed means estimated.
+- **Bars** compare categories, such as PV systems or months. They start at zero, have square ends, are at most 48px wide and keep a gap between them. One measure has one colour, the series colour of what is measured (`series-pv` for PV yield). Never colour bars by status or by rank; mark a system below normal with a `Badge` beside its name in the table.
+- **Comparing data sources** for the same quantity (a meter, an inverter, a model): do not draw several lines of the same quantity on top of each other. Plot the deviation (%) of one source from the reference source, in the quantity's series colour, with a zero line and the tolerance as a band in `surface-muted` labelled "Tolerance ±3%". List every source with its deviation, coverage and status in a table beside the chart.
 - Offer the numbers as a table as well, for readers who cannot use the chart.
 - The backend computes every figure a chart shows (energy totals, yield, performance ratio) and sets the reading interval. The interface plots and formats it.
 

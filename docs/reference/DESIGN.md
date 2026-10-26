@@ -265,6 +265,12 @@ components:
     textColor: "{colors.ink}"
     rounded: "{rounded.none}"
     padding: 16px
+  chart-reference-line:
+    backgroundColor: "{colors.ink-muted}"
+    height: 2px
+  chart-tolerance-band:
+    backgroundColor: "{colors.surface-muted}"
+    textColor: "{colors.ink-muted}"
 ---
 
 # INNO-TREC
@@ -376,4 +382,6 @@ React 18 components are published under the global `InnoTrec`; the values above 
 - Do give each energy series its own fixed colour (`series-consumption`, `series-pv`, `series-storage`, `series-grid`) in every chart, with a legend and the unit. Don't use the brand `green` or `orange` for chart marks.
 - Don't put two y-axes on one chart; use two charts that share the time axis. Show estimated values dashed and missing data as a gap, never as zero.
 - Do show times in the community's time zone, not the reader's, and name the time zone on the page.
+- Do draw references (history, community value, target) as a dotted `ink-muted` line with its name and value. Do draw bars in the series colour of the measure, from zero, square, never coloured by status.
+- Don't overlay several sources of the same quantity; plot each source's deviation (%) from the reference source, with the tolerance as a `surface-muted` band.
 - Do write the project name as INNO-TREC in text; INNOTREC (no hyphen) appears only in the logo.

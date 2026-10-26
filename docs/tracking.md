@@ -11,9 +11,9 @@ Status: **To do**, **In progress**, **Done** (keep done items until the next rel
 | # | Item | Tools | Priority | Status | Notes |
 | --- | --- | --- | --- | --- | --- |
 | 1 | Data contract with WP2: OpenAPI as the compatibility rule, a first contract and typed clients | All | 1 | Done (draft) | Draft 0.1 in [API contract](api-contract.md) and `packages/api-contract`, decision 12. Next: WP2 review (D1), credits mapping (item 16). |
-| 2 | Alerts inbox: corrective and predictive alerts with severity and state (new, acknowledged, resolved) | 2, 3 | 1 | In progress | |
-| 3 | PV performance page: PR, availability, specific yield and efficiency per system, against historical and community references; bar chart and reference line | 2 (base for 3) | 1 | In progress | Indicator definitions are open (D2). |
-| 4 | Source coherence: compare the same quantity from several sources (meter, inverter, DSS) and show deviations | 1 | 1 | In progress | |
+| 2 | Alerts inbox: corrective and predictive alerts with severity and state (new, acknowledged, resolved) | 2, 3 | 1 | Done | [Alerts page](../apps/web-starter/src/pages/AlertsPage.tsx), pattern 9. Notifications stay with the alert engine (outside the template). |
+| 3 | PV performance page: PR, availability, specific yield and efficiency per system, against historical and community references; bar chart and reference line | 2 (base for 3) | 1 | Done | [PV performance page](../apps/web-starter/src/pages/PerformancePage.tsx), pattern 7, `BarChart`. Indicator definitions are open (D2). |
+| 4 | Source coherence: compare the same quantity from several sources (meter, inverter, DSS) and show deviations | 1 | 1 | Done | [Data checks page](../apps/web-starter/src/pages/DataChecksPage.tsx), pattern 8, tolerance band in `TimeSeriesChart`. |
 | 5 | Work order form (the Assets button is a placeholder) | 3 | 2 | To do | |
 | 6 | Remote device control: a command with confirmation and the device's answer (sent, done, failed) | 3 | 2 | To do | Needs a safety review: which commands, who may send them. |
 | 7 | Member screens for tools 1–3 (for example "My energy" with `EnergySummary`) | 1, 3 | 2 | To do | All starter pages are manager screens today. |

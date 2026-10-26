@@ -30,7 +30,7 @@ Do these four things first.
 1. **Rename the app.** In `apps/web-starter/package.json`, change `"name"`. If you rename the folder as well, update the `dev` script in the root `package.json`.
 2. **Set the tool name.** In `apps/web-starter/src/layouts/ToolShell.tsx`, change `TOOL_NAME`. It appears in the top bar.
 3. **Set the page title and icon.** In `apps/web-starter/index.html`, change `<title>` and add your icon.
-4. **Remove the example pages you do not need.** Delete the files in `src/pages/`, their routes in `src/App.tsx`, and their entries in `NAV` in `ToolShell.tsx`. Delete `src/data/synthetic.ts` and `src/data/api.ts` when your own data replaces them. Keep the footer in `ToolShell.tsx`: it carries the EU funding emblem and statement.
+4. **Remove the example pages you do not need.** Delete the files in `src/pages/`, their routes in `src/App.tsx`, and their entries in `NAV` in `ToolShell.tsx`. Delete `src/data/fakeServer.ts` and `src/data/synthetic.ts` when your own API replaces them. Keep the footer in `ToolShell.tsx`: it carries the EU funding emblem and statement.
 
 The starter's pages fit monitoring, PV performance and maintenance tools. For a tool that shows energy credits, copy the pages you need from `apps/credits-example/src/pages/` (and its `src/data/`), and read the [credit rules](design-rules.md#energy-credits).
 
@@ -73,7 +73,7 @@ For the shape of common pages (overview, list with detail, step flow), see [Page
 
 ## 4. Connect your backend
 
-The starter reads from `src/data/api.ts`, a fake backend over synthetic readings (`src/data/synthetic.ts`). It waits and then answers. Replace both with calls to your API. Keep the loading, empty and error states that the pages show.
+The pages call `src/data/api.ts`, the client of the INNO-TREC data API. Today it calls a simulated provider (`src/data/fakeServer.ts`) that answers in the shapes of the draft contract (`packages/api-contract/openapi.yaml`, see [API contract](api-contract.md)). To connect your backend, replace those calls with `fetch` and delete `fakeServer.ts` and `synthetic.ts`. When the contract changes, run `npm run api:types`: the compiler then lists every screen that must follow. Keep the loading, empty and error states that the pages show.
 
 The design system has one rule here: **the interface displays what the backend reports and collects input.** Energy totals, shares, performance indicators, credit amounts and balances all come from the API. Do not calculate them in a component. The [design rules](design-rules.md#numbers-and-units) explain why.
 

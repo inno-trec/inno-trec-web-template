@@ -13,6 +13,12 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ### Added
 
+- Draft data contract with WP2 (`packages/api-contract`, OpenAPI 3.1) with generated TypeScript types; CI validates it and fails when the types drift. The starter's data layer follows it: `fakeServer.ts` plays the provider, `api.ts` is the client. The rationale is in `docs/api-contract.md` (decision 12, which also keeps users and roles in one shared identity).
+- PV performance page: indicators per system against history and the community, `BarChart` with a dotted reference line.
+- Data checks page: agreement between data sources, with a tolerance band in `TimeSeriesChart`.
+- Alerts page: corrective and predictive alerts with filters, acknowledge and resolve. Assets show their open alerts.
+- Chart rules (design system): reference lines, bars, and comparing data sources.
+- `docs/tracking.md`: a provisional list of pending work and decisions.
 - Form components (design system): `Textarea`, `DateField`, `DateRangeField`, `Checkbox`, `RadioGroup`, `Switch`, and `Dialog` on the browser's `<dialog>` element.
 - "Users" page in the starter: invite, edit and deactivate users with forms in dialogs, field errors from the backend and a confirmation before deactivating. A smoke test runs the whole flow. New "Forms in dialogs" pattern and form rules in the docs.
 - Chart series colors (design system): `series-consumption`, `series-pv`, `series-storage` and `series-grid`. Each has a fixed meaning. They were checked together for contrast and for colorblind readers. They are in `DESIGN.md` and in the brand book's new "Charts" section.
