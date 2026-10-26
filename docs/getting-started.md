@@ -82,7 +82,10 @@ Keep a short list of what your tool needs from the backend, because the componen
 ```sh
 npm run typecheck    # types in every workspace
 npm run build        # type check and production build
+npm test             # every page at 1440px and 400px: heading, no sideways scroll, no console errors
 ```
+
+The first time, install the test browser with `npx -w web-starter playwright install chromium`. The tests find your pages through the side navigation, so a page you add to `NAV` is tested without changes to the tests.
 
 Before you open a pull request, read the [design rules](design-rules.md) once. They are short.
 

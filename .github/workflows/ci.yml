@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Checks (Node ${{ matrix.label }})
+    runs-on: ubuntu-latest
+    # The Node pinned in .nvmrc must pass. The newest Node release is an early warning only.
+    continue-on-error: ${{ matrix.label == 'current' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: .nvmrc
+            file: .nvmrc
+          - label: current
+            version: current
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: ${{ matrix.file }}
+          node-version: ${{ matrix.version }}
+          cache: npm
+
+      - name: Warn when a newer Node LTS exists
+        if: matrix.label == '.nvmrc'
+        run: |
+          pinned=$(cut -d. -f1 .nvmrc | tr -d 'v ')
+          latest=$(curl -fsSL https://nodejs.org/dist/index.json | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>console.log(JSON.parse(s).find(r=>r.lts).version.slice(1).split(".")[0]))')
+          if [ "$latest" -gt "$pinned" ]; then echo "::warning::Node $latest is the newest LTS; .nvmrc pins $pinned. See decision 7 in docs/decisions.md."; fi
+
+      - run: npm ci
+
+      - name: Generated files match the last design system sync
+        run: npm run check:generated
+
+      - run: npm run typecheck
+
+      - run: npm run build
+
+      - name: Install Playwright browser
+        run: npx -w web-starter playwright install --with-deps chromium
+
+      - run: npm test
+
+      - name: Upload test report
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report-${{ strategy.job-index }}
+          path: apps/*/playwright-report/
+          retention-days: 14

@@ -73,3 +73,15 @@ Problems that have already come up, with the cause and the fix.
 **Cause.** The components contain fixed English text ("Send credits", "Credits sent", "Step 1 of 3").
 
 **Fix.** There is no translation setting yet. This is an open item in [Decisions](decisions.md). If your tool needs another language, tell the design system owners before you work around it.
+
+## `npm test` says the browser executable does not exist
+
+**Cause.** Playwright downloads its browser separately from `npm install`.
+
+**Fix.** Run `npx -w web-starter playwright install chromium` once. On Linux, add `--with-deps` to install the system libraries as well.
+
+## `npm run check:generated` fails
+
+**Cause.** A file in `packages/tokens/`, `packages/ui-web/src/`, `packages/ui-web/assets/` or `docs/reference/` differs from what the last `npm run sync:ds` wrote. Usually someone edited it by hand.
+
+**Fix.** Undo the edit with `git checkout -- <file>`. If the change is needed, make it in the design system repository and run `npm run sync:ds`, which also records the new hashes.

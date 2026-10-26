@@ -24,7 +24,8 @@ To build a tool of your own, read [Getting started](docs/getting-started.md).
 | `packages/tokens/` | The design tokens as a Tailwind preset, CSS variables and JavaScript constants. Generated. |
 | `docs/` | The documentation. Start with the table below. |
 | `scripts/` | `sync-design-system.mjs` copies the design system into `packages/` and `docs/reference/`. `export-tokens.mjs` copies the tokens into another project. |
-| `design-system.lock.json` | Which version of the design system this copy came from. |
+| `design-system.lock.json` | Which version of the design system this copy came from, and a hash of every generated file. |
+| `CHANGELOG.md` | What changed in each version of the template. |
 
 The two packages are generated from the design system repository. Do not edit them by hand: change the design system, then run `npm run sync:ds`.
 
@@ -51,6 +52,8 @@ The two packages are generated from the design system repository. Do not edit th
 | `npm run dev` | Starts the starter app with hot reload |
 | `npm run typecheck` | Checks types in every workspace |
 | `npm run build` | Type checks and builds every app into its own `dist/` folder |
+| `npm test` | Runs the browser smoke tests of every app at 1440px and 400px wide |
+| `npm run check:generated` | Fails if a generated file was edited by hand |
 | `npm run tokens` | Rebuilds the tokens package from `tokens.json` |
 | `npm run sync:ds` | Copies the latest design system into this repository |
 | `npm run export:tokens -- <folder>` | Copies the tokens into another project, such as the mobile app |
@@ -59,7 +62,7 @@ The two packages are generated from the design system repository. Do not edit th
 
 - **A mobile app.** The mobile app lives elsewhere and shares only the tokens. See [Mobile](docs/mobile.md).
 - **Authentication, an API client or state management.** The starter uses sample data in `src/data/sample.ts`. Replace it with your backend.
-- **Tests.** The starter has type checking and a production build as its checks.
+- **Unit tests.** The starter has browser smoke tests (`npm test`), not unit tests. Add a unit test runner when your tool has logic of its own.
 - **Deployment setup.** `npm run build` produces static files. Where they go is your team's choice.
 
 ## Versions this was verified with
