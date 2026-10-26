@@ -53,6 +53,11 @@ Add a line for your change under `## [Unreleased]` in `CHANGELOG.md`.
 - Show the file path next to every code excerpt.
 - Check every command and every class name you write down. The docs in this repository were checked against a running copy.
 - Link to `docs/reference/` for design system content instead of copying it.
+- The files in `docs/` are also the website. A new page needs an entry in the `sidebar` in `docs/.vitepress/config.mts`. Preview with `npm run docs:dev`. CI builds the site and fails on a broken link.
+
+## The website and the demo
+
+`.github/workflows/pages.yml` publishes `docs/` and the starter (under `demo/`) to GitHub Pages after every push to `main`. It runs only in the template repository (`is_template`). Before the first run, turn on Pages in the repository settings with **Source: GitHub Actions**. The site is public (only GitHub Enterprise Cloud organizations can limit it to members), so internal pages stay out of it: `INTERNAL` in `docs/.vitepress/config.mts` lists them (decisions, tracking, ECMS open questions), and links to them open the file on GitHub. Add a page there when it should not be public.
 
 ## Preparing the repository as a GitHub template
 

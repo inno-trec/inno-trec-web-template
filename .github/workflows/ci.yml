@@ -54,6 +54,10 @@ jobs:
 
       - run: npm run build
 
+      # Fails on a broken link between pages, so the published site stays whole.
+      - name: The documentation site builds
+        run: npx vitepress build docs
+
       # Headless Chromium only. The runner image already has the system libraries (it ships Google Chrome),
       # and --with-deps would pull fonts and xvfb from apt, which has taken over 10 minutes.
       - name: Install Playwright browser

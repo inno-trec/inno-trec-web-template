@@ -13,6 +13,16 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ### Added
 
+- Account screens in the starter: sign in (with "keep me signed in" and a return to the page asked for), ask for an account with a manager's approval on the Users page, accept an invitation, forgot and reset password, "Your account" (profile and password) and sign out. Pages without a session redirect to sign in, and `roles` in `NAV` hide pages from other roles. Pattern 10 and decision 12 describe them.
+- `AuthLayout` and `PasswordField` (design system): the frame of the screens without a session, and a password field with a Show/Hide button.
+- Documentation website (VitePress) built from `docs/`, with the starter as a live demo; `.github/workflows/pages.yml` publishes it to GitHub Pages. `npm run docs:dev` previews it.
+- The starter's router follows `base` in `vite.config.ts`, so the app also works under a sub-path.
+- The starter's sample backend answers in the shapes of `src/data/types.ts`; `api.ts` turns every failure into an `ApiError` with messages per field.
+- PV performance page: indicators per system against history and the community, `BarChart` with a dotted reference line.
+- Data checks page: agreement between data sources, with a tolerance band in `TimeSeriesChart`.
+- Alerts page: corrective and predictive alerts with filters, acknowledge and resolve. Assets show their open alerts.
+- Chart rules (design system): reference lines, bars, and comparing data sources.
+- `docs/tracking.md`: a provisional list of pending work and decisions.
 - Form components (design system): `Textarea`, `DateField`, `DateRangeField`, `Checkbox`, `RadioGroup`, `Switch`, and `Dialog` on the browser's `<dialog>` element.
 - "Users" page in the starter: invite, edit and deactivate users with forms in dialogs, field errors from the backend and a confirmation before deactivating. A smoke test runs the whole flow. New "Forms in dialogs" pattern and form rules in the docs.
 - Chart series colors (design system): `series-consumption`, `series-pv`, `series-storage` and `series-grid`. Each has a fixed meaning. They were checked together for contrast and for colorblind readers. They are in `DESIGN.md` and in the brand book's new "Charts" section.

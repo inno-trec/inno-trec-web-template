@@ -30,7 +30,7 @@ Do these four things first.
 1. **Rename the app.** In `apps/web-starter/package.json`, change `"name"`. If you rename the folder as well, update the `dev` script in the root `package.json`.
 2. **Set the tool name.** In `apps/web-starter/src/layouts/ToolShell.tsx`, change `TOOL_NAME`. It appears in the top bar.
 3. **Set the page title and icon.** In `apps/web-starter/index.html`, change `<title>` and add your icon.
-4. **Remove the example pages you do not need.** Delete the files in `src/pages/`, their routes in `src/App.tsx`, and their entries in `NAV` in `ToolShell.tsx`. Delete `src/data/synthetic.ts` and `src/data/api.ts` when your own data replaces them. Keep the footer in `ToolShell.tsx`: it carries the EU funding emblem and statement.
+4. **Remove the example pages you do not need.** Delete the files in `src/pages/`, their routes in `src/App.tsx`, and their entries in `NAV` in `ToolShell.tsx`. Delete `src/data/fakeServer.ts` and `src/data/synthetic.ts` when your own API replaces them. Keep the footer in `ToolShell.tsx`: it carries the EU funding emblem and statement.
 
 The starter's pages fit monitoring, PV performance and maintenance tools. For a tool that shows energy credits, copy the pages you need from `apps/credits-example/src/pages/` (and its `src/data/`), and read the [credit rules](design-rules.md#energy-credits).
 
@@ -73,7 +73,17 @@ For the shape of common pages (overview, list with detail, step flow), see [Page
 
 ## 4. Connect your backend
 
-The starter reads from `src/data/api.ts`, a fake backend over synthetic readings (`src/data/synthetic.ts`). It waits and then answers. Replace both with calls to your API. Keep the loading, empty and error states that the pages show.
+The pages call `src/data/api.ts`. Today it calls a sample backend (`src/data/fakeServer.ts`) that answers in the shapes of `src/data/types.ts`. To connect your backend:
+
+1. Replace the types in `types.ts` with your backend's. If your backend publishes an OpenAPI description, `npx openapi-typescript <url> -o src/data/schema.d.ts` generates them.
+2. Replace each call in `api.ts` with `fetch`. Turn your backend's errors into `ApiError`: a code for the whole request, and one message per field when it rejects a value. The forms show those messages under the fields.
+3. Delete `fakeServer.ts` and `synthetic.ts`, and follow the compiler.
+
+Keep the loading, empty and error states that the pages show.
+
+### Accounts and sign-in
+
+The screens without a session are in `src/pages/auth/` (sign in, ask for an account, accept an invitation, forgot and reset password); the person's own account is `src/pages/AccountPage.tsx`. `src/auth/session.tsx` holds who is signed in, sends people without a session to `/sign-in`, and hides pages by role (`roles` in `NAV`). The sample keeps the session in the browser; replace it with what your backend or identity provider gives you, and delete the "Sample accounts" note on the sign-in screen. If your tools share an OpenID Connect provider such as Keycloak, its sign-in pages replace these screens, and these screens are the design for its theme.
 
 The design system has one rule here: **the interface displays what the backend reports and collects input.** Energy totals, shares, performance indicators, credit amounts and balances all come from the API. Do not calculate them in a component. The [design rules](design-rules.md#numbers-and-units) explain why.
 
@@ -117,4 +127,4 @@ Never edit the files the script writes. The next sync overwrites them. If someth
 
 The app uses client-side routes such as `/wallets`. Configure the host to answer every unknown path with `index.html`, or opening `/wallets` directly returns a 404. If your host cannot do that, switch the router in `src/main.tsx` from `BrowserRouter` to `HashRouter`.
 
-If the tool is served from a sub-path such as `/ledger/`, set `base: '/ledger/'` in `vite.config.ts` and `basename="/ledger"` on the router.
+If the tool is served from a sub-path such as `/ledger/`, set `base: '/ledger/'` in `vite.config.ts`. The router and the navigation links follow it.

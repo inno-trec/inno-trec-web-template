@@ -1,5 +1,9 @@
 node_modules/
 apps/*/dist/
+apps/*/dist-pages/
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+.playwright-mcp/
 *.log
 .DS_Store
 .env

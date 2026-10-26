@@ -1,20 +1,13 @@
 import { expect, test, type Page } from '@playwright/test';
+import { collectErrors, expectNoSidewaysScroll } from './helpers';
 
-/** Records console errors and uncaught exceptions for the whole test. */
-function collectErrors(page: Page) {
-  const errors: string[] = [];
-  page.on('console', (msg) => {
-    if (msg.type() === 'error') errors.push(msg.text());
+/** These tests start signed in as an administrator. The sign-in screens are tested in accounts.spec.ts. */
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    const session = { userId: 'u-1', name: 'Ana Ribeiro', email: 'ana.ribeiro@example.org', role: 'admin', roleLabel: 'Administrator' };
+    sessionStorage.setItem('inno-trec.session', JSON.stringify(session));
   });
-  page.on('pageerror', (err) => errors.push(err.message));
-  return errors;
-}
-
-/** Fails when the page itself scrolls sideways. A wide table in its own scroll container is allowed. */
-async function expectNoSidewaysScroll(page: Page) {
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-  expect(overflow, 'page scrolls sideways').toBeLessThanOrEqual(0);
-}
+});
 
 /** Pages come from the side navigation, so a new NAV entry is tested without editing this file. */
 async function navPages(page: Page) {
@@ -100,3 +93,49 @@ test('a user can be invited and deactivated', async ({ page }) => {
   await expect(page.getByText('Teresa Lima is deactivated')).toBeVisible();
   expect(errors).toEqual([]);
 });
+
+test('the performance and data checks pages draw their charts', async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto('/performance');
+  await expect(page.locator('[data-chart] canvas')).toHaveCount(1);
+  await expect(page.getByText('Below normal').first()).toBeVisible();
+  await page.goto('/data-checks');
+  await expect(page.locator('[data-chart] canvas')).toHaveCount(1);
+  await expect(page.getByText('Outside tolerance').first()).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('an alert can be acknowledged and resolved', async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto('/alerts');
+  await expect(page.getByRole('heading', { name: 'Inverter 3 stopped with fault F07' })).toBeVisible();
+  await page.getByRole('button', { name: 'Acknowledge' }).click();
+  await expect(page.getByText('Alert acknowledged')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Resolve' }).click();
+  const dialog = page.getByRole('dialog', { name: 'Resolve the alert' });
+  await dialog.getByRole('button', { name: 'Resolve alert' }).click();
+  await expect(dialog.getByText('Write what was done.')).toBeVisible();
+  await dialog.getByRole('textbox', { name: 'What was done' }).fill('Inverter replaced.');
+  await dialog.getByRole('button', { name: 'Resolve alert' }).click();
+  await expect(page.getByText('Alert resolved')).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('the account page saves the profile and checks the current password', async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto('/');
+  await page.getByRole('link', { name: 'Account' }).click();
+  await expect(page.locator('.it-shell-main > h1')).toHaveText('Your account');
+
+  await page.getByRole('textbox', { name: 'Name' }).fill('Ana M. Ribeiro');
+  await page.getByRole('button', { name: 'Save profile' }).click();
+  await expect(page.getByText('Your profile is saved')).toBeVisible();
+
+  await page.getByLabel('Current password').fill('not-my-password');
+  await page.getByLabel('New password').fill('a-new-long-password');
+  await page.getByRole('button', { name: 'Change password' }).click();
+  await expect(page.getByText('This is not your current password.')).toBeVisible();
+  expect(errors).toEqual([]);
+});
+

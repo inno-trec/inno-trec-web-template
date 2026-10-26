@@ -260,11 +260,23 @@ components:
     rounded: "{rounded.full}"
     height: 24px
     width: 44px
+  auth-panel:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.none}"
+    padding: 32px
+    width: 440px
   dialog:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
     rounded: "{rounded.none}"
     padding: 16px
+  chart-reference-line:
+    backgroundColor: "{colors.ink-muted}"
+    height: 2px
+  chart-tolerance-band:
+    backgroundColor: "{colors.surface-muted}"
+    textColor: "{colors.ink-muted}"
 ---
 
 # INNO-TREC
@@ -341,7 +353,7 @@ React 18 components are published under the global `InnoTrec`; the values above 
 
 **Shared:** Button (primary, secondary, ghost, danger; small, medium, large; optional icon before the label), TextField and Select (visible label, hint, error with icon; a large size for members), Card, Badge, InlineAlert (info, success, warning, error, each with an icon and border), Icon.
 
-**Forms:** Textarea, DateField and DateRangeField (the browser's date picker), Checkbox (a choice confirmed with the form), RadioGroup (one of two to five options, with optional descriptions), Switch (on or off, with the state also in words), and Dialog (a modal on the browser's dialog element for one short task or a confirmation; cancel first, main action last).
+**Forms:** Textarea, DateField and DateRangeField (the browser's date picker), Checkbox (a choice confirmed with the form), RadioGroup (one of two to five options, with optional descriptions), Switch (on or off, with the state also in words), Dialog (a modal on the browser's dialog element for one short task or a confirmation; cancel first, main action last), and PasswordField (a password with a Show/Hide button instead of a second "repeat" field).
 
 **Member screens:**
 - WalletBalance: the credit balance in large type with the word "credits", when it was updated, and large "Send credits" and "Exchange" buttons.
@@ -355,7 +367,7 @@ React 18 components are published under the global `InnoTrec`; the values above 
 
 **Manager screens:** AccountCard and AccountList (wallets in EC with type, ID, balance and status: Active, Suspended, Closed), StatTile, DataTable, Identifier (shortened ID with Copy), ConfidenceBadge (Certified, Measured, Estimated, Manual), PurposeTag in technical mode (raw purpose codes).
 
-**Shell:** TopBar, SideNav (icon plus label per item; four or five items for members), Footer (EU funding emblem, funding statement and legal links on `ink`), AppShell.
+**Shell:** TopBar, SideNav (icon plus label per item; four or five items for members), Footer (EU funding emblem, funding statement and legal links on `ink`), AppShell, and AuthLayout (screens without a session: TopBar, one centered panel of at most 440px on `surface`, the same Footer).
 
 ## Do's and Don'ts
 
@@ -376,4 +388,6 @@ React 18 components are published under the global `InnoTrec`; the values above 
 - Do give each energy series its own fixed colour (`series-consumption`, `series-pv`, `series-storage`, `series-grid`) in every chart, with a legend and the unit. Don't use the brand `green` or `orange` for chart marks.
 - Don't put two y-axes on one chart; use two charts that share the time axis. Show estimated values dashed and missing data as a gap, never as zero.
 - Do show times in the community's time zone, not the reader's, and name the time zone on the page.
+- Do draw references (history, community value, target) as a dotted `ink-muted` line with its name and value. Do draw bars in the series colour of the measure, from zero, square, never coloured by status.
+- Don't overlay several sources of the same quantity; plot each source's deviation (%) from the reference source, with the tolerance as a `surface-muted` band.
 - Do write the project name as INNO-TREC in text; INNOTREC (no hyphen) appears only in the logo.

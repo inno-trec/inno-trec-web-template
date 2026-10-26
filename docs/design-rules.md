@@ -40,6 +40,9 @@ The design system has four series colors with a fixed meaning. Use them through 
 - **Estimated values are dashed** and the tooltip says "estimated".
 - **Show times in the community's time zone**, which the backend sends, and name it on the page ("Times in Europe/Lisbon"). Never the reader's: days, totals, solar peaks and alarm times must match what the community sees.
 - **Offer a table** with the same numbers, for readers who cannot use the chart.
+- **References are dotted** `ink-muted` lines with their name and value. Dashed means estimated.
+- **Bars start at zero and have one color**, the series color of the measure. Never color a bar by status.
+- **To compare data sources, plot the deviation** of one source from the reference, with the tolerance as a band. Never overlay several sources of one quantity.
 
 ## Forms
 

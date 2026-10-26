@@ -14,19 +14,29 @@ import {
   type Column,
 } from '@inno-trec/ui-web';
 import { useEffect, useState, type FormEvent } from 'react';
-import { ApiError, getUsers, inviteUser, setUserActive, updateUser, type Role, type RoleId, type User, type UserStatus } from '../data/api';
+import { formatDate, formatRelative } from '../charts/format';
+import { approveRequest, declineRequest, inviteUser, listUsers, updateUser, type Role, type RoleId, type User } from '../data/api';
+import { useSubmit } from '../forms/useSubmit';
 
-const STATUS: Record<UserStatus, { tone: 'success' | 'info' | 'neutral'; label: string }> = {
-  ACTIVE: { tone: 'success', label: 'Active' },
-  INVITED: { tone: 'info', label: 'Invited' },
-  DEACTIVATED: { tone: 'neutral', label: 'Deactivated' },
+type UserStatus = User['status'];
+
+const STATUS: Record<UserStatus, { tone: 'success' | 'info' | 'warning' | 'neutral'; label: string }> = {
+  requested: { tone: 'warning', label: 'Waiting for approval' },
+  active: { tone: 'success', label: 'Active' },
+  invited: { tone: 'info', label: 'Invited' },
+  deactivated: { tone: 'neutral', label: 'Deactivated' },
 };
 
 type Load = { state: 'loading' } | { state: 'error' } | { state: 'ready'; users: User[]; roles: Role[] };
-type Open = 'invite' | 'edit' | 'deactivate' | null;
+type Open = 'invite' | 'edit' | 'deactivate' | 'approve' | 'decline' | null;
 
 /**
- * Pattern: a list with detail, and forms in dialogs. The page has one primary button (Invite user).
+ * Pattern: a list with detail, and forms in dialogs.
+ *
+ * People join in two ways: a manager invites them (Invite user), or they ask for an account on the sign-up
+ * screen and wait here as "Waiting for approval" until a manager approves or declines. If several tools
+ * share one list of users, manage it in one place only and remove this page from the others.
+ * The page has one primary button (Invite user).
  * Each dialog is one short task; a form shows the backend's errors next to the fields.
  * Add ?demo=empty or ?demo=error to the address to see the other states.
  */
@@ -41,7 +51,7 @@ export function UsersPage() {
   useEffect(() => {
     let current = true;
     setLoad({ state: 'loading' });
-    getUsers().then(
+    listUsers().then(
       ({ users, roles }) => current && setLoad({ state: 'ready', users, roles }),
       () => current && setLoad({ state: 'error' }),
     );
@@ -74,8 +84,10 @@ export function UsersPage() {
   }
 
   const { users, roles } = load;
-  const roleLabel = (id: RoleId) => roles.find((r) => r.value === id)?.label ?? id;
+  const roleLabel = (id: RoleId) => roles.find((r) => r.id === id)?.label ?? id;
+  const roleOptions = roles.map((r) => ({ value: r.id, label: r.label, description: r.description }));
   const selected = users.find((u) => u.id === selectedId) ?? users[0];
+  const requests = users.filter((u) => u.status === 'requested');
 
   // Put the backend's answer into the list, select that user and say what happened.
   function saved(user: User, message: string) {
@@ -100,8 +112,21 @@ export function UsersPage() {
     </Button>
   );
 
+  function declined(user: User) {
+    if (load.state !== 'ready') return;
+    setLoad({ ...load, users: load.users.filter((u) => u.id !== user.id) });
+    setSelectedId(undefined);
+    setOpen(null);
+    setNotice(`The request from ${user.name} is declined`);
+  }
+
   return (
     <div className="flex flex-col gap-space-4">
+      {requests.length > 0 && !notice && (
+        <InlineAlert tone="info" title={requests.length === 1 ? `${requests[0].name} asks for an account` : `${requests.length} people ask for an account`}>
+          Choose them in the list to approve or decline. They can sign in once you approve.
+        </InlineAlert>
+      )}
       {problem && (
         <InlineAlert tone="error" title={problem}>
           Check your connection and try again. Nothing was changed.
@@ -127,10 +152,12 @@ export function UsersPage() {
             roleLabel={roleLabel(selected.role)}
             onEdit={() => { setNotice(undefined); setOpen('edit'); }}
             onDeactivate={() => { setNotice(undefined); setOpen('deactivate'); }}
+            onApprove={() => { setNotice(undefined); setOpen('approve'); }}
+            onDecline={() => { setNotice(undefined); setOpen('decline'); }}
             onActivate={() => {
               setNotice(undefined);
               setProblem(undefined);
-              setUserActive(selected.id, true).then(
+              updateUser(selected.id, { status: 'active' }).then(
                 (u) => saved(u, `${u.name} is active again`),
                 () => setProblem(`${selected.name} could not be activated`),
               );
@@ -139,23 +166,57 @@ export function UsersPage() {
         </div>
       )}
 
-      <InviteDialog open={open === 'invite'} roles={roles} onClose={() => setOpen(null)} onSaved={(u) => saved(u, `Invitation sent to ${u.email}`)} />
+      <InviteDialog open={open === 'invite'} roles={roleOptions} onClose={() => setOpen(null)} onSaved={(u) => saved(u, `Invitation sent to ${u.email}`)} />
       {selected && (
         <>
-          <EditDialog open={open === 'edit'} user={selected} roles={roles} onClose={() => setOpen(null)} onSaved={(u) => saved(u, `${u.name} is updated`)} />
+          <EditDialog open={open === 'edit'} user={selected} roles={roleOptions} onClose={() => setOpen(null)} onSaved={(u) => saved(u, `${u.name} is updated`)} />
           <DeactivateDialog open={open === 'deactivate'} user={selected} onClose={() => setOpen(null)} onSaved={(u) => saved(u, `${u.name} is deactivated`)} />
+          <ApproveDialog open={open === 'approve'} user={selected} roles={roleOptions} onClose={() => setOpen(null)} onSaved={(u) => saved(u, `${u.name} can sign in now`)} />
+          <DeclineDialog open={open === 'decline'} user={selected} onClose={() => setOpen(null)} onDeclined={() => declined(selected)} />
         </>
       )}
     </div>
   );
 }
 
-function UserDetail({ user, roleLabel, onEdit, onDeactivate, onActivate }: { user: User; roleLabel: string; onEdit: () => void; onDeactivate: () => void; onActivate: () => void }) {
+interface UserDetailProps {
+  user: User;
+  roleLabel: string;
+  onEdit: () => void;
+  onDeactivate: () => void;
+  onActivate: () => void;
+  onApprove: () => void;
+  onDecline: () => void;
+}
+
+function UserDetail({ user, roleLabel, onEdit, onDeactivate, onActivate, onApprove, onDecline }: UserDetailProps) {
+  if (user.status === 'requested') {
+    return (
+      <Card title={user.name} actions={<Badge tone={STATUS.requested.tone} dot>{STATUS.requested.label}</Badge>}>
+        <div className="flex flex-col gap-space-4">
+          <dl className="m-0 grid grid-cols-[auto_1fr] gap-x-space-4 gap-y-space-2">
+            <dt className="text-ink-muted">Email</dt>
+            <dd className="m-0 break-words">{user.email}</dd>
+            <dt className="text-ink-muted">Message</dt>
+            <dd className="m-0">{user.requestMessage || 'No message'}</dd>
+          </dl>
+          <div className="flex flex-wrap gap-space-2">
+            <Button size="sm" onClick={onApprove}>
+              Approve
+            </Button>
+            <Button size="sm" variant="danger" onClick={onDecline}>
+              Decline
+            </Button>
+          </div>
+        </div>
+      </Card>
+    );
+  }
   const facts: Array<[string, string]> = [
     ['Email', user.email],
     ['Role', roleLabel],
-    ['Last active', user.lastActive],
-    ['Access until', user.accessUntil || 'No end date'],
+    ['Last active', formatRelative(user.lastActiveAt)],
+    ['Access until', user.accessUntil ? formatDate(user.accessUntil) : 'No end date'],
     ['Email alerts', user.emailAlerts ? 'On' : 'Off'],
   ];
   return (
@@ -174,7 +235,7 @@ function UserDetail({ user, roleLabel, onEdit, onDeactivate, onActivate }: { use
           <Button size="sm" onClick={onEdit}>
             Edit
           </Button>
-          {user.status === 'DEACTIVATED' ? (
+          {user.status === 'deactivated' ? (
             <Button size="sm" onClick={onActivate}>
               Activate
             </Button>
@@ -189,30 +250,11 @@ function UserDetail({ user, roleLabel, onEdit, onDeactivate, onActivate }: { use
   );
 }
 
-/** Sends a request and keeps the backend's answer: field messages, or one message for the whole form. */
-function useSubmit() {
-  const [working, setWorking] = useState(false);
-  const [fields, setFields] = useState<Record<string, string>>({});
-  const [failed, setFailed] = useState(false);
-  async function run<T>(request: () => Promise<T>, done: (result: T) => void) {
-    setWorking(true);
-    setFailed(false);
-    setFields({});
-    try {
-      done(await request());
-    } catch (error) {
-      if (error instanceof ApiError && Object.keys(error.fields).length > 0) setFields(error.fields);
-      else setFailed(true);
-    } finally {
-      setWorking(false);
-    }
-  }
-  return { working, fields, failed, setFields, run };
-}
+type RoleOption = { value: RoleId; label: string; description: string };
 
 const FAILED = 'The change could not be saved. Check your connection and try again. Nothing was changed.';
 
-function InviteDialog({ open, roles, onClose, onSaved }: { open: boolean; roles: Role[]; onClose: () => void; onSaved: (u: User) => void }) {
+function InviteDialog({ open, roles, onClose, onSaved }: { open: boolean; roles: RoleOption[]; onClose: () => void; onSaved: (u: User) => void }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [role, setRole] = useState<RoleId>('viewer');
@@ -264,9 +306,9 @@ function InviteDialog({ open, roles, onClose, onSaved }: { open: boolean; roles:
   );
 }
 
-function EditDialog({ open, user, roles, onClose, onSaved }: { open: boolean; user: User; roles: Role[]; onClose: () => void; onSaved: (u: User) => void }) {
+function EditDialog({ open, user, roles, onClose, onSaved }: { open: boolean; user: User; roles: RoleOption[]; onClose: () => void; onSaved: (u: User) => void }) {
   const [role, setRole] = useState<RoleId>(user.role);
-  const [accessUntil, setAccessUntil] = useState(user.accessUntil);
+  const [accessUntil, setAccessUntil] = useState(user.accessUntil ?? '');
   const [emailAlerts, setEmailAlerts] = useState(user.emailAlerts);
   const [note, setNote] = useState(user.note);
   const submit = useSubmit();
@@ -275,7 +317,7 @@ function EditDialog({ open, user, roles, onClose, onSaved }: { open: boolean; us
   useEffect(() => {
     if (!open) return;
     setRole(user.role);
-    setAccessUntil(user.accessUntil);
+    setAccessUntil(user.accessUntil ?? '');
     setEmailAlerts(user.emailAlerts);
     setNote(user.note);
     submit.setFields({});
@@ -283,7 +325,7 @@ function EditDialog({ open, user, roles, onClose, onSaved }: { open: boolean; us
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
-    submit.run(() => updateUser(user.id, { role, accessUntil, emailAlerts, note }), onSaved);
+    submit.run(() => updateUser(user.id, { role, accessUntil: accessUntil || null, emailAlerts, note }), onSaved);
   }
 
   return (
@@ -322,7 +364,7 @@ function DeactivateDialog({ open, user, onClose, onSaved }: { open: boolean; use
       actions={
         <>
           <Button onClick={onClose}>Cancel</Button>
-          <Button variant="danger" disabled={submit.working} onClick={() => submit.run(() => setUserActive(user.id, false), onSaved)}>
+          <Button variant="danger" disabled={submit.working} onClick={() => submit.run(() => updateUser(user.id, { status: 'deactivated' }), onSaved)}>
             {submit.working ? 'Deactivating…' : 'Deactivate'}
           </Button>
         </>
@@ -330,6 +372,60 @@ function DeactivateDialog({ open, user, onClose, onSaved }: { open: boolean; use
     >
       {submit.failed && <InlineAlert tone="error" title="Not deactivated">{FAILED}</InlineAlert>}
       <p>{user.name} will no longer be able to sign in. You can activate the account again later.</p>
+    </Dialog>
+  );
+}
+
+function ApproveDialog({ open, user, roles, onClose, onSaved }: { open: boolean; user: User; roles: RoleOption[]; onClose: () => void; onSaved: (u: User) => void }) {
+  const [role, setRole] = useState<RoleId>('viewer');
+  const submit = useSubmit();
+
+  useEffect(() => {
+    if (open) setRole('viewer');
+  }, [open]);
+
+  return (
+    <Dialog
+      open={open}
+      title={`Approve ${user.name}`}
+      onClose={onClose}
+      actions={
+        <>
+          <Button onClick={onClose}>Cancel</Button>
+          <Button variant="primary" type="submit" form="approve-user" disabled={submit.working}>
+            {submit.working ? 'Approving…' : 'Approve'}
+          </Button>
+        </>
+      }
+    >
+      <form id="approve-user" className="flex flex-col gap-space-4" onSubmit={(e) => { e.preventDefault(); submit.run(() => approveRequest(user.id, role), onSaved); }} noValidate>
+        {submit.failed && <InlineAlert tone="error" title="Not approved">{FAILED}</InlineAlert>}
+        <p className="m-0">{user.name} receives an email and can sign in with the password they chose.</p>
+        <RadioGroup label="Role" options={roles} value={role} onChange={(v) => setRole(v as RoleId)} />
+      </form>
+    </Dialog>
+  );
+}
+
+function DeclineDialog({ open, user, onClose, onDeclined }: { open: boolean; user: User; onClose: () => void; onDeclined: () => void }) {
+  const submit = useSubmit();
+  return (
+    <Dialog
+      open={open}
+      size="sm"
+      title={`Decline the request from ${user.name}?`}
+      onClose={onClose}
+      actions={
+        <>
+          <Button onClick={onClose}>Cancel</Button>
+          <Button variant="danger" disabled={submit.working} onClick={() => submit.run(() => declineRequest(user.id), onDeclined)}>
+            {submit.working ? 'Declining…' : 'Decline'}
+          </Button>
+        </>
+      }
+    >
+      {submit.failed && <InlineAlert tone="error" title="Not declined">{FAILED}</InlineAlert>}
+      <p>The request is deleted and {user.name} cannot sign in. They can ask again later.</p>
     </Dialog>
   );
 }

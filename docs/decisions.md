@@ -86,6 +86,16 @@ The reader's own time zone would be simpler, and for readers in the community's 
 
 **Revisit when** a tool compares communities in different time zones on one chart. That chart needs one shared clock, probably UTC, and says so.
 
+### 12. Account screens in the template; each system owns its data API
+
+The template gives every tool the screens around accounts: sign in, ask for an account (a manager approves it), accept an invitation, reset a password, the person's own account, and the list of users with roles. It does not define how a tool talks to its backend. Each system owns its API and its description; the starter's `src/data/types.ts` and `src/data/fakeServer.ts` are examples to replace.
+
+An earlier draft of this decision put a data contract (OpenAPI) for all providers in the template. It was removed: the contract belongs to the systems that provide the data, and the template's job is the interface that teams in the work package reuse.
+
+**Consequence.** The starter keeps its sample session in the browser so it runs without a server; a real tool takes the session from its backend or identity provider. If the tools adopt one OpenID Connect provider (for example Keycloak), the provider shows its own sign-in pages, and the template's screens are the design for its theme. Hiding a page by role is for clarity only; the backend checks the role on every request.
+
+**Revisit when** the project chooses an identity provider (tracking D7).
+
 ## Open
 
 These need an owner and an answer. None blocks using the template today.

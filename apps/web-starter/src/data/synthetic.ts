@@ -12,8 +12,8 @@ import { zonedParts } from '../time/zone';
 /** The community's time zone sets its days, its solar curve and its daily totals. */
 export const COMMUNITY = { households: 24, pvKwp: 60, batteryKwh: 100, batteryKw: 25, timeZone: 'Europe/Lisbon' };
 
-/** One 15-minute reading. Power in kW: storage is positive while charging, grid is positive while importing. */
-export interface Reading {
+/** One 15-minute sample. Power in kW: storage is positive while charging, grid is positive while importing. */
+export interface Sample {
   /** Start of the interval, in milliseconds since 1970 (UTC). */
   time: number;
   consumption: number | null;
@@ -72,8 +72,8 @@ const round = (n: number) => Math.round(n * 100) / 100;
  * Readings at or after `estimatedAfter` are marked as estimated. The meters are offline from
  * 03:00 to 04:00 (community time) on the last day, to show a gap in the data.
  */
-export function generateReadings(from: number, to: number, estimatedAfter: number): Reading[] {
-  const readings: Reading[] = [];
+export function generateReadings(from: number, to: number, estimatedAfter: number): Sample[] {
+  const readings: Sample[] = [];
   let socKwh = COMMUNITY.batteryKwh * 0.4;
   const last = zonedParts(to - 1, COMMUNITY.timeZone);
 

@@ -25,6 +25,17 @@ Use TextField for single-line input, always with a visible `label`.
 - Member screens set `large`. Put the unit in `suffix` ("credits") so people type only the number.
 - `hint` says what to type or what is available; `error` replaces it with an icon and a plain sentence of what to do.
 
+## PasswordField
+
+Group: Forms
+
+Use PasswordField for a password, with a visible `label` and a Show/Hide button so people can check what they typed.
+
+- Provide: `label`, `value`/`onChange`, and `autoComplete`: `"current-password"` to sign in, `"new-password"` to set a password. Password managers rely on it.
+- Ask for a new password once. The Show button replaces a second "repeat the password" field.
+- Put the rule in `hint` ("At least 12 characters."). The backend checks it and returns the message for `error`.
+- Never paste-block the field and never clear it after a wrong attempt on another field.
+
 ## Select
 
 Group: Forms
@@ -334,3 +345,14 @@ Use AppShell as the page frame of an INNO-TREC web tool: TopBar, SideNav, a main
 - Provide: `logoSrc`, `title`, `user`, `navItems` or `navSections`, `activeId`, `onNavigate`, `heading` (the page's h1) and `children` (the page content, usually Cards and StatTiles).
 - Pass a Footer as `footer`. It sits below the side navigation and the main area, and the main area grows so the footer stays at the bottom of the window.
 - Give the shell a full-height parent (`height: 100%` on html and body) so the side navigation runs to the bottom.
+
+## AuthLayout
+
+Group: Shell
+
+Use AuthLayout as the frame of every screen without a session: sign in, create an account, accept an invitation, reset a password.
+
+- Provide: `logoSrc` and `title` (as in AppShell), `heading` (the screen's h1), an optional `intro`, the form as `children`, and the same `Footer` as the signed-in screens.
+- One task per screen, with one primary button. Put the way to the other screen in `aside` ("New here? Create an account").
+- Say what went wrong without helping an attacker: "The email or password is wrong", not which one. After a reset request, show the same message whether the email exists or not.
+- The panel is 440px wide at most and fills the width on a phone. Use the standard field size; members' screens may set `large`.

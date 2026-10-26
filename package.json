@@ -19,6 +19,11 @@
     "sync:ds": "node scripts/sync-design-system.mjs",
     "export:tokens": "node scripts/export-tokens.mjs",
     "test": "npm run test --workspaces --if-present",
-    "check:generated": "node scripts/check-generated.mjs"
+    "check:generated": "node scripts/check-generated.mjs",
+    "docs:dev": "vitepress dev docs",
+    "pages:build": "node scripts/build-pages.mjs"
+  },
+  "devDependencies": {
+    "vitepress": "1.6.4"
   }
 }

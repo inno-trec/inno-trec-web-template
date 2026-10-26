@@ -1,18 +1,13 @@
 import { Badge, Button, Card, ConfidenceBadge, DataTable, InlineAlert, type Column } from '@inno-trec/ui-web';
 import { useEffect, useState } from 'react';
-import { getAssets, type Asset, type AssetStatus } from '../data/api';
-
-/** Status always shows a word with its color. */
-const STATUS: Record<AssetStatus, { tone: 'success' | 'warning' | 'danger' | 'neutral'; label: string }> = {
-  RUNNING: { tone: 'success', label: 'Running' },
-  ATTENTION: { tone: 'warning', label: 'Needs attention' },
-  FAULT: { tone: 'danger', label: 'Fault' },
-  OFFLINE: { tone: 'neutral', label: 'Offline' },
-};
+import { useNavigate } from 'react-router';
+import { formatMonth, formatQuantities, formatRelative } from '../charts/format';
+import { listAssets, type Asset } from '../data/api';
+import { ALERT_SEVERITY, ASSET_STATUS as STATUS, ASSET_TYPE } from '../labels';
 
 const COLUMNS: Column<Asset>[] = [
   { key: 'name', header: 'Asset' },
-  { key: 'type', header: 'Type' },
+  { key: 'type', header: 'Type', render: (a) => ASSET_TYPE[a.type] },
   { key: 'site', header: 'Site' },
   { key: 'status', header: 'Status', render: (a) => <Badge tone={STATUS[a.status].tone} dot>{STATUS[a.status].label}</Badge> },
   { key: 'dataQuality', header: 'Data', render: (a) => <ConfidenceBadge level={a.dataQuality} /> },
@@ -22,7 +17,7 @@ type Load = { state: 'loading' } | { state: 'error' } | { state: 'ready'; assets
 
 /**
  * Pattern: list with detail. The table lists the community's assets; the panel shows the selected one
- * with the maintenance suggestions the backend writes for the person responsible.
+ * with its open alerts, which the backend writes for the person responsible.
  * Add ?demo=empty or ?demo=error to the address to see the other states.
  */
 export function AssetsPage() {
@@ -33,7 +28,7 @@ export function AssetsPage() {
   useEffect(() => {
     let current = true;
     setLoad({ state: 'loading' });
-    getAssets().then(
+    listAssets().then(
       (assets) => current && setLoad({ state: 'ready', assets }),
       () => current && setLoad({ state: 'error' }),
     );
@@ -94,18 +89,19 @@ export function AssetsPage() {
 }
 
 function AssetDetail({ asset }: { asset: Asset }) {
+  const navigate = useNavigate();
   const facts: Array<[string, string]> = [
-    ['Type', asset.type],
+    ['Type', ASSET_TYPE[asset.type]],
     ['Site', asset.site],
-    ['Rating', asset.rating],
-    ['Installed', asset.installed],
-    ['Last reading', asset.lastReading],
+    ['Rating', formatQuantities(asset.ratings)],
+    ['Installed', formatMonth(asset.installedOn)],
+    ['Last reading', formatRelative(asset.lastReadingAt)],
   ];
 
   return (
     <Card
       title={asset.name}
-      subtitle={`${asset.type} · ${asset.site}`}
+      subtitle={`${ASSET_TYPE[asset.type]} · ${asset.site}`}
       actions={<Badge tone={STATUS[asset.status].tone} dot>{STATUS[asset.status].label}</Badge>}
     >
       <div className="flex flex-col gap-space-4">
@@ -122,19 +118,24 @@ function AssetDetail({ asset }: { asset: Asset }) {
           </dd>
         </dl>
 
-        {/* The backend decides what to suggest and writes the text. The interface shows it as it comes. */}
-        {asset.suggestions.length === 0 ? (
-          <p className="m-0 text-ink-muted">Nothing to do for this asset.</p>
+        {/* The backend raises the alerts and writes their text. The interface shows them as they come. */}
+        {asset.openAlerts.length === 0 ? (
+          <p className="m-0 text-ink-muted">No open alerts for this asset.</p>
         ) : (
-          asset.suggestions.map((s) => (
-            <InlineAlert key={s.title} tone={s.tone} title={s.title}>
-              {s.text}
+          asset.openAlerts.map((a) => (
+            <InlineAlert key={a.id} tone={ALERT_SEVERITY[a.severity].alertTone} title={a.title}>
+              {a.text}
             </InlineAlert>
           ))
         )}
 
-        <div>
-          {/* TODO: connect to your work-order system. It does nothing in the starter. */}
+        <div className="flex flex-wrap gap-space-2">
+          {asset.openAlerts.length > 0 && (
+            <Button size="sm" onClick={() => navigate('/alerts')}>
+              Open alerts
+            </Button>
+          )}
+          {/* TODO: connect to your work-order system. It does nothing in the starter (tracking item 5). */}
           <Button size="sm" onClick={() => console.info('TODO: create a work order for', asset.id)}>
             Create work order
           </Button>
