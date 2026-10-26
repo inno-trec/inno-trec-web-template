@@ -73,7 +73,7 @@ Generated files start with a `GENERATED` banner. The sync records a SHA-256 hash
 - `src/App.tsx`: routes nested under `ToolShell`.
 - `src/layouts/ToolShell.tsx`: wraps the design system `AppShell`. The `NAV` array drives both the side navigation and the page heading (`label`). `TOOL_NAME` and `USER` are placeholders. It passes a `Footer` with the EU funding emblem (`@inno-trec/ui-web/assets/funding/eu-funded-negative.png`) and `FOOTER_LINKS`; every tool keeps the footer.
 - Adding a page takes three edits: a file in `src/pages/`, a `<Route>` in `App.tsx`, and a `NAV` entry.
-- Pages: `OverviewPage.tsx` (monitoring: period filter, `StatTile` totals, power chart in kW, battery chart in %, table view) and `AssetsPage.tsx` (list with detail, status, data quality, maintenance suggestions from the backend). Both show loading, empty and error states.
+- Pages: `OverviewPage.tsx` (monitoring: period filter, `StatTile` totals, power chart in kW, battery chart in %, table view), `AssetsPage.tsx` (list with detail, status, data quality, maintenance suggestions from the backend) and `UsersPage.tsx` (forms in `Dialog`s: invite, edit, confirm deactivation; `useSubmit` maps the backend's `ApiError.fields` to field errors). All show loading, empty and error states.
 - `src/charts/TimeSeriesChart.tsx` wraps Apache ECharts (tree-shaken imports from `echarts/core`). It takes `SeriesSpec`s whose `color` must be a series token (`colors['series-pv']` from `@inno-trec/tokens`), draws one y-axis, a legend, end labels when they fit, dashed estimates and gaps for `null`. Pages import `LazyTimeSeriesChart`, which loads ECharts on demand. `src/charts/format.ts` holds the shared number and time formats.
 - Times follow the community's time zone, sent by the backend (`EnergyReport.timeZone`), never the reader's. `src/time/zone.ts` converts with `Intl` only; `TimeSeriesChart` shifts instants by the zone offset and sets `useUTC`, because ECharts has no time zone option. Pass `timeZone` to the chart and to the `format.ts` functions.
 - `src/data/synthetic.ts` generates deterministic synthetic 15-minute readings. `src/data/api.ts` is a fake backend over it that also computes totals and table rows (a delay, and `?demo=empty` / `?demo=error` in the address to show the other states). There is no real API client, auth or state library.
@@ -91,6 +91,7 @@ All tools:
 - Every number has its unit. Missing data is never zero: a gap in a chart, "No data" in a table.
 - Charts use the series tokens (`series-consumption`, `series-pv`, `series-storage`, `series-grid`), each with a fixed meaning, never the brand `green`/`orange`. One y-axis per chart, a legend, text in `ink`.
 - A `DataTable` inside a `Card` uses `flush` and no `caption`.
+- Forms: visible labels; the client checks only required fields, the backend validates the rest and returns messages per field; confirm in a `Dialog` (danger button) before taking something away; one task per dialog.
 - Allow one primary button per screen. Pair every icon and color with text. No shadows, gradients or rounded cards.
 - Keep the `Footer` with the EU funding emblem on every page.
 
@@ -111,4 +112,4 @@ Credit screens only:
 
 ## Documentation map
 
-The `docs/` files were checked against a running copy; keep them accurate when behavior changes. Start with `docs/getting-started.md` (team workflow), `docs/architecture.md`, `docs/tokens-and-tailwind.md` (class names), `docs/troubleshooting.md` (known issues) and `docs/reference/components.md` (when to use each of the 26 components; props are typed in `packages/ui-web/src/index.d.ts`).
+The `docs/` files were checked against a running copy; keep them accurate when behavior changes. Start with `docs/getting-started.md` (team workflow), `docs/architecture.md`, `docs/tokens-and-tailwind.md` (class names), `docs/troubleshooting.md` (known issues) and `docs/reference/components.md` (when to use each of the 33 components; props are typed in `packages/ui-web/src/index.d.ts`).

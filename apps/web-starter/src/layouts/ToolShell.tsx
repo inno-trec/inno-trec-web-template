@@ -13,6 +13,7 @@ const USER = { name: 'Sample User', role: 'Community manager' };
 const NAV: Array<NavItem & { href: string }> = [
   { id: '/', href: '/', label: 'Overview', icon: 'sun' },
   { id: '/assets', href: '/assets', label: 'Assets', icon: 'wrench' },
+  { id: '/users', href: '/users', label: 'Users', icon: 'person' },
 ];
 
 /** Legal links in the footer. Point the privacy policy at your tool's own policy if it has one. */

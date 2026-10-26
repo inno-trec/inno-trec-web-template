@@ -38,6 +38,91 @@ export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElemen
 }
 export declare function Select(props: SelectProps): React.ReactElement;
 
+export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  label?: React.ReactNode;
+  hint?: React.ReactNode;
+  /** Replaces the hint and marks the field invalid. */
+  error?: React.ReactNode;
+  large?: boolean;
+}
+export declare function Textarea(props: TextareaProps): React.ReactElement;
+
+/** The browser's date picker in a field. `value` and `min`/`max` are "YYYY-MM-DD". */
+export type DateFieldProps = Omit<TextFieldProps, 'type' | 'prefix' | 'suffix' | 'mono'>;
+export declare function DateField(props: DateFieldProps): React.ReactElement;
+
+export interface DateRange { from: string; to: string }
+export interface DateRangeFieldProps {
+  label?: React.ReactNode;
+  value?: Partial<DateRange>;
+  onChange?: (value: DateRange) => void;
+  /** Earliest and latest dates, "YYYY-MM-DD". */
+  min?: string;
+  max?: string;
+  fromLabel?: string;
+  toLabel?: string;
+  hint?: React.ReactNode;
+  error?: React.ReactNode;
+  disabled?: boolean;
+  large?: boolean;
+  className?: string;
+}
+export declare function DateRangeField(props: DateRangeFieldProps): React.ReactElement;
+
+export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
+  label: React.ReactNode;
+  hint?: React.ReactNode;
+  error?: React.ReactNode;
+  large?: boolean;
+}
+export declare function Checkbox(props: CheckboxProps): React.ReactElement;
+
+export interface RadioOption { value: string; label: React.ReactNode; description?: React.ReactNode; disabled?: boolean }
+export interface RadioGroupProps {
+  label: React.ReactNode;
+  options: RadioOption[];
+  value?: string;
+  defaultValue?: string;
+  onChange?: (value: string) => void;
+  name?: string;
+  hint?: React.ReactNode;
+  error?: React.ReactNode;
+  required?: boolean;
+  disabled?: boolean;
+  large?: boolean;
+  className?: string;
+}
+export declare function RadioGroup(props: RadioGroupProps): React.ReactElement;
+
+export interface SwitchProps {
+  label: React.ReactNode;
+  checked?: boolean;
+  defaultChecked?: boolean;
+  onChange?: (checked: boolean) => void;
+  /** Words shown beside the label. Defaults: "On" and "Off". */
+  onLabel?: string;
+  offLabel?: string;
+  hint?: React.ReactNode;
+  disabled?: boolean;
+  id?: string;
+  className?: string;
+}
+export declare function Switch(props: SwitchProps): React.ReactElement;
+
+export interface DialogProps {
+  open: boolean;
+  title: React.ReactNode;
+  /** Called on Escape and on the Close button. Leave it out only when the person must choose an action. */
+  onClose?: () => void;
+  /** Buttons at the bottom, right-aligned: the cancel button first, the main action last. */
+  actions?: React.ReactNode;
+  size?: 'sm' | 'md';
+  closeLabel?: string;
+  className?: string;
+  children?: React.ReactNode;
+}
+export declare function Dialog(props: DialogProps): React.ReactElement;
+
 export interface CardProps {
   title?: React.ReactNode;
   subtitle?: React.ReactNode;

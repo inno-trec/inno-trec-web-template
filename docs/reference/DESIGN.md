@@ -247,6 +247,24 @@ components:
   chart-grid-line:
     backgroundColor: "{colors.line}"
     height: 1px
+  checkbox:
+    backgroundColor: "{colors.surface}"
+    rounded: "{rounded.none}"
+    size: 20px
+  checkbox-checked:
+    backgroundColor: "{colors.light-blue}"
+    textColor: "{colors.on-light-blue}"
+  switch-on:
+    backgroundColor: "{colors.light-blue}"
+    textColor: "{colors.on-light-blue}"
+    rounded: "{rounded.full}"
+    height: 24px
+    width: 44px
+  dialog:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.none}"
+    padding: 16px
 ---
 
 # INNO-TREC
@@ -322,6 +340,8 @@ The system is flat. There are no shadows: surfaces are separated by a 1px `line`
 React 18 components are published under the global `InnoTrec`; the values above describe how they look. Data names follow the ECMS Technical Specification v1.0.
 
 **Shared:** Button (primary, secondary, ghost, danger; small, medium, large; optional icon before the label), TextField and Select (visible label, hint, error with icon; a large size for members), Card, Badge, InlineAlert (info, success, warning, error, each with an icon and border), Icon.
+
+**Forms:** Textarea, DateField and DateRangeField (the browser's date picker), Checkbox (a choice confirmed with the form), RadioGroup (one of two to five options, with optional descriptions), Switch (on or off, with the state also in words), and Dialog (a modal on the browser's dialog element for one short task or a confirmation; cancel first, main action last).
 
 **Member screens:**
 - WalletBalance: the credit balance in large type with the word "credits", when it was updated, and large "Send credits" and "Exchange" buttons.

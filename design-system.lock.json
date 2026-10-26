@@ -1,9 +1,9 @@
 {
   "designSystem": "inno-trec-design-system",
-  "publishedVersion": "1793010734-cee7",
+  "publishedVersion": "1793011791-388c",
   "publishedAt": "2026-10-26",
-  "syncedAt": "2026-10-26T10:32:25.126Z",
-  "components": 26,
+  "syncedAt": "2026-10-26T10:50:36.246Z",
+  "components": 33,
   "logos": 8,
   "funding": 2,
   "referenceDocs": [
@@ -13,9 +13,9 @@
     "components.md"
   ],
   "files": {
-    "docs/reference/brand-book.md": "3e1ebc7c5acda86012493a18d70e4b9cce1028810694500eee242e5c52d94ace",
-    "docs/reference/components.md": "4efee8d063a63be927ea24186a5b2af3e284268fbaba9fd148be4c6dd0f58c79",
-    "docs/reference/DESIGN.md": "70154a7f299bcea9b8734523740c502d4e4695c94db41495f8f87c6283402c4c",
+    "docs/reference/brand-book.md": "bcc090780524fb0e615315f51965e97b0080b9d77a62768e040dc8db5514ecb3",
+    "docs/reference/components.md": "88b11117b31eb17bf1215a7de9797242eeb58ea78079218b00c42e075da0388d",
+    "docs/reference/DESIGN.md": "0ccecd6257f520cfd2a4b281e54b2b1ffc1e3e036bb50d8f543a72625b088510",
     "docs/reference/open-questions.md": "437864536fe551500dadf03d10836f3fefeaee1c09885bb398ef964022dd5eaf",
     "packages/tokens/dist/tailwind-preset.cjs": "6800aba7d7daaab3910ad79b978a4317dc49e2fd0c31c528118aef84621574f6",
     "packages/tokens/dist/tokens.cjs": "932ffd24537af5d6cf2a187a570824c86c281c91910c0fb07b1a3110dd27d0f7",
@@ -33,8 +33,8 @@
     "packages/ui-web/assets/logos/logo-stacked-grey.png": "cca5d979368c73df54a20642e07db02d70b9dd658c59a17cb5a8cbfd7128bed5",
     "packages/ui-web/assets/logos/logo-vertical-colour.png": "640143aaed84821f97e8843405fc20a42450cbaa662b565b40a523b1f083ca6e",
     "packages/ui-web/assets/logos/logo-vertical-grey.png": "4944b8ba4c71b8289cf0f47ee24628643c1dd3fdcf91b5e1b4697bbffe44f35d",
-    "packages/ui-web/src/index.d.ts": "5048995a4bccfff38378d33d946d900adc23b0b5dc8e92b3d546254c6c9410e6",
-    "packages/ui-web/src/index.js": "1185a0fa63358623852e3a91cf882c651029575f5bff5dc5b4daf0c228bfdf83",
-    "packages/ui-web/src/styles.css": "4c548df3788f2b7879b8c668dfbf28a8fc9d520bac85fa5b80429adf52f7c033"
+    "packages/ui-web/src/index.d.ts": "6dfd99cbdc737b96db8c33de2c2eed9e35d7409138056670b084d97b146d23ef",
+    "packages/ui-web/src/index.js": "79eff80883c86ec84b8dcefb6d27e33603cf4cc789e40cc994ac03d0a8d6804b",
+    "packages/ui-web/src/styles.css": "8ed2e81560d08d6d0c944cc23472cd7410d15d7de642b9e72cf72319a7a76a1b"
   }
 }
