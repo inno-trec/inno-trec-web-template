@@ -36,7 +36,7 @@ The mobile app uses NativeWind. The stable release is version 4, and its runtime
 
 ### 5. The template is copied, not installed
 
-The packages are not published to npm. A team copies the repository with **Use this template** and keeps its own copy of the packages.
+The packages are not published to npm. A team copies the repository into a new project (see Getting started) and keeps its own copy of the packages.
 
 **Consequence.** Each team updates the design system on its own schedule with `npm run sync:ds`, and a team can fall behind.
 

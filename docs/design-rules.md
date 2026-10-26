@@ -88,7 +88,7 @@ These rules apply to screens that show energy credits (the ECMS). [`apps/credits
 
 The ECMS specification and user stories are ambiguous in places (how members authorize a transfer, how to explain a negative balance, the states of a settlement request, and others). Components do not decide these. Read the [open questions](reference/open-questions.md) before you design a screen that touches one, and do not invent the answer in the interface. Ask the people who own the specification.
 
-## A short checklist before a pull request
+## A short checklist before a merge request
 
 - [ ] One primary button per screen
 - [ ] No shadows, gradients or rounded corners that you added

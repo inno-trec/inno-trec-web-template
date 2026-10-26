@@ -2,15 +2,15 @@ import path from 'node:path';
 import { defineConfig } from 'vitepress';
 
 /**
- * The documentation site (GitHub Pages). The pages are the Markdown files in docs/, so the site and the
+ * The documentation site (GitLab Pages). The pages are the Markdown files in docs/, so the site and the
  * repository never disagree. `npm run docs:dev` previews it; `npm run pages:build` builds it with the demo.
  */
 
-const REPO = 'https://github.com/joaocarlos/inno-trec-template';
+const REPO = 'https://gitlab.up.pt/inno-trec/inno-trec-web-template';
 
 /**
  * Internal pages stay out of the public site. They remain in the (private) repository, and links to them
- * from other pages open the file on GitHub, which asks for a sign-in.
+ * from other pages open the file on gitlab.up.pt, which asks for a sign-in.
  */
 const INTERNAL = ['decisions.md', 'tracking.md', 'reference/open-questions.md'];
 
@@ -76,7 +76,7 @@ export default defineConfig({
   },
   markdown: {
     config(md) {
-      // Links to source files (../apps/…) and to internal pages point at the repository on GitHub.
+      // Links to source files (../apps/…) and to internal pages point at the repository on gitlab.up.pt.
       const render = md.renderer.rules.link_open ?? ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options));
       md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
         const href = tokens[idx].attrGet('href');
@@ -84,7 +84,7 @@ export default defineConfig({
           const target = path.posix.normalize(path.posix.join('docs', path.posix.dirname(env.relativePath), href));
           const [file, hash] = target.split('#');
           const internal = INTERNAL.some((page) => file === `docs/${page}`);
-          if (!target.startsWith('docs/') || internal) tokens[idx].attrSet('href', `${REPO}/blob/main/${file}${hash ? `#${hash}` : ''}`);
+          if (!target.startsWith('docs/') || internal) tokens[idx].attrSet('href', `${REPO}/-/blob/main/${file}${hash ? `#${hash}` : ''}`);
         }
         return render(tokens, idx, options, env, self);
       };

@@ -1,8 +1,8 @@
 /**
- * Builds the GitHub Pages site: the documentation (VitePress, from docs/) with the starter app as a live
+ * Builds the documentation site (GitLab Pages): the documentation (VitePress, from docs/) with the starter app as a live
  * demo under demo/. The result is docs/.vitepress/dist.
  *
- * GitHub Pages has no rewrites, so an address inside the demo (…/demo/alerts) would get the site's 404
+ * Pages has no rewrites, so an address inside the demo (…/demo/alerts) would get the site's 404
  * page. The 404 page sends such addresses to demo/?p=<address>, and the demo puts the address back before
  * the router starts. Both small scripts are added here, so the starter itself stays unchanged.
  */
