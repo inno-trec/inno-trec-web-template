@@ -6,6 +6,7 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ### Changed
 
+- **The template moved to gitlab.up.pt** (`inno-trec/inno-trec-web-template`). CI, the documentation site and releases run in GitLab CI (`.gitlab-ci.yml`); the GitHub workflows and Dependabot are removed. Teams copy the template into a new project instead of using GitHub's "Use this template".
 - **The starter is no longer about credits.** `web-starter` now fits the monitoring, PV performance and maintenance tools: an energy overview with time-series charts and an asset list with maintenance suggestions, on synthetic data.
 - **The credit pages moved to `apps/credits-example`** (ledger overview, wallets, send flow, "My wallet"). Run it with `npm run dev:credits`.
 - The design rules separate the rules for every tool from the rules for credit screens, and add rules for charts.
@@ -15,7 +16,7 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 - Account screens in the starter: sign in (with "keep me signed in" and a return to the page asked for), ask for an account with a manager's approval on the Users page, accept an invitation, forgot and reset password, "Your account" (profile and password) and sign out. Pages without a session redirect to sign in, and `roles` in `NAV` hide pages from other roles. Pattern 10 and decision 12 describe them.
 - `AuthLayout` and `PasswordField` (design system): the frame of the screens without a session, and a password field with a Show/Hide button.
-- Documentation website (VitePress) built from `docs/`, with the starter as a live demo; `.github/workflows/pages.yml` publishes it to GitHub Pages. `npm run docs:dev` previews it.
+- Documentation website (VitePress) built from `docs/`, with the starter as a live demo; the `pages` job publishes it to GitLab Pages. `npm run docs:dev` previews it.
 - The starter's router follows `base` in `vite.config.ts`, so the app also works under a sub-path.
 - The starter's sample backend answers in the shapes of `src/data/types.ts`; `api.ts` turns every failure into an `ApiError` with messages per field.
 - PV performance page: indicators per system against history and the community, `BarChart` with a dotted reference line.
@@ -62,5 +63,5 @@ First release of the template.
 
 - Node 24 LTS or newer, npm 11.
 
-[Unreleased]: https://github.com/joaocarlos/inno-trec-template/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/joaocarlos/inno-trec-template/releases/tag/v0.1.0
+[Unreleased]: https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/compare/v0.1.0...main
+[0.1.0]: https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/tags/v0.1.0

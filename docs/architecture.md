@@ -16,7 +16,7 @@ INNO-TREC design system repository          (source of truth: tokens, components
 │  apps/credits-example  example pages for energy credit tools             │
 └──────────────────────────────────────────────────────────────────────────┘
         │
-        │  "Use this template"
+        │  copied into a new project (git clone, then push)
         ▼
 each team's own repository                  (their tools, their backend)
 ```

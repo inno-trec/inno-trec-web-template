@@ -22,7 +22,7 @@ When you change one of the three scripts, run the sync and look at the diff of t
 
 The sync script stops with a message when the design system's `bundle.js` changes shape. Fix the script, not the generated file.
 
-## Checks before a pull request
+## Checks before a merge request
 
 ```sh
 npm run check:generated   # generated files match the last sync
@@ -31,7 +31,7 @@ npm run build
 npm test                  # every page at 1440px and 400px wide
 ```
 
-CI runs the same four commands on every pull request, on the Node version in `.nvmrc` and on the newest Node release. Only the `.nvmrc` run blocks a merge; a failure on the newest Node is an early warning to look into.
+CI (`.gitlab-ci.yml`) runs the same four commands, and builds the documentation site, on every merge request and every push to `main`: the `checks` job on the Node in the image (keep it in step with `.nvmrc`), and `checks-node-current` on the newest Node. Only `checks` blocks a merge; a failure on the newest Node is an early warning to look into.
 
 `npm test` opens every page in the side navigation at 1440px and 400px wide. It fails when the page scrolls sideways (a wide table in its own container is fine), when the heading is missing, or when the console shows an error. It cannot judge whether a pattern reads well, so still click through a changed pattern with `npm run dev`.
 
@@ -57,13 +57,11 @@ Add a line for your change under `## [Unreleased]` in `CHANGELOG.md`.
 
 ## The website and the demo
 
-`.github/workflows/pages.yml` publishes `docs/` and the starter (under `demo/`) to GitHub Pages after every push to `main`. It runs only in the template repository (`is_template`). Before the first run, turn on Pages in the repository settings with **Source: GitHub Actions**. The site is public (only GitHub Enterprise Cloud organizations can limit it to members), so internal pages stay out of it: `INTERNAL` in `docs/.vitepress/config.mts` lists them (decisions, tracking, ECMS open questions), and links to them open the file on GitHub. Add a page there when it should not be public.
+The `pages` job in `.gitlab-ci.yml` publishes `docs/` and the starter (under `demo/`) to GitLab Pages after every push to `main`. It runs only in the template project (`CI_PROJECT_PATH`); the site's path comes from the project's Pages address. Internal pages stay out of the site: `INTERNAL` in `docs/.vitepress/config.mts` lists them (decisions, tracking, ECMS open questions), and links to them open the file on gitlab.up.pt, which asks for a sign-in. Add a page there when it should not be on the site. Who can see the site is set in the project under **Settings → General → Visibility → Pages**.
 
-## Preparing the repository as a GitHub template
+## How teams copy the template
 
-In the repository settings on GitHub, turn on **Template repository**. Teams then get **Use this template** on the repository page.
-
-Teams do not receive updates automatically, because their copy has diverged. They learn about changes from the releases.
+Teams copy the repository into a new project of their own ([Getting started](getting-started.md#1-create-your-repository-from-the-template)) and keep the template as a second remote named `template`. They do not receive updates automatically, because their copy has diverged. They learn about changes from the releases.
 
 ## Releasing a version
 
@@ -77,21 +75,21 @@ The template version is the `version` in the root `package.json`. It follows sem
    git push --follow-tags
    ```
 
-3. The `Release` workflow runs all checks, confirms that the tag matches `package.json` and that `CHANGELOG.md` has a section for it, and publishes a GitHub release with that section as its notes.
+3. The tag pipeline runs all checks, confirms that the tag matches `package.json` and that `CHANGELOG.md` has a section for it (`release-notes`), and creates a GitLab release with that section as its notes (`release`).
 
 ## Keeping versions current
 
 The template uses the newest stable release of Node and of every dependency (decision 7 in [Decisions](decisions.md)).
 
-- **Dependencies.** Dependabot opens a weekly pull request that groups minor and patch updates, and one pull request per major update. Merge them when CI passes. Read the changelog of a major update first. Dependabot skips Tailwind 4 (decision 3).
-- **Node.** CI warns when a newer LTS release exists than the one in `.nvmrc`. Then change `.nvmrc` and `engines.node` in `package.json` to the new major version, and update the Node version in `README.md` and `docs/getting-started.md`.
+- **Dependencies.** Once a month, run `npm outdated`, update minor and patch versions together in one merge request, and each major update in its own. Merge when CI passes. Read the changelog of a major update first. Never move to Tailwind 4 (decision 3).
+- **Node.** When a new LTS release comes out (each October), change `.nvmrc`, `engines.node` in `package.json` and the image in `.gitlab-ci.yml` to the new major version, and update the Node version in `README.md` and `docs/getting-started.md`. The `checks-node-current` job shows problems with newer Node releases early.
 
 ## Telling teams about changes
 
 A team that wants an update from the template can compare against it:
 
 ```sh
-git remote add template <template-repository-url>
+git remote add template git@gitlab.up.pt:inno-trec/inno-trec-web-template.git   # if you do not have it yet
 git fetch template
 git diff HEAD template/main -- packages scripts docs apps/web-starter
 ```

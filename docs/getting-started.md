@@ -10,14 +10,19 @@ This guide takes you from nothing to a running tool with your own page, then cov
 
 ## 1. Create your repository from the template
 
-On GitHub, open this repository and choose **Use this template**, then **Create a new repository**. Clone your new repository and install:
+On gitlab.up.pt, create an empty project for your tool (no README). Then copy the template into it and install:
 
 ```sh
-git clone <your-repository-url>
-cd <your-repository>
+git clone git@gitlab.up.pt:inno-trec/inno-trec-web-template.git my-tool
+cd my-tool
+git remote rename origin template          # keep the template to compare updates later
+git remote add origin <your-project-ssh-url>
+git push -u origin main
 npm install
 npm run dev
 ```
+
+SSH to gitlab.up.pt works only from the University of Porto network or its VPN. Elsewhere, use the HTTPS addresses with a personal access token.
 
 Vite serves the starter tool at <http://localhost:5173>. Open that address in a browser.
 
@@ -99,7 +104,7 @@ npm test             # every page at 1440px and 400px: heading, no sideways scro
 
 The first time, install the test browser with `npx -w web-starter playwright install chromium`. The tests find your pages through the side navigation, so a page you add to `NAV` is tested without changes to the tests.
 
-Before you open a pull request, read the [design rules](design-rules.md) once. They are short.
+Before you open a merge request, read the [design rules](design-rules.md) once. They are short.
 
 ## Update the design system
 

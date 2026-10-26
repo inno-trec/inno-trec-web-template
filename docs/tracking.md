@@ -1,6 +1,6 @@
 # Tracking (provisional)
 
-What the template still needs to serve the four INNO-TREC tools, and who must decide what. This page is a working list: update it in the same pull request as the work, and remove it once the list is empty or moves to an issue tracker.
+What the template still needs to serve the four INNO-TREC tools, and who must decide what. This page is a working list: update it in the same merge request as the work, and remove it once the list is empty or moves to an issue tracker.
 
 Last reviewed: 26 Oct 2026. Focus: a template that the teams of the work package reuse, with components, account screens and documentation. Data APIs belong to each system, not to the template (decision 12).
 
@@ -28,7 +28,9 @@ Status: **To do**, **In progress**, **Done** (keep done items until the next rel
 | 16 | Map the ECMS credit data into the contract | 4 | — | Dropped | Went with item 1. |
 | 17 | Describe live updates in AsyncAPI | 1, 3 | — | Dropped | Went with item 1. |
 | 18 | Account screens: sign in, ask for an account with manager approval, accept an invitation, forgot and reset password, your account, sign out | All | 1 | Done | `src/pages/auth/`, `AccountPage`, approval on the Users page. Design system: `AuthLayout`, `PasswordField`. |
-| 19 | Documentation site on GitHub Pages, with the starter as a live demo | All | 1 | Done | Pages is on; it publishes after the merge to `main`. The site is public, so decisions, tracking and the ECMS open questions stay out of it (`INTERNAL` in `docs/.vitepress/config.mts`). |
+| 19 | Documentation site with the starter as a live demo | All | 1 | Done | GitLab Pages (`pages` job in `.gitlab-ci.yml`). Decisions, tracking and the ECMS open questions stay out of the site (`INTERNAL` in `docs/.vitepress/config.mts`). |
+| 21 | Move to gitlab.up.pt: repository, CI, Pages, releases | All | 1 | In progress | The GitHub repositories are archived after the move. |
+| 22 | Automatic dependency updates (Dependabot did this on GitHub) | All | 3 | To do | Today: `npm outdated` once a month. Renovate is an option if the runners allow it. |
 | 20 | More shared components for the work package's tools (list to agree with the teams) | All | 1 | To do | Candidates: file upload (item 13), empty state, tabs, pagination, toast for saved changes. |
 
 ## Decisions waiting for an owner

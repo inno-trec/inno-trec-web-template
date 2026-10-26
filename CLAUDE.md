@@ -6,7 +6,7 @@ When asked to explain something, explain it using the spirit of ASD STE100. Keep
 
 ## What this repository is
 
-A starter template for INNO-TREC web tools: energy monitoring (consumption, PV, storage), PV yield and performance, asset maintenance, and the energy credit system (ECMS). It packages the INNO-TREC design system (tokens, React components, brand rules) with a working React app, so teams copy the repository ("Use this template") and build their own tool on top of it. The goal is a setup that different frontend and backend stacks can reuse: the tokens package is the stack-neutral layer (Tailwind preset, CSS variables, JS constants), and `ui-web` is the React-on-the-web layer.
+A starter template for INNO-TREC web tools: energy monitoring (consumption, PV, storage), PV yield and performance, asset maintenance, and the energy credit system (ECMS). It packages the INNO-TREC design system (tokens, React components, brand rules) with a working React app, so teams copy the repository into a new gitlab.up.pt project and build their own tool on top of it. The goal is a setup that different frontend and backend stacks can reuse: the tokens package is the stack-neutral layer (Tailwind preset, CSS variables, JS constants), and `ui-web` is the React-on-the-web layer.
 
 The design system itself lives in a separate repository (by default `../inno-trec-design-system`, also published in Claude Design). It is the source of truth for anything visual.
 
@@ -31,9 +31,9 @@ npm run sync:ds [-- <path-to-ds>]    # copy the design system in (or set INNO_TR
 npm run export:tokens -- <folder>    # copy tokens into another project (e.g. the Expo app)
 ```
 
-There is no linter and no unit test runner. CI (`.github/workflows/ci.yml`) runs `check:generated`, `typecheck`, `build` and `npm test` on the Node in `.nvmrc` (required) and on the newest Node (warning only). The smoke tests in `apps/web-starter/e2e/` open every page listed in the side navigation at 1440px and 400px wide and fail on sideways scroll, a missing heading or a console error. They read the pages from the rendered nav, so a new `NAV` entry is tested automatically. A wide table in its own scroll container does not count as sideways scroll.
+There is no linter and no unit test runner. CI (`.gitlab-ci.yml`, gitlab.up.pt) runs `check:generated`, `typecheck`, `build`, the docs site build and `npm test` on Node 24 (required, keep in step with `.nvmrc`) and on the newest Node (warning only). The `pages` job publishes the docs site with the starter as `demo/`. The smoke tests in `apps/web-starter/e2e/` open every page listed in the side navigation at 1440px and 400px wide and fail on sideways scroll, a missing heading or a console error. They read the pages from the rendered nav, so a new `NAV` entry is tested automatically. A wide table in its own scroll container does not count as sideways scroll.
 
-Versions: the template version is the root `package.json` version, recorded in `CHANGELOG.md` (Keep a Changelog). Pushing a `vX.Y.Z` tag runs `.github/workflows/release.yml`, which checks the tag against `package.json` and `CHANGELOG.md` and creates the GitHub release. Add every user-visible change under `## [Unreleased]` in `CHANGELOG.md`.
+Versions: the template version is the root `package.json` version, recorded in `CHANGELOG.md` (Keep a Changelog). Pushing a `vX.Y.Z` tag runs the `release-notes` and `release` jobs, which check the tag against `package.json` and `CHANGELOG.md` and create the GitLab release. Add every user-visible change under `## [Unreleased]` in `CHANGELOG.md`.
 
 Node: `.nvmrc` pins the newest LTS release (24); `engines` requires >= 24. The policy is "newest stable": see decision 7 in `docs/decisions.md`.
 
