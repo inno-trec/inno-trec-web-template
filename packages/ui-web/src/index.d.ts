@@ -27,6 +27,10 @@ export interface TextFieldProps extends Omit<React.InputHTMLAttributes<HTMLInput
 }
 export declare function TextField(props: TextFieldProps): React.ReactElement;
 
+/** A password with a Show/Hide button. Set autoComplete to "current-password" (sign in) or "new-password". */
+export type PasswordFieldProps = Omit<TextFieldProps, 'type' | 'prefix' | 'suffix' | 'mono'>;
+export declare function PasswordField(props: PasswordFieldProps): React.ReactElement;
+
 export interface SelectOption { value: string; label: string; disabled?: boolean }
 export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: React.ReactNode;
@@ -371,3 +375,22 @@ export interface AppShellProps {
   footer?: React.ReactNode;
 }
 export declare function AppShell(props: AppShellProps): React.ReactElement;
+
+/** Frame for screens without a session (sign in, create an account, reset a password): TopBar, one centered panel, Footer. */
+export interface AuthLayoutProps {
+  logoSrc?: string;
+  /** The tool's name, as in AppShell. */
+  title?: React.ReactNode;
+  /** The screen's h1, for example "Sign in". */
+  heading?: React.ReactNode;
+  /** One or two sentences under the heading. */
+  intro?: React.ReactNode;
+  /** The form. */
+  children?: React.ReactNode;
+  /** Below the panel: one link to another screen, for example "New here? Create an account". */
+  aside?: React.ReactNode;
+  /** Usually the same Footer as in AppShell. */
+  footer?: React.ReactNode;
+  className?: string;
+}
+export declare function AuthLayout(props: AuthLayoutProps): React.ReactElement;

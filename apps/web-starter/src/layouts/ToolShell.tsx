@@ -1,26 +1,31 @@
-import { AppShell, Footer, type NavItem } from '@inno-trec/ui-web';
+import { AppShell, Button, Footer, InlineAlert, type NavItem } from '@inno-trec/ui-web';
 import euEmblem from '@inno-trec/ui-web/assets/funding/eu-funded-negative.png';
 import logo from '@inno-trec/ui-web/assets/logos/logo-landscape-colour.png';
-import { Outlet, useLocation, useNavigate } from 'react-router';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router';
+import { allowed, useSession } from '../auth/session';
+import { FOOTER_LINKS, TOOL_NAME } from '../config';
+import type { RoleId } from '../data/api';
 
-/** Name of your tool, shown in the top bar. */
-const TOOL_NAME = 'Community Energy';
+type Page = NavItem & { href: string; roles?: RoleId[] };
 
-/** Replace with the signed-in user from your auth layer. */
-const USER = { name: 'Sample User', role: 'Community manager' };
-
-/** `id` is the route path. `label` is also the page heading. Manager tools may use more than five items; member tools should not. */
-const NAV: Array<NavItem & { href: string }> = [
+/**
+ * `id` is the route path. `label` is also the page heading. `roles` limits who sees the page (no list:
+ * everyone). Manager tools may use more than five items; member tools should not.
+ */
+const NAV: Page[] = [
   { id: '/', href: '/', label: 'Overview', icon: 'sun' },
   { id: '/performance', href: '/performance', label: 'PV performance', icon: 'panel' },
   { id: '/data-checks', href: '/data-checks', label: 'Data checks', icon: 'check' },
   { id: '/alerts', href: '/alerts', label: 'Alerts', icon: 'alert' },
   { id: '/assets', href: '/assets', label: 'Assets', icon: 'wrench' },
-  { id: '/users', href: '/users', label: 'Users', icon: 'person' },
+  { id: '/users', href: '/users', label: 'Users', icon: 'person', roles: ['admin', 'manager'] },
 ];
 
-/** Legal links in the footer. Point the privacy policy at your tool's own policy if it has one. */
-const FOOTER_LINKS = [{ label: 'Privacy Policy', href: 'https://inno-trec.eu/privacy-policy/' }];
+/** Links include the base path (`base` in vite.config.ts), so they also work when opened in a new tab. */
+const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+/** Pages reached from the top bar instead of the side navigation. */
+const OTHER_PAGES: Page[] = [{ id: '/account', href: '/account', label: 'Your account' }];
 
 /**
  * The page frame every tool shares: top bar, side navigation, a pale gray main area and the footer.
@@ -30,14 +35,28 @@ const FOOTER_LINKS = [{ label: 'Privacy Policy', href: 'https://inno-trec.eu/pri
 export function ToolShell() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const active = NAV.find((item) => item.href === pathname);
+  const { session } = useSession();
+  const role = session!.role;
+  const nav = NAV.filter((item) => allowed(role, item.roles)).map((item) => ({ ...item, href: BASE + item.href }));
+  const active = [...NAV, ...OTHER_PAGES].find((item) => item.href === pathname);
+  const permitted = !active || allowed(role, active.roles);
 
   return (
     <AppShell
       logoSrc={logo}
       title={TOOL_NAME}
-      user={USER}
-      navItems={NAV}
+      user={{ name: session!.name, role: session!.roleLabel }}
+      topActions={
+        <>
+          <Link className="it-btn it-btn-ghost it-btn-sm no-underline" to="/account">
+            Account
+          </Link>
+          <Button variant="ghost" size="sm" onClick={() => navigate('/sign-out')}>
+            Sign out
+          </Button>
+        </>
+      }
+      navItems={nav}
       activeId={active?.id}
       heading={active?.label ?? 'Page not found'}
       onNavigate={(id, event) => {
@@ -47,7 +66,15 @@ export function ToolShell() {
       footer={<Footer emblemSrc={euEmblem} links={FOOTER_LINKS} />}
     >
       {/* Pages render here. Lay them out with Tailwind: gap-space-4 between blocks, p-space-4 inside them. */}
-      <Outlet />
+      {permitted ? (
+        <Outlet />
+      ) : (
+        <div className="max-w-[640px]">
+          <InlineAlert tone="info" title="You do not have access to this page">
+            Your role is {session!.roleLabel}. Ask an administrator if you need this page.
+          </InlineAlert>
+        </div>
+      )}
     </AppShell>
   );
 }

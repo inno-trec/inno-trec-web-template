@@ -1,10 +1,9 @@
-import type { PerformancePeriod } from '@inno-trec/api-contract';
 import { colors } from '@inno-trec/tokens';
 import { Badge, Button, Card, DataTable, InlineAlert, Select, StatTile, type Column } from '@inno-trec/ui-web';
 import { useEffect, useState } from 'react';
 import { formatNumber } from '../charts/format';
 import { LazyBarChart } from '../charts/LazyCharts';
-import { getPvPerformance, PERFORMANCE_PERIODS, type Indicator, type PvPerformanceReport, type SystemPerformance } from '../data/api';
+import { getPvPerformance, PERFORMANCE_PERIODS, type Indicator, type PerformancePeriod, type PvPerformanceReport, type SystemPerformance } from '../data/api';
 
 type Load = { state: 'loading' } | { state: 'error' } | { state: 'ready'; report: PvPerformanceReport };
 
@@ -44,8 +43,7 @@ const COLUMNS: Column<SystemPerformance>[] = [
 /**
  * Pattern: performance against references. Community indicators on top, one bar per system with the
  * community's value as a dotted reference line, and every indicator in a table with each system's history.
- * The backend computes the indicators and decides which are below normal; their definitions are still to be
- * agreed (docs/tracking.md, D2). Add ?demo=empty or ?demo=error to the address to see the other states.
+ * The backend computes the indicators and decides which are below normal. Add ?demo=empty or ?demo=error to the address to see the other states.
  */
 export function PerformancePage() {
   const [period, setPeriod] = useState<PerformancePeriod>('last30days');

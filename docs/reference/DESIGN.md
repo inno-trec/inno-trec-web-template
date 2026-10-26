@@ -260,6 +260,12 @@ components:
     rounded: "{rounded.full}"
     height: 24px
     width: 44px
+  auth-panel:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.none}"
+    padding: 32px
+    width: 440px
   dialog:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
@@ -347,7 +353,7 @@ React 18 components are published under the global `InnoTrec`; the values above 
 
 **Shared:** Button (primary, secondary, ghost, danger; small, medium, large; optional icon before the label), TextField and Select (visible label, hint, error with icon; a large size for members), Card, Badge, InlineAlert (info, success, warning, error, each with an icon and border), Icon.
 
-**Forms:** Textarea, DateField and DateRangeField (the browser's date picker), Checkbox (a choice confirmed with the form), RadioGroup (one of two to five options, with optional descriptions), Switch (on or off, with the state also in words), and Dialog (a modal on the browser's dialog element for one short task or a confirmation; cancel first, main action last).
+**Forms:** Textarea, DateField and DateRangeField (the browser's date picker), Checkbox (a choice confirmed with the form), RadioGroup (one of two to five options, with optional descriptions), Switch (on or off, with the state also in words), Dialog (a modal on the browser's dialog element for one short task or a confirmation; cancel first, main action last), and PasswordField (a password with a Show/Hide button instead of a second "repeat" field).
 
 **Member screens:**
 - WalletBalance: the credit balance in large type with the word "credits", when it was updated, and large "Send credits" and "Exchange" buttons.
@@ -361,7 +367,7 @@ React 18 components are published under the global `InnoTrec`; the values above 
 
 **Manager screens:** AccountCard and AccountList (wallets in EC with type, ID, balance and status: Active, Suspended, Closed), StatTile, DataTable, Identifier (shortened ID with Copy), ConfidenceBadge (Certified, Measured, Estimated, Manual), PurposeTag in technical mode (raw purpose codes).
 
-**Shell:** TopBar, SideNav (icon plus label per item; four or five items for members), Footer (EU funding emblem, funding statement and legal links on `ink`), AppShell.
+**Shell:** TopBar, SideNav (icon plus label per item; four or five items for members), Footer (EU funding emblem, funding statement and legal links on `ink`), AppShell, and AuthLayout (screens without a session: TopBar, one centered panel of at most 440px on `surface`, the same Footer).
 
 ## Do's and Don'ts
 

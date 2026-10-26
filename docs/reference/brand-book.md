@@ -128,8 +128,9 @@ React 18 components under the global `InnoTrec` (load React and ReactDOM 18, the
 - **Member screens:** `WalletBalance`, `BalanceStatement`, `EnergySummary`, `TransactionList`, `TransactionDetail`, `RecipientPicker`, `TransferForm`, `SettlementRequestForm`.
 - **Manager screens:** `AccountCard`, `AccountList`, `StatTile`, `DataTable`, `Identifier`, `ConfidenceBadge`, `PurposeTag` (technical mode).
 - **Shared:** `Button`, `TextField`, `Select`, `Card`, `Badge`, `InlineAlert`, `Icon`, `PurposeTag`.
-- **Forms:** `TextField`, `Select`, `Textarea`, `DateField`, `DateRangeField`, `Checkbox`, `RadioGroup`, `Switch`, and `Dialog` for short tasks and confirmations. Every control has a visible label; the backend validates what the form sends, and the form shows its errors next to the fields.
-- **Shell:** `TopBar`, `SideNav`, `Footer`, `AppShell`.
+- **Forms:** `TextField`, `Select`, `Textarea`, `DateField`, `DateRangeField`, `Checkbox`, `RadioGroup`, `Switch`, `PasswordField` (with Show/Hide, so a new password is asked once), and `Dialog` for short tasks and confirmations. Every control has a visible label; the backend validates what the form sends, and the form shows its errors next to the fields.
+- **Shell:** `TopBar`, `SideNav`, `Footer`, `AppShell`, and `AuthLayout` for screens without a session (sign in, create an account, accept an invitation, reset a password).
+- **Signing in:** one task per screen. Errors do not tell an attacker which part was wrong ("The email or password is wrong"), and a reset request gets the same answer whether the email exists or not. Fields carry `autoComplete` (`username`, `current-password`, `new-password`) so password managers work.
 
 Rules that apply to all of them:
 

@@ -1,49 +1,36 @@
+import { ApiError } from './errors';
+import * as server from './fakeServer';
 import type {
   Alert,
   EnergyPeriod,
-  EnergyReport as EnergyReportDto,
+  EnergyReportDto,
   Invitation,
   PerformancePeriod,
-  Problem,
-  QuantityCheck,
-  SourceComparison,
+  RoleId,
+  QuantityCheckDto,
+  SourceComparisonDto,
   UserChanges,
-} from '@inno-trec/api-contract';
-import * as server from './fakeServer';
+} from './types';
 
 /**
- * CLIENT of the INNO-TREC data API. Pages call these functions only.
+ * CLIENT of the backend. Pages call these functions only.
  *
- * Today each function calls the fake provider in fakeServer.ts. To use the real API, replace the call
+ * Today each function calls the fake backend in fakeServer.ts. To use your backend, replace the call
  * with fetch (for example `fetch(`${API}/communities/${id}/energy?period=today`)`) and keep the rest:
- * the types come from the contract (@inno-trec/api-contract), and the adapters below turn its JSON
- * into what the screens need (times as numbers for charts, errors per field for forms).
+ * the adapters below turn the JSON into what the screens need (times as numbers for charts), and
+ * `call` turns every failure into an ApiError (one message per field for forms).
  */
 
-export type { Alert, Asset, Indicator, PvPerformanceReport, Role, RoleId, SystemPerformance, User } from '@inno-trec/api-contract';
+export { ApiError };
+export type { Alert, Asset, Indicator, PerformancePeriod, PvPerformanceReport, Role, RoleId, Session, SystemPerformance, User } from './types';
 
-/** An error from the API, ready for a form: one message per field, or a code for the whole request. */
-export class ApiError extends Error {
-  constructor(
-    public code: string,
-    public fields: Record<string, string> = {},
-  ) {
-    super(code);
-  }
-}
-
-function toApiError(problem: Problem) {
-  const fields = Object.fromEntries((problem.errors ?? []).map((e) => [e.field, e.message]));
-  return new ApiError(problem.type, fields);
-}
-
-/** Runs a request and turns a problem response (RFC 9457) into an ApiError. */
+/** Runs a request. A backend error passes through; anything else (no network, a crash) becomes `network`. */
 async function call<T>(request: () => Promise<T>): Promise<T> {
   try {
     return await request();
   } catch (error) {
-    if (error instanceof server.ProblemResponse) throw toApiError(error.problem);
-    throw new ApiError('/errors/network');
+    if (error instanceof ApiError) throw error;
+    throw new ApiError('network');
   }
 }
 
@@ -111,8 +98,8 @@ export interface Deviation {
   time: number;
   deviationPct: number | null;
 }
-export type Comparison = Omit<SourceComparison, 'deviations'> & { deviations: Deviation[] };
-export type QuantityCheckView = Omit<QuantityCheck, 'comparisons'> & { comparisons: Comparison[] };
+export type Comparison = Omit<SourceComparisonDto, 'deviations'> & { deviations: Deviation[] };
+export type QuantityCheckView = Omit<QuantityCheckDto, 'comparisons'> & { comparisons: Comparison[] };
 
 export async function getSourceChecks(period: Period): Promise<{ timeZone: string; quantities: QuantityCheckView[] }> {
   const dto = await call(() => server.getSourceChecks(API_PERIOD[period]));
@@ -137,3 +124,23 @@ export const listAssets = () => call(() => server.listAssets()).then((r) => r.as
 export const listUsers = () => call(() => server.listUsers());
 export const inviteUser = (input: Invitation) => call(() => server.inviteUser(input));
 export const updateUser = (id: string, changes: UserChanges) => call(() => server.updateUser(id, changes));
+export const approveRequest = (id: string, role: RoleId) => call(() => server.approveRequest(id, role));
+export const declineRequest = (id: string) => call(() => server.declineRequest(id));
+
+/* ---------- Accounts ----------
+ * With an OpenID Connect provider (for example Keycloak), signing in, invitations and password resets may
+ * happen on the provider's own pages; these screens then serve as the design for its theme.
+ */
+
+export type { AccountRequest } from './fakeServer';
+export const SAMPLE_PASSWORD = server.SAMPLE_PASSWORD;
+export const signIn = (email: string, password: string) => call(() => server.signIn(email, password));
+export const requestAccount = (input: server.AccountRequest) => call(() => server.requestAccount(input));
+export const getInvitation = (token: string) => call(() => server.getInvitation(token));
+export const acceptInvitation = (token: string, input: { name: string; password: string; acceptPolicy: boolean }) => call(() => server.acceptInvitation(token, input));
+export const requestPasswordReset = (email: string) => call(() => server.requestPasswordReset(email));
+export const checkResetLink = (token: string) => call(() => server.checkResetLink(token));
+export const resetPassword = (token: string, password: string) => call(() => server.resetPassword(token, password));
+export const getAccount = (userId: string) => call(() => server.getAccount(userId));
+export const updateAccount = (userId: string, changes: { name: string; emailAlerts: boolean }) => call(() => server.updateAccount(userId, changes));
+export const changePassword = (userId: string, current: string, next: string) => call(() => server.changePassword(userId, current, next));

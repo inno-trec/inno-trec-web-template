@@ -1,4 +1,4 @@
-import type { Alert, Asset } from '@inno-trec/api-contract';
+import type { Alert, Asset } from './data/types';
 
 /*
  * Words and tones for the codes the API sends. Status always shows a word with its color.

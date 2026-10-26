@@ -11,10 +11,12 @@ The starter for an INNO-TREC web tool. Copy this app to start a tool of your own
 | Data checks | Agreement between data sources (meters, inverters, DSS): deviations, coverage and status, and one source's deviation over time with a tolerance band | `src/pages/DataChecksPage.tsx` |
 | Alerts | Corrective and predictive alerts: filters, severity, state, acknowledge and resolve | `src/pages/AlertsPage.tsx` |
 | Assets | A list with detail: status, data quality and the asset's open alerts | `src/pages/AssetsPage.tsx` |
-| Users | Forms in dialogs: invite, edit (role, access end date, alerts, note) and confirm deactivation, with the backend's errors under each field | `src/pages/UsersPage.tsx` |
+| Users | Forms in dialogs: invite, approve or decline account requests, edit (role, access end date, alerts, note) and confirm deactivation, with the backend's errors under each field. Administrators and managers only | `src/pages/UsersPage.tsx` |
+| Your account | The signed-in person's profile and password, from "Account" in the top bar | `src/pages/AccountPage.tsx` |
+| Sign in, ask for an account, accept an invitation, forgot and reset password | Account screens in `AuthLayout`, without a session | `src/pages/auth/` |
 | Any other address | A page not found | `src/pages/NotFoundPage.tsx` |
 
-The frame around the pages (top bar, side navigation, page heading, footer) is `src/layouts/ToolShell.tsx`. The routes are in `src/App.tsx`. The footer shows the EU funding emblem and statement. Every INNO-TREC tool keeps it.
+The frame around the pages (top bar, side navigation, page heading, footer) is `src/layouts/ToolShell.tsx`; the screens without a session use `src/layouts/SignedOutFrame.tsx`. The routes are in `src/App.tsx`. `src/auth/session.tsx` keeps who is signed in and sends everyone else to `/sign-in`. Sample sign-in: `ana.ribeiro@example.org`, password `sample-password`. The footer shows the EU funding emblem and statement. Every INNO-TREC tool keeps it.
 
 ## Charts
 
@@ -35,8 +37,8 @@ To add another chart type (bars, for example), import it from `echarts/charts` a
 The data is synthetic. Nothing in it describes a real site.
 
 - `src/data/synthetic.ts` generates 15-minute readings for a small community (24 households, 60 kWp of PV, a 100 kWh battery). The same day always gives the same values.
-- `src/data/fakeServer.ts` plays the WP2 data provider. It answers in the shapes of the draft contract ([`packages/api-contract`](../../packages/api-contract/openapi.yaml)), waits a moment, and computes totals, indicators and statuses, as a real provider would. It sends the community's time zone (`Europe/Lisbon`).
-- `src/data/api.ts` is the client the pages call. It turns the contract's JSON into what the screens need and the provider's errors into messages per field.
+- `src/data/fakeServer.ts` plays the backend. It answers in the shapes of `src/data/types.ts`, waits a moment, and computes totals, indicators and statuses, as a real backend would. It sends the community's time zone (`Europe/Lisbon`). It also keeps the sample accounts, until the page reloads.
+- `src/data/api.ts` is the client the pages call. It turns the JSON into what the screens need, and every failure into an `ApiError` with messages per field.
 - `src/time/zone.ts` converts instants to the community's clock. Charts, tables and periods use it, so a reader in another time zone sees the same days and hours as the community.
 
 To see the other states, add one of these to the address:
@@ -55,10 +57,11 @@ npm run dev
 
 ## Make it yours
 
-1. Set `TOOL_NAME`, `USER` and `FOOTER_LINKS` (your privacy policy) in `src/layouts/ToolShell.tsx`.
+1. Set `TOOL_NAME` and `PRIVACY_URL` in `src/config.ts`.
 2. Set the `<title>` and the icon in `index.html`.
 3. Add your pages as described in [Getting started](../../docs/getting-started.md#3-add-a-page).
 4. In `src/data/api.ts`, replace the calls to `fakeServer` with `fetch` to your API, then delete `fakeServer.ts` and `synthetic.ts`. Keep the loading, empty and error states.
+5. Connect `src/auth/session.tsx` to your backend or identity provider, and delete the "Sample accounts" note in `src/pages/auth/SignInPage.tsx`.
 
 ## Where things come from
 
