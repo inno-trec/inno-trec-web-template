@@ -62,6 +62,20 @@ The starter has almost no logic: the backend computes values, and the components
 
 **Revisit when** a tool adds logic of its own. That tool should add a unit test runner (Vitest fits the Vite setup).
 
+### 9. Apache ECharts for charts
+
+Three of the four INNO-TREC tools plot time series: a year of 15-minute readings is 35,000 points per series. ECharts draws that many points on a canvas without slowing down, and it has the tooltips, legends and time axes the chart rules ask for. Recharts slows down above a few thousand points; uPlot is smaller but leaves tooltips and legends to each team.
+
+**Consequence.** ECharts is large (about 175 kB compressed for a line chart). The starter imports only the parts it uses and loads the chart on demand, so pages without a chart do not wait for it. The chart colors come from the design system's series tokens, not from ECharts themes.
+
+**Revisit when** the design system ships its own chart component, or a tool needs a chart ECharts cannot draw.
+
+### 10. One neutral starter, one example per domain
+
+The starter holds the patterns every tool needs (monitoring over time, list with detail). Credit screens live in `apps/credits-example`. A team copies the starter and takes credit pages only when its tool shows credits.
+
+**Consequence.** The credit rules in the design rules apply to credit screens only. A new domain with its own patterns gets its own example app.
+
 ## Open
 
 These need an owner and an answer. None blocks using the template today.
@@ -74,3 +88,5 @@ These need an owner and an answer. None blocks using the template today.
 | **Top bar on phones.** The `TopBar` does not fit on narrow screens. | The starter works around it in `index.css`. Every team would otherwise rediscover it. |
 | **Dark mode.** The design system has one light theme. | Tools used in low light have no alternative. |
 | **Questions about the ECMS specification** in the [open questions](reference/open-questions.md). | Several decide what a screen shows, for example how a negative balance is explained. |
+| **Time zone and resolution of readings.** The starter shows 15-minute readings in the reader's time zone. | Communities across time zones, and meters with other intervals, need a rule from the backend. |
+| **Definitions of PV indicators** (performance ratio, specific yield, expected yield). | The backend computes them. Each tool must show the same definition, which no document sets yet. |

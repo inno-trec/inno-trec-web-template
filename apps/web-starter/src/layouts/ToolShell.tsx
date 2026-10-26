@@ -4,17 +4,15 @@ import logo from '@inno-trec/ui-web/assets/logos/logo-landscape-colour.png';
 import { Outlet, useLocation, useNavigate } from 'react-router';
 
 /** Name of your tool, shown in the top bar. */
-const TOOL_NAME = 'Community Ledger';
+const TOOL_NAME = 'Community Energy';
 
 /** Replace with the signed-in user from your auth layer. */
 const USER = { name: 'Sample User', role: 'Community manager' };
 
 /** `id` is the route path. `label` is also the page heading. Manager tools may use more than five items; member tools should not. */
 const NAV: Array<NavItem & { href: string }> = [
-  { id: '/', href: '/', label: 'Overview', icon: 'panel' },
-  { id: '/wallets', href: '/wallets', label: 'Wallets', icon: 'wallet' },
-  { id: '/send', href: '/send', label: 'Send credits', icon: 'arrowOut' },
-  { id: '/my-wallet', href: '/my-wallet', label: 'My wallet', icon: 'person' },
+  { id: '/', href: '/', label: 'Overview', icon: 'sun' },
+  { id: '/assets', href: '/assets', label: 'Assets', icon: 'wrench' },
 ];
 
 /** Legal links in the footer. Point the privacy policy at your tool's own policy if it has one. */

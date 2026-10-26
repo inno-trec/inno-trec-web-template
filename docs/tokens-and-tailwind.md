@@ -111,8 +111,10 @@ For places that cannot use a class, such as a chart series color:
 ```ts
 import { colors } from '@inno-trec/tokens';
 
-const energyColor = colors['green'];      // '#78b948'
+const pvColor = colors['series-pv'];      // '#d26a12'
 ```
+
+For charts, use the four series colors: `series-consumption`, `series-pv`, `series-storage` and `series-grid`. Each one always means the same series. See [Charts](design-rules.md#charts).
 
 `ColorName` is a union of every token name, so a typo fails the type check.
 

@@ -8,6 +8,7 @@
   "exports": {
     ".": {
       "types": "./dist/tokens.d.ts",
+      "import": "./dist/tokens.mjs",
       "default": "./dist/tokens.cjs"
     },
     "./tailwind-preset": "./dist/tailwind-preset.cjs",
@@ -16,5 +17,6 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs"
-  }
+  },
+  "module": "./dist/tokens.mjs"
 }

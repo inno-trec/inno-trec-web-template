@@ -43,7 +43,8 @@ Add a line for your change under `## [Unreleased]` in `CHANGELOG.md`.
 2. Give it a `package.json` name that is unique, and keep `@inno-trec/tokens` and `@inno-trec/ui-web` as dependencies with version `*`.
 3. Make the example teach one thing. Say what it teaches at the top of its README.
 4. Use sample data and mark it as sample data in the code.
-5. Add a row for it to the table in the root `README.md`.
+5. Add a row for it to the table in the root `README.md`, and a `dev:<name>` script to the root `package.json`.
+6. Give its `playwright.config.ts` its own port, so `npm test` can run every app (`web-starter` uses 4173, `credits-example` 4174).
 
 ## Writing documentation
 
