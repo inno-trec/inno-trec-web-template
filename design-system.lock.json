@@ -1,0 +1,14 @@
+{
+  "designSystem": "inno-trec-design-system",
+  "publishedVersion": "1791536921-9ae1",
+  "publishedAt": "2026-10-09",
+  "syncedAt": "2026-10-16T10:04:59.945Z",
+  "components": 25,
+  "logos": 8,
+  "referenceDocs": [
+    "brand-book.md",
+    "DESIGN.md",
+    "open-questions.md",
+    "components.md"
+  ]
+}

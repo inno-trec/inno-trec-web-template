@@ -1,0 +1,24 @@
+{
+  "name": "@inno-trec/ui-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "INNO-TREC design system components for React on the web. Generated from the design system by npm run sync:ds.",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./styles.css": "./src/styles.css",
+    "./assets/logos/*": "./assets/logos/*"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  }
+}

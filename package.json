@@ -1,0 +1,21 @@
+{
+  "name": "inno-trec-template",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Starter template and example apps for INNO-TREC web tools, built on the INNO-TREC design system.",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "npm run dev -w web-starter",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "tokens": "npm run build -w @inno-trec/tokens",
+    "sync:ds": "node scripts/sync-design-system.mjs",
+    "export:tokens": "node scripts/export-tokens.mjs"
+  }
+}

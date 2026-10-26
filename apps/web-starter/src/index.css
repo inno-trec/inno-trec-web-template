@@ -1,0 +1,24 @@
+/* Tailwind is used for layout and spacing around the design system components.
+   Preflight (Tailwind's reset) is off: the component styles set their own base styles. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--surface-muted);
+}
+
+/* Known gap in the design system: on phones the top bar does not fit the tool name and the user.
+   Hide them below 560px until the design system handles it. Remove when it does. */
+@media (max-width: 560px) {
+  .it-topbar-title,
+  .it-user > span:last-child {
+    display: none;
+  }
+}

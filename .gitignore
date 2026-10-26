@@ -1,0 +1,11 @@
+node_modules/
+apps/*/dist/
+*.log
+.DS_Store
+.env
+.env.*
+!.env.example
+.vite/
+
+# Generated tokens are committed (they come from npm run sync:ds)
+!packages/tokens/dist/
