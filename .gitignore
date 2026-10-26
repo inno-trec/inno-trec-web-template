@@ -9,3 +9,5 @@ apps/*/dist/
 
 # Generated tokens are committed (they come from npm run sync:ds)
 !packages/tokens/dist/
+apps/*/test-results/
+apps/*/playwright-report/
