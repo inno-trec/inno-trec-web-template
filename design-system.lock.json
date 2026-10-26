@@ -1,10 +1,11 @@
 {
   "designSystem": "inno-trec-design-system",
-  "publishedVersion": "1791536921-9ae1",
-  "publishedAt": "2026-10-09",
-  "syncedAt": "2026-10-26T08:35:56.160Z",
-  "components": 25,
+  "publishedVersion": "1793007993-2749",
+  "publishedAt": "2026-10-26",
+  "syncedAt": "2026-10-26T09:46:49.568Z",
+  "components": 26,
   "logos": 8,
+  "funding": 2,
   "referenceDocs": [
     "brand-book.md",
     "DESIGN.md",
@@ -12,15 +13,17 @@
     "components.md"
   ],
   "files": {
-    "docs/reference/brand-book.md": "6a668dfb1b204ea59648d4d8a3a3c64d7b291d4d403e0d1f0f8b746e363fa12b",
-    "docs/reference/components.md": "02c78049dcd57b7f222ca4d33655ade29ceed8a68e3db4b24799f802dad1d225",
-    "docs/reference/DESIGN.md": "15736e3c3652fef6a64fcd034899800def17dbd358758a46a1eaf24b87b6f290",
+    "docs/reference/brand-book.md": "900e364eaa6f74cbe80b47ae06d1b2e944338341aadbb98e34c8035540bb976c",
+    "docs/reference/components.md": "4efee8d063a63be927ea24186a5b2af3e284268fbaba9fd148be4c6dd0f58c79",
+    "docs/reference/DESIGN.md": "9d65759faed92a8c7145c1b4adf2c7aedfacf7e56eeff11817b617470731317c",
     "docs/reference/open-questions.md": "437864536fe551500dadf03d10836f3fefeaee1c09885bb398ef964022dd5eaf",
     "packages/tokens/dist/tailwind-preset.cjs": "964d127b56c67621fef159a572753077e38049ce351786c5db1f924384a69784",
     "packages/tokens/dist/tokens.cjs": "5d2fd1f73fc41dd8db238dfd9b24f8c0ec19bd24ae6b753e60eda204840e4241",
     "packages/tokens/dist/tokens.css": "b1510285fa03112f75ceb95508797191a9ed805aef7517b9bc8207e42a3fd325",
     "packages/tokens/dist/tokens.d.ts": "edc32418e16cfa1abf230e90b614d1e93599e8265b87f64f71d998ab8d014ffa",
     "packages/tokens/tokens.json": "5bcfe57ceea724583b2c446351e00097de7c6859d7845f8c5013bb1d3ddbfce0",
+    "packages/ui-web/assets/funding/eu-funded-colour.png": "d075e964f944e97fbc543ef883415da8397a1fe148c324724612109dc7735375",
+    "packages/ui-web/assets/funding/eu-funded-negative.png": "33ab3e480137737b84567345f5ec62f14933ab3e1514a3869fd7d4bac397c44b",
     "packages/ui-web/assets/logos/logo-curved-colour.png": "ff8dab2ab35957da6554a28495dafe2e864fe8aea6811982328bddc7691a28e0",
     "packages/ui-web/assets/logos/logo-curved-grey.png": "8251223de9a0685b9a59b655b09c5cd8432a0f5e15dfd8c37393335fc912803c",
     "packages/ui-web/assets/logos/logo-landscape-colour.png": "51568c915cae467b21314517a7be4d89d1849c73c5469c50cc2aa15ed1f7b383",
@@ -29,8 +32,8 @@
     "packages/ui-web/assets/logos/logo-stacked-grey.png": "cca5d979368c73df54a20642e07db02d70b9dd658c59a17cb5a8cbfd7128bed5",
     "packages/ui-web/assets/logos/logo-vertical-colour.png": "640143aaed84821f97e8843405fc20a42450cbaa662b565b40a523b1f083ca6e",
     "packages/ui-web/assets/logos/logo-vertical-grey.png": "4944b8ba4c71b8289cf0f47ee24628643c1dd3fdcf91b5e1b4697bbffe44f35d",
-    "packages/ui-web/src/index.d.ts": "bc72fb5782c3cb1718071ef588f364f31b39a5a8c4ea29afed964479ba861ac0",
-    "packages/ui-web/src/index.js": "67ec606b67cab99942ae8952274d18586fbc8dbd547e023f7d537afb8bdf2def",
-    "packages/ui-web/src/styles.css": "bf5f1dc50491b34a946f11223ad371a89a26dd6537cc3b790725474640807076"
+    "packages/ui-web/src/index.d.ts": "5048995a4bccfff38378d33d946d900adc23b0b5dc8e92b3d546254c6c9410e6",
+    "packages/ui-web/src/index.js": "1185a0fa63358623852e3a91cf882c651029575f5bff5dc5b4daf0c228bfdf83",
+    "packages/ui-web/src/styles.css": "a37c51dbb151734d0cae1c225624c5e268fe29b3d622813124b68076aa3b0b7f"
   }
 }

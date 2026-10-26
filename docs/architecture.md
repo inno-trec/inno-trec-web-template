@@ -77,9 +77,10 @@ apps/web-starter/src/
   main.tsx              entry: router, global styles
   App.tsx               the list of routes
   index.css             Tailwind, and one workaround for the top bar on phones
-  layouts/ToolShell.tsx top bar, side navigation, page heading
+  layouts/ToolShell.tsx top bar, side navigation, page heading, footer
   pages/                one file per screen
   data/sample.ts        sample data, replace with your API
+  data/api.ts           fake backend (delay, ?demo=empty, ?demo=error), replace with your API
 ```
 
 `ToolShell` uses the design system's `AppShell` and turns its navigation items into router links. Pages render inside it.

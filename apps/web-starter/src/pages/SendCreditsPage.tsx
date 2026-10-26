@@ -1,32 +1,34 @@
 import { Card, TransferForm, type FlowStatus } from '@inno-trec/ui-web';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { RECIPIENTS } from '../data/sample';
-
-const AVAILABLE = 350; // from the backend
+import { ApiError, sendCredits } from '../data/api';
+import { MY_WALLET, RECIPIENTS } from '../data/sample';
 
 /**
  * Pattern: a short step flow in a single column, at most 480px wide.
  * TransferForm collects the input and shows progress. You drive it with `status`:
  * idle -> working (request sent) -> done or error (backend answered).
+ * Add ?demo=error to the address to see a refusal from the backend.
  */
 export function SendCreditsPage() {
   const navigate = useNavigate();
   const [status, setStatus] = useState<FlowStatus>('idle');
-  const [sent, setSent] = useState(0);
+  const [newBalance, setNewBalance] = useState<number | undefined>();
   const [errorCode, setErrorCode] = useState<string | undefined>();
 
-  function handleSubmit({ to, amount, note }: { to: string; amount: number; note: string }) {
+  async function handleSubmit(input: { to: string; amount: number; note: string }) {
     setStatus('working');
     setErrorCode(undefined);
-    // TODO: replace this timer with your API call, for example:
-    //   api.transfers.create({ to, amount, note }).then(() => setStatus('done')).catch(...)
-    void to;
-    void note;
-    window.setTimeout(() => {
-      setSent(amount);
+    try {
+      const result = await sendCredits(input);
+      // The backend reports the new balance. Never compute it in the interface.
+      setNewBalance(result.newBalance);
       setStatus('done');
-    }, 800);
+    } catch (error) {
+      // Unknown codes show a generic message, so pass the code through as it is.
+      setErrorCode(error instanceof ApiError ? error.code : 'UNKNOWN');
+      setStatus('error');
+    }
   }
 
   return (
@@ -34,10 +36,10 @@ export function SendCreditsPage() {
       <Card>
         <TransferForm
           recipients={RECIPIENTS}
-          available={AVAILABLE}
+          available={MY_WALLET.available}
           status={status}
           errorCode={errorCode}
-          newBalance={AVAILABLE - sent}
+          newBalance={newBalance}
           onSubmit={handleSubmit}
           onCancel={() => navigate('/')}
           onFinish={() => navigate('/')}

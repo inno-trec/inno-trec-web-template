@@ -24,7 +24,7 @@ async function navPages(page: Page) {
   return links.evaluateAll((els) => els.map((el) => ({ href: el.getAttribute('href')!, label: el.textContent!.trim() })));
 }
 
-test('every page renders its heading without sideways scroll or console errors', async ({ page }) => {
+test('every page renders its heading and footer without sideways scroll or console errors', async ({ page }) => {
   const errors = collectErrors(page);
   const pages = await navPages(page);
   expect(pages.length).toBeGreaterThan(0);
@@ -35,6 +35,8 @@ test('every page renders its heading without sideways scroll or console errors',
       await expect(page.locator('.it-shell-main > h1')).toHaveText(label);
       // The heading comes from NAV, so also check that a route renders a real page, not the fallback.
       await expect(page.locator('[data-not-found]'), `no route for ${href} in App.tsx`).toHaveCount(0);
+      // Every INNO-TREC tool shows the EU funding emblem in the footer.
+      await expect(page.getByRole('img', { name: 'Funded by the European Union' })).toBeVisible();
       await expectNoSidewaysScroll(page);
     });
   }

@@ -30,7 +30,7 @@ Do these four things first.
 1. **Rename the app.** In `apps/web-starter/package.json`, change `"name"`. If you rename the folder as well, update the `dev` script in the root `package.json`.
 2. **Set the tool name.** In `apps/web-starter/src/layouts/ToolShell.tsx`, change `TOOL_NAME`. It appears in the top bar.
 3. **Set the page title and icon.** In `apps/web-starter/index.html`, change `<title>` and add your icon.
-4. **Remove the example pages you do not need.** Delete the files in `src/pages/`, their routes in `src/App.tsx`, and their entries in `NAV` in `ToolShell.tsx`. Delete `src/data/sample.ts` when your own data replaces it.
+4. **Remove the example pages you do not need.** Delete the files in `src/pages/`, their routes in `src/App.tsx`, and their entries in `NAV` in `ToolShell.tsx`. Delete `src/data/sample.ts` and `src/data/api.ts` when your own data replaces them. Keep the footer in `ToolShell.tsx`: it carries the EU funding emblem and statement.
 
 If your repository will hold only one tool, you can keep `apps/web-starter` as it is. If it will hold several, copy the folder once per tool and give each copy its own name.
 
@@ -71,7 +71,7 @@ For the shape of common pages (overview, list with detail, step flow), see [Page
 
 ## 4. Connect your backend
 
-The starter reads from `src/data/sample.ts`. Replace those imports with calls to your API.
+The starter reads from `src/data/sample.ts` and from `src/data/api.ts`, a fake backend that waits and then answers. Replace them with calls to your API. Keep the loading, empty and error states that `MyWalletPage.tsx` shows.
 
 The design system has one rule here: **the interface displays what the backend reports and collects input.** Credit amounts, valuation, limits and balances all come from the API. Do not calculate them in a component. The [design rules](design-rules.md) explain why.
 

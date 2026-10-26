@@ -1,4 +1,4 @@
-import type { Recipient, WalletRow } from '@inno-trec/ui-web';
+import type { Movement, Recipient, WalletRow } from '@inno-trec/ui-web';
 
 /**
  * SAMPLE DATA. Replace it with calls to your backend.
@@ -31,4 +31,13 @@ export const RECIPIENTS: Recipient[] = [
   { id: 'w-7d2e91b4', name: 'C4', detail: 'Same community' },
   { id: 'w-9a31c5f0', name: 'Member C7', detail: 'Same community' },
   { id: 'w-4b8e27d1', name: 'Member C12', detail: 'Same community', disabled: true },
+];
+
+/** The signed-in member's wallet, as the backend reports it (member C3 in user story 4). */
+export const MY_WALLET = { balance: 150, available: 150, updated: 'today at 08:00' };
+
+/** The same wallet's movements, newest first. Amounts are positive; `direction` gives the sign. */
+export const MY_MOVEMENTS: Movement[] = [
+  { id: 'm2', direction: 'out', txType: 'TRANSFER_P2P', amount: 200, time: 'Today', counterpartyName: 'C4' },
+  { id: 'm1', direction: 'in', txType: 'ISSUANCE', purposeCode: 'GEN_SOLAR', amount: 350, time: 'Earlier' },
 ];

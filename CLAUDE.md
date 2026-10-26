@@ -48,7 +48,7 @@ design system repo ──npm run sync:ds──► packages/tokens, packages/ui-w
 `scripts/sync-design-system.mjs` overwrites these; edits are lost at the next sync:
 
 - `packages/tokens/tokens.json` and `packages/tokens/dist/*`
-- `packages/ui-web/src/*` and `packages/ui-web/assets/` (its `package.json` is hand-maintained)
+- `packages/ui-web/src/*` and `packages/ui-web/assets/` (logos and the EU funding emblem; its `package.json` is hand-maintained)
 - `docs/reference/*`
 - `design-system.lock.json`
 
@@ -69,9 +69,10 @@ Generated files start with a `GENERATED` banner. The sync records a SHA-256 hash
 
 - `src/main.tsx`: `BrowserRouter`, imports `styles.css` and then `index.css`.
 - `src/App.tsx`: routes nested under `ToolShell`.
-- `src/layouts/ToolShell.tsx`: wraps the design system `AppShell`. The `NAV` array drives both the side navigation and the page heading (`label`). `TOOL_NAME` and `USER` are placeholders.
+- `src/layouts/ToolShell.tsx`: wraps the design system `AppShell`. The `NAV` array drives both the side navigation and the page heading (`label`). `TOOL_NAME` and `USER` are placeholders. It passes a `Footer` with the EU funding emblem (`@inno-trec/ui-web/assets/funding/eu-funded-negative.png`) and `FOOTER_LINKS`; every tool keeps the footer.
 - Adding a page takes three edits: a file in `src/pages/`, a `<Route>` in `App.tsx`, and a `NAV` entry.
-- `src/data/sample.ts` is sample data (ECMS user story 4) that stands in for a backend; there is no API client, auth or state library.
+- `src/data/sample.ts` is sample data (ECMS user story 4). `src/data/api.ts` is a fake backend over it (a delay, and `?demo=empty` / `?demo=error` in the address to show the other states). There is no real API client, auth or state library.
+- `src/pages/MyWalletPage.tsx` is the member-screen example and shows the loading, empty and error states.
 - `src/index.css` holds a workaround that hides the `TopBar` title and user below 560px. Remove it when the design system fixes the gap.
 
 `apps/*` may hold more example apps. Each one depends on `@inno-trec/tokens` and `@inno-trec/ui-web` at version `*` and should teach one pattern (see `docs/contributing.md`).
@@ -97,4 +98,4 @@ The full lists are in `docs/design-rules.md` and `docs/page-patterns.md`. These 
 
 ## Documentation map
 
-The `docs/` files were checked against a running copy; keep them accurate when behavior changes. Start with `docs/getting-started.md` (team workflow), `docs/architecture.md`, `docs/tokens-and-tailwind.md` (class names), `docs/troubleshooting.md` (known issues) and `docs/reference/components.md` (when to use each of the 25 components; props are typed in `packages/ui-web/src/index.d.ts`).
+The `docs/` files were checked against a running copy; keep them accurate when behavior changes. Start with `docs/getting-started.md` (team workflow), `docs/architecture.md`, `docs/tokens-and-tailwind.md` (class names), `docs/troubleshooting.md` (known issues) and `docs/reference/components.md` (when to use each of the 26 components; props are typed in `packages/ui-web/src/index.d.ts`).

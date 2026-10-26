@@ -61,7 +61,7 @@ export interface InlineAlertProps {
 }
 export declare function InlineAlert(props: InlineAlertProps): React.ReactElement;
 
-export type IconName = 'sun' | 'wind' | 'plug' | 'battery' | 'clock' | 'coins' | 'panel' | 'wrench' | 'heart' | 'star' | 'exchange'
+export type IconName = 'sun' | 'wind' | 'plug' | 'battery' | 'clock' | 'wallet' | 'coins' | 'panel' | 'wrench' | 'heart' | 'star' | 'exchange'
   | 'arrowIn' | 'arrowOut' | 'person' | 'check' | 'info' | 'alert' | 'search' | 'chevron' | 'back';
 export interface IconProps { name: IconName; size?: number; strokeWidth?: number; /** Set only when the icon is the sole content. */ label?: string; className?: string }
 export declare function Icon(props: IconProps): React.ReactElement;
@@ -199,7 +199,9 @@ export interface TransferFormProps {
   status?: FlowStatus;
   /** Backend error code, e.g. INSUFFICIENT_BALANCE. Unknown codes show a generic message. */
   errorCode?: string;
+  /** Replaces the code's message. The form adds "Your credits were not moved." after it. */
   errorMessage?: string;
+  /** The balance after the send, as the backend reports it. Shown on the result screen. */
   newBalance?: number;
   unit?: string;
   finishLabel?: string;
@@ -256,6 +258,19 @@ export interface SideNavProps {
 }
 export declare function SideNav(props: SideNavProps): React.ReactElement;
 
+export interface FooterLink { label: string; href: string }
+export interface FooterProps {
+  /** The "Funded by the European Union" emblem. On this dark footer use the negative version (assets/Funding/eu-funded-negative.png). */
+  emblemSrc?: string;
+  /** Replaces the INNO-TREC Horizon Europe funding statement. Keep the EU wording when you change it. */
+  funding?: React.ReactNode;
+  /** Legal links, for example the privacy policy. */
+  links?: FooterLink[];
+  children?: React.ReactNode;
+  className?: string;
+}
+export declare function Footer(props: FooterProps): React.ReactElement;
+
 export interface AppShellProps {
   logoSrc?: string;
   title?: React.ReactNode;
@@ -267,5 +282,7 @@ export interface AppShellProps {
   onNavigate?: (id: string, event: React.MouseEvent) => void;
   heading?: React.ReactNode;
   children?: React.ReactNode;
+  /** Usually a Footer. It spans the full width below the side navigation and the main area. */
+  footer?: React.ReactNode;
 }
 export declare function AppShell(props: AppShellProps): React.ReactElement;
