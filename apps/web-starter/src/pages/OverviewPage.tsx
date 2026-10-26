@@ -1,7 +1,7 @@
 import { colors } from '@inno-trec/tokens';
 import { Button, Card, DataTable, InlineAlert, Select, StatTile, type Column } from '@inno-trec/ui-web';
 import { useEffect, useState } from 'react';
-import { formatDay, formatHour, formatNumber, TIME_ZONE } from '../charts/format';
+import { formatDay, formatHour, formatNumber } from '../charts/format';
 import { LazyTimeSeriesChart as TimeSeriesChart } from '../charts/LazyTimeSeriesChart';
 import type { SeriesSpec } from '../charts/TimeSeriesChart';
 import { getEnergyReport, PERIODS, type EnergyReport, type EnergyRow, type Period } from '../data/api';
@@ -56,7 +56,8 @@ export function OverviewPage() {
             onChange={(e) => setPeriod(e.target.value as Period)}
           />
         </div>
-        <p className="m-0 pb-space-2 text-ink-muted">Times in {TIME_ZONE}</p>
+        {/* Times follow the community's clock, so the page names its time zone. */}
+        {load.state === 'ready' && <p className="m-0 pb-space-2 text-ink-muted">Times in {load.report.timeZone}</p>}
       </div>
 
       {load.state === 'loading' && (
@@ -97,7 +98,7 @@ const kwh = (value: number | null) => (value == null ? 'No data' : formatNumber(
 function Report({ report, showTable, onToggleTable }: { report: EnergyReport; showTable: boolean; onToggleTable: () => void }) {
   const { totals } = report;
   const columns: Column<EnergyRow>[] = [
-    { key: 'time', header: report.rowUnit === 'hour' ? 'Hour' : 'Day', render: (r) => (report.rowUnit === 'hour' ? formatHour(r.time) : formatDay(r.time)) },
+    { key: 'time', header: report.rowUnit === 'hour' ? 'Hour' : 'Day', render: (r) => (report.rowUnit === 'hour' ? formatHour(r.time, report.timeZone) : formatDay(r.time, report.timeZone)) },
     { key: 'consumptionKwh', header: 'Consumption (kWh)', align: 'right', render: (r) => kwh(r.consumptionKwh) },
     { key: 'pvKwh', header: 'PV production (kWh)', align: 'right', render: (r) => kwh(r.pvKwh) },
     { key: 'storageKwh', header: 'Storage (kWh)', align: 'right', render: (r) => kwh(r.storageKwh) },
@@ -124,12 +125,12 @@ function Report({ report, showTable, onToggleTable }: { report: EnergyReport; sh
           </Button>
         }
       >
-        <TimeSeriesChart points={report.readings} series={POWER} unit="kW" label="Power of consumption, PV production, storage and grid over time" />
+        <TimeSeriesChart points={report.readings} series={POWER} unit="kW" timeZone={report.timeZone} label="Power of consumption, PV production, storage and grid over time" />
       </Card>
 
       {/* A second unit gets its own chart, never a second y-axis. */}
       <Card title="Battery charge" subtitle="State of charge of the community battery">
-        <TimeSeriesChart points={report.readings} series={CHARGE} unit="%" min={0} max={100} height={200} label="Battery state of charge over time" />
+        <TimeSeriesChart points={report.readings} series={CHARGE} unit="%" min={0} max={100} height={200} timeZone={report.timeZone} label="Battery state of charge over time" />
       </Card>
 
       {showTable && (

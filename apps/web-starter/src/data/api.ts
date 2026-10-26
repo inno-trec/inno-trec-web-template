@@ -1,5 +1,6 @@
 import type { DataConfidence } from '@inno-trec/ui-web';
-import { generateReadings, type Reading } from './synthetic';
+import { startOfDay, startOfHour } from '../time/zone';
+import { COMMUNITY, generateReadings, type Reading } from './synthetic';
 
 /**
  * FAKE BACKEND. It stands in for your API client while you build the interface.
@@ -52,7 +53,9 @@ export interface EnergyRow {
 
 export interface EnergyReport {
   period: Period;
-  /** Minutes between readings. */
+  /** The community's time zone (IANA name). Show every time in it, and name it on the page. */
+  timeZone: string;
+  /** Minutes between readings. The backend sets it; the interface does not assume 15. */
   resolution: number;
   readings: Reading[];
   rows: EnergyRow[];
@@ -74,13 +77,12 @@ export async function getEnergyReport(period: Period): Promise<EnergyReport> {
   await delay(500);
   if (demo() === 'error') throw new ApiError('UNAVAILABLE');
 
+  const zone = COMMUNITY.timeZone;
   const now = Math.floor(Date.now() / QUARTER) * QUARTER;
-  const start = new Date(now);
-  start.setHours(0, 0, 0, 0);
-  if (period === '7d') start.setDate(start.getDate() - 6);
-  if (period === '30d') start.setDate(start.getDate() - 29);
+  // Periods start at midnight in the community's time zone, not the reader's.
+  const start = startOfDay(now, zone, period === '7d' ? -6 : period === '30d' ? -29 : 0);
 
-  const readings = demo() === 'empty' ? [] : generateReadings(start.getTime(), now, now - 60 * 60 * 1000);
+  const readings = demo() === 'empty' ? [] : generateReadings(start, now, now - 60 * 60 * 1000);
   const rowUnit = period === 'today' ? 'hour' : 'day';
 
   // Everything below is the backend's arithmetic. A real interface receives these figures.
@@ -91,10 +93,8 @@ export async function getEnergyReport(period: Period): Promise<EnergyReport> {
   let gridImport = 0;
   let gridExport = 0;
   for (const r of readings) {
-    const d = new Date(r.time);
-    if (rowUnit === 'hour') d.setMinutes(0, 0, 0);
-    else d.setHours(0, 0, 0, 0);
-    const row = buckets.get(d.getTime()) ?? { time: d.getTime(), consumptionKwh: 0, pvKwh: 0, storageKwh: 0, gridKwh: 0, missingReadings: 0, readings: 0 };
+    const key = rowUnit === 'hour' ? startOfHour(r.time, zone) : startOfDay(r.time, zone);
+    const row = buckets.get(key) ?? { time: key, consumptionKwh: 0, pvKwh: 0, storageKwh: 0, gridKwh: 0, missingReadings: 0, readings: 0 };
     if (r.consumption == null) row.missingReadings += 1;
     else row.readings += 1;
     row.consumptionKwh += kwh(r.consumption);
@@ -121,6 +121,7 @@ export async function getEnergyReport(period: Period): Promise<EnergyReport> {
 
   return {
     period,
+    timeZone: zone,
     resolution: 15,
     readings,
     rows,

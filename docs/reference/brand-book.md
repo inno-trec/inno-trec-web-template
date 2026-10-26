@@ -96,13 +96,14 @@ INNO-TREC tools chart energy over time: consumption, PV production, storage and 
 - The four colours were checked as a set: each pair stays apart for protanopia and deuteranopia (ΔE 8.2 or more) and every colour reaches 3:1 on `surface` and `surface-muted`. Do not swap in the brand `green` or `orange`: they fail contrast as marks, and together they look the same to colour-blind readers.
 - Series colours are for marks only (lines, bars, areas, legend swatches). Axis labels, values, legends and tooltips stay in `ink` and `ink-muted`.
 - One y-axis per chart. Two measures with different units (kW and %) go in two charts, one above the other, sharing the time axis.
-- Always show the unit (kW, kWh, %) in the axis title or the tooltip, and the time zone where readers are in more than one.
+- Always show the unit (kW, kWh, %) in the axis title or the tooltip.
+- Show times in the community's time zone (the site's, sent by the backend), not the reader's, and name it on the page ("Times in Europe/Lisbon"). Days, totals, solar peaks and alarm times then match what the community and its technicians see.
 - Every chart with two or more series has a legend with the series names; with up to four series also label the lines directly. Never identify a series by colour alone.
 - Lines are 2px. Grid lines use `line`; axes and tick labels use `ink-muted`. No shadows, gradients or 3D.
 - Estimated or forecast values use a dashed line of the same series colour, and the legend or tooltip says "estimated". Missing data is a gap in the line, never a zero.
 - Status (an alarm, a fault) is not a series: show it with a `Badge` or `InlineAlert`, with a word and an icon.
 - Offer the numbers as a table as well, for readers who cannot use the chart.
-- The backend computes every figure a chart shows (energy totals, yield, performance ratio). The interface plots and formats it.
+- The backend computes every figure a chart shows (energy totals, yield, performance ratio) and sets the reading interval. The interface plots and formats it.
 
 ## Writing for members
 

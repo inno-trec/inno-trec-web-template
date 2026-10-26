@@ -15,7 +15,7 @@ The first sections apply to every INNO-TREC tool. [Charts](#charts) applies to t
 
 ## Numbers and units
 
-- **The backend computes every figure.** Energy totals, shares, yield, performance indicators, credit amounts and balances all come from the API. The interface formats and displays them.
+- **The backend computes every figure.** Energy totals, shares, yield, performance indicators (such as the performance ratio), credit amounts and balances all come from the API. So does the reading interval. The interface formats and displays them.
 - Write every number with its unit (kW, kWh, kWp, %) and with thousands separators: "1,284 kWh".
 - Use a real minus sign (−), not a hyphen.
 - **Missing data is never zero.** Show a gap in a chart and "No data" in a table.
@@ -38,7 +38,7 @@ The design system has four series colors with a fixed meaning. Use them through 
 - **Name every series.** Use a legend when there are two or more series, and label the lines directly when there is room.
 - **Text stays ink.** Axis labels, legends and tooltips use `ink` and `ink-muted`, never a series color.
 - **Estimated values are dashed** and the tooltip says "estimated".
-- **Say which time zone** the times are in.
+- **Show times in the community's time zone**, which the backend sends, and name it on the page ("Times in Europe/Lisbon"). Never the reader's: days, totals, solar peaks and alarm times must match what the community sees.
 - **Offer a table** with the same numbers, for readers who cannot use the chart.
 
 ## Accessibility

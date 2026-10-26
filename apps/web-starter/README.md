@@ -31,7 +31,8 @@ To add another chart type (bars, for example), import it from `echarts/charts` a
 The data is synthetic. Nothing in it describes a real site.
 
 - `src/data/synthetic.ts` generates 15-minute readings for a small community (24 households, 60 kWp of PV, a 100 kWh battery). The same day always gives the same values.
-- `src/data/api.ts` is a fake backend over it. Each request waits a moment and then answers. It also computes the totals and the table rows, the way a real backend would.
+- `src/data/api.ts` is a fake backend over it. Each request waits a moment and then answers. It also computes the totals and the table rows, the way a real backend would, and sends the community's time zone (`Europe/Lisbon`).
+- `src/time/zone.ts` converts instants to the community's clock. Charts, tables and periods use it, so a reader in another time zone sees the same days and hours as the community.
 
 To see the other states, add one of these to the address:
 

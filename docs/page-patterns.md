@@ -41,6 +41,7 @@ Rules for this pattern:
 - **Use the series tokens.** Each series has its own color in every chart. See [Charts](design-rules.md#charts).
 - **Totals come from the backend.** The `StatTile` values and the table rows arrive computed. The chart only plots the readings.
 - **Show gaps and estimates.** A missing reading is `null` and draws a gap. Readings not yet confirmed are drawn dashed.
+- **Use the community's clock.** Pass the `timeZone` from the backend to the chart and to the formatters, and name it on the page. Periods start at midnight in that time zone.
 - **Offer the numbers as a table.** "Show as table" opens a `DataTable` with the same figures per hour or per day.
 - **Load the chart on demand.** ECharts is large, so `LazyTimeSeriesChart` loads it only on pages that show a chart.
 
