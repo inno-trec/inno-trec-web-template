@@ -23,5 +23,5 @@ First release of the template.
 
 - Node 24 LTS or newer, npm 11.
 
-[Unreleased]: https://github.com/joaocarlos/inno-treck-template/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/joaocarlos/inno-treck-template/releases/tag/v0.1.0
+[Unreleased]: https://github.com/joaocarlos/inno-trec-template/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/joaocarlos/inno-trec-template/releases/tag/v0.1.0
