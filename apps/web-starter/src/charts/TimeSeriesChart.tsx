@@ -12,6 +12,7 @@ import {
 import { init, use, type ComposeOption } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 import { useEffect, useRef, useState } from 'react';
+import { BROWSER_TIME_ZONE, zoneOffset } from '../time/zone';
 import { formatNumber, formatTime } from './format';
 
 // Load only the parts of ECharts this chart uses. Add others (BarChart, DataZoomComponent…) when you need them.
@@ -41,6 +42,8 @@ export interface TimeSeriesChartProps<P extends Point> {
   unit: string;
   /** What the chart shows, read by screen readers. */
   label: string;
+  /** The community's time zone (IANA name), from the backend. The axis and the tooltip use it. */
+  timeZone?: string;
   height?: number;
   min?: number;
   max?: number;
@@ -50,7 +53,7 @@ export interface TimeSeriesChartProps<P extends Point> {
  * A line chart over time, styled by the design system's chart rules: fixed series colors, one y-axis,
  * a legend, direct labels when there is room, dashed estimates and gaps for missing data.
  */
-export function TimeSeriesChart<P extends Point>({ points, series, unit, label, height = 320, min, max }: TimeSeriesChartProps<P>) {
+export function TimeSeriesChart<P extends Point>({ points, series, unit, label, timeZone = BROWSER_TIME_ZONE, height = 320, min, max }: TimeSeriesChartProps<P>) {
   const ref = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
 
@@ -69,12 +72,17 @@ export function TimeSeriesChart<P extends Point>({ points, series, unit, label, 
     const chart = init(el, undefined, { renderer: 'canvas' });
     chart.setOption(buildOption(points, series, unit, width));
     return () => chart.dispose();
-  }, [points, series, unit, width, min, max]);
+  }, [points, series, unit, width, min, max, timeZone]);
 
   return <div ref={ref} data-chart role="img" aria-label={label} style={{ width: '100%', height }} />;
 
   function buildOption(pts: P[], specs: SeriesSpec<P>[], yUnit: string, w: number): Option {
     const hasEstimates = pts.some((p) => p.estimated);
+    // ECharts lays out its time axis in the browser's time zone and has no setting for another one.
+    // So each instant moves by the community's offset, and the chart reads the result as UTC:
+    // the axis then shows the community's clock. The tooltip formats the real instant instead.
+    // On the night summer time ends, one hour repeats, and the line steps back for that hour.
+    const at = pts.map((p) => p.time + zoneOffset(p.time, timeZone));
     // Name the lines at their end when there is room and the ends are far enough apart;
     // the legend always names them too.
     const directLabels = w >= 640 && specs.length <= 4 && endsApart(pts, specs);
@@ -95,7 +103,7 @@ export function TimeSeriesChart<P extends Point>({ points, series, unit, label, 
       const endLabel = { show: true, formatter: spec.name, ...text, distance: 8 };
       const measured: LineSeriesOption = {
         ...base,
-        data: pts.map((p) => [p.time, p.estimated ? null : spec.value(p)]),
+        data: pts.map((p, i) => [at[i], p.estimated ? null : spec.value(p)]),
         endLabel: directLabels && !hasEstimates ? endLabel : undefined,
         labelLayout: { moveOverlap: 'shiftY' },
       };
@@ -105,7 +113,7 @@ export function TimeSeriesChart<P extends Point>({ points, series, unit, label, 
       const estimated: LineSeriesOption = {
         ...base,
         lineStyle: { width: 2, color: spec.color, type: 'dashed' },
-        data: pts.map((p, i) => [p.time, p.estimated || pts[i + 1]?.estimated ? spec.value(p) : null]),
+        data: pts.map((p, i) => [at[i], p.estimated || pts[i + 1]?.estimated ? spec.value(p) : null]),
         endLabel: directLabels ? endLabel : undefined,
         labelLayout: { moveOverlap: 'shiftY' },
       };
@@ -114,6 +122,7 @@ export function TimeSeriesChart<P extends Point>({ points, series, unit, label, 
 
     return {
       animation: false,
+      useUTC: true,
       aria: { enabled: true },
       textStyle: text,
       // On narrow screens the legend takes two rows.
@@ -153,7 +162,7 @@ export function TimeSeriesChart<P extends Point>({ points, series, unit, label, 
               return `<div>${swatch}${name}: <b>${value == null ? 'no data' : `${formatNumber(value)} ${yUnit}`}</b></div>`;
             })
             .join('');
-          return `<div style="margin-bottom:4px">${formatTime(point.time)}${point.estimated ? ' · estimated' : ''}</div>${rows}`;
+          return `<div style="margin-bottom:4px">${formatTime(point.time, timeZone)}${point.estimated ? ' · estimated' : ''}</div>${rows}`;
         },
       },
       xAxis: {

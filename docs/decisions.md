@@ -76,6 +76,16 @@ The starter holds the patterns every tool needs (monitoring over time, list with
 
 **Consequence.** The credit rules in the design rules apply to credit screens only. A new domain with its own patterns gets its own example app.
 
+### 11. The backend sets the data; the community sets the clock
+
+The backend computes PV indicators (performance ratio, specific yield, expected yield) and sets the reading interval. The interface displays them and never assumes an interval. Times are shown in the community's time zone, which the backend sends as an IANA name ("Europe/Lisbon"), and every page with times names it.
+
+The reader's own time zone would be simpler, and for readers in the community's time zone the result is the same. But it breaks for everyone else: days would not match the backend's daily totals, the solar peak would move away from midday, and alarm times would differ from what technicians see on site. INNO-TREC has pilots in more than one country, so readers in another time zone are expected.
+
+**Consequence.** ECharts has no time zone setting. `TimeSeriesChart` moves each instant by the community's offset and reads the result as UTC, so its axis shows the community's clock. On the night summer time ends, one hour repeats and the line steps back for that hour. `src/time/zone.ts` holds the conversions, with the browser's `Intl` API and no library. The browser's time zone is the fallback only when the backend sends none.
+
+**Revisit when** a tool compares communities in different time zones on one chart. That chart needs one shared clock, probably UTC, and says so.
+
 ## Open
 
 These need an owner and an answer. None blocks using the template today.
@@ -88,5 +98,4 @@ These need an owner and an answer. None blocks using the template today.
 | **Top bar on phones.** The `TopBar` does not fit on narrow screens. | The starter works around it in `index.css`. Every team would otherwise rediscover it. |
 | **Dark mode.** The design system has one light theme. | Tools used in low light have no alternative. |
 | **Questions about the ECMS specification** in the [open questions](reference/open-questions.md). | Several decide what a screen shows, for example how a negative balance is explained. |
-| **Time zone and resolution of readings.** The starter shows 15-minute readings in the reader's time zone. | Communities across time zones, and meters with other intervals, need a rule from the backend. |
-| **Definitions of PV indicators** (performance ratio, specific yield, expected yield). | The backend computes them. Each tool must show the same definition, which no document sets yet. |
+| **Definitions of PV indicators** (performance ratio, specific yield, expected yield). The backend computes them (decision 11). | Every tool must use the same definition, and no document sets one yet. |

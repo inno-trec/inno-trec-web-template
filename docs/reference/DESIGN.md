@@ -355,4 +355,5 @@ React 18 components are published under the global `InnoTrec`; the values above 
 - Do use the logo files as supplied: full colour on light grounds, greyscale on dark grounds, clear space of logo height ÷ 4 on every side. Don't recolour, redraw, stretch or invert the logo.
 - Do give each energy series its own fixed colour (`series-consumption`, `series-pv`, `series-storage`, `series-grid`) in every chart, with a legend and the unit. Don't use the brand `green` or `orange` for chart marks.
 - Don't put two y-axes on one chart; use two charts that share the time axis. Show estimated values dashed and missing data as a gap, never as zero.
+- Do show times in the community's time zone, not the reader's, and name the time zone on the page.
 - Do write the project name as INNO-TREC in text; INNOTREC (no hyphen) appears only in the logo.

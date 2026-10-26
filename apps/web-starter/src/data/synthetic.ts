@@ -7,7 +7,10 @@
  * and tests stay stable.
  */
 
-export const COMMUNITY = { households: 24, pvKwp: 60, batteryKwh: 100, batteryKw: 25 };
+import { zonedParts } from '../time/zone';
+
+/** The community's time zone sets its days, its solar curve and its daily totals. */
+export const COMMUNITY = { households: 24, pvKwp: 60, batteryKwh: 100, batteryKw: 25, timeZone: 'Europe/Lisbon' };
 
 /** One 15-minute reading. Power in kW: storage is positive while charging, grid is positive while importing. */
 export interface Reading {
@@ -45,8 +48,8 @@ function clearness(day: number) {
 }
 
 function pvAt(time: number, rnd: () => number) {
-  const date = new Date(time);
-  const hour = date.getHours() + date.getMinutes() / 60;
+  const local = zonedParts(time, COMMUNITY.timeZone);
+  const hour = local.hour + local.minute / 60;
   const sun = Math.sin((Math.PI * (hour - 6.5)) / 13);
   if (sun <= 0) return 0;
   const clouds = clearness(dayNumber(time)) * (0.85 + 0.15 * rnd());
@@ -54,11 +57,11 @@ function pvAt(time: number, rnd: () => number) {
 }
 
 function consumptionAt(time: number, rnd: () => number) {
-  const date = new Date(time);
-  const hour = date.getHours() + date.getMinutes() / 60;
+  const local = zonedParts(time, COMMUNITY.timeZone);
+  const hour = local.hour + local.minute / 60;
   const morning = 10 * Math.exp(-((hour - 7.5) ** 2) / 1.5);
   const evening = 18 * Math.exp(-((hour - 19.5) ** 2) / 3);
-  const weekend = date.getDay() === 0 || date.getDay() === 6 ? 1.15 : 1;
+  const weekend = local.weekday === 0 || local.weekday === 6 ? 1.15 : 1;
   return (8 + morning + evening) * weekend * (0.9 + 0.2 * rnd());
 }
 
@@ -67,12 +70,12 @@ const round = (n: number) => Math.round(n * 100) / 100;
 /**
  * Readings from `from` up to (not including) `to`, every 15 minutes.
  * Readings at or after `estimatedAfter` are marked as estimated. The meters are offline from
- * 03:00 to 04:00 on the last day, to show a gap in the data.
+ * 03:00 to 04:00 (community time) on the last day, to show a gap in the data.
  */
 export function generateReadings(from: number, to: number, estimatedAfter: number): Reading[] {
   const readings: Reading[] = [];
   let socKwh = COMMUNITY.batteryKwh * 0.4;
-  const lastDay = new Date(to - 1).toDateString();
+  const last = zonedParts(to - 1, COMMUNITY.timeZone);
 
   for (let time = from; time < to; time += STEP_MS) {
     const rnd = random(Math.floor(time / STEP_MS));
@@ -87,8 +90,8 @@ export function generateReadings(from: number, to: number, estimatedAfter: numbe
     socKwh += storage > 0 ? storage * 0.25 * 0.95 : storage * 0.25;
     const grid = consumption - pv + storage;
 
-    const date = new Date(time);
-    const offline = date.toDateString() === lastDay && date.getHours() === 3;
+    const local = zonedParts(time, COMMUNITY.timeZone);
+    const offline = local.day === last.day && local.month === last.month && local.hour === 3;
     readings.push(
       offline
         ? { time, consumption: null, pv: null, storage: null, grid: null, soc: null, estimated: false }

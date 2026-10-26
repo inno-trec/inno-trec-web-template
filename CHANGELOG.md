@@ -9,6 +9,7 @@ All notable changes to the template are listed here. The format follows [Keep a 
 - **The starter is no longer about credits.** `web-starter` now fits the monitoring, PV performance and maintenance tools: an energy overview with time-series charts and an asset list with maintenance suggestions, on synthetic data.
 - **The credit pages moved to `apps/credits-example`** (ledger overview, wallets, send flow, "My wallet"). Run it with `npm run dev:credits`.
 - The design rules separate the rules for every tool from the rules for credit screens, and add rules for charts.
+- Times in the starter follow the community's time zone, which the fake backend sends, instead of the reader's. A reader in Tokyo and one in Lisbon see the same days, hours and totals. Decision 11 records this, and that the backend sets PV indicators and the reading interval.
 
 ### Added
 
@@ -20,6 +21,7 @@ All notable changes to the template are listed here. The format follows [Keep a 
 - `wallet` icon (design system).
 - `npm run sync:ds` also copies the EU funding emblem to `packages/ui-web/assets/funding/`.
 - Decisions 9 (Apache ECharts) and 10 (one neutral starter, one example per domain).
+
 
 ### Fixed
 
