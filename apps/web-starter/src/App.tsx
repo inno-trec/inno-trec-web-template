@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router';
 import { ToolShell } from './layouts/ToolShell';
 import { DashboardPage } from './pages/DashboardPage';
+import { MyWalletPage } from './pages/MyWalletPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { SendCreditsPage } from './pages/SendCreditsPage';
 import { WalletsPage } from './pages/WalletsPage';
@@ -18,6 +19,7 @@ export function App() {
         <Route index element={<DashboardPage />} />
         <Route path="wallets" element={<WalletsPage />} />
         <Route path="send" element={<SendCreditsPage />} />
+        <Route path="my-wallet" element={<MyWalletPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

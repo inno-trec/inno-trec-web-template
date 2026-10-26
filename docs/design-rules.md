@@ -8,6 +8,7 @@ These are the rules from the design system that most often decide whether a scre
 - **Brand colors are fills and accents, not text.** `green` and `orange` as text on a light background fail contrast. Light blue is the only brand color that works as text on white.
 - **Each fill has its own text color.** Ink on green, white on light blue, black on orange. Do not set white text on green or orange.
 - **One primary button per screen**, labeled with a verb ("Send credits").
+- **Every tool shows the EU funding emblem.** INNO-TREC is funded by Horizon Europe. The `Footer` in `ToolShell.tsx` shows the emblem and the funding statement. Keep it, and never recolor or crop the emblem.
 - **Focus is always visible.** A 2px light blue outline with a 2px offset on every interactive element. Components do this already. Keep it on anything you build yourself.
 
 ## What members see
@@ -51,5 +52,6 @@ The ECMS specification and user stories are ambiguous in places (how members aut
 - [ ] No codes, IDs or formulas on member screens
 - [ ] Negative balances in normal text with a minus sign
 - [ ] Every table in a `Card` uses `flush` and has no `caption`
+- [ ] The footer with the EU funding emblem is still on every page
 - [ ] Checked at 400px and at 1440px wide
 - [ ] `npm run typecheck` and `npm run build` pass

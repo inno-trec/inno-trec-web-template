@@ -12,7 +12,8 @@
       "default": "./src/index.js"
     },
     "./styles.css": "./src/styles.css",
-    "./assets/logos/*": "./assets/logos/*"
+    "./assets/logos/*": "./assets/logos/*",
+    "./assets/funding/*": "./assets/funding/*"
   },
   "sideEffects": [
     "*.css"

@@ -223,6 +223,11 @@ components:
     backgroundColor: "{colors.green}"
     textColor: "{colors.on-green}"
     size: 64px
+  footer:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.surface}"
+    rounded: "{rounded.none}"
+    padding: 32px
 ---
 
 # INNO-TREC
@@ -310,7 +315,7 @@ React 18 components are published under the global `InnoTrec`; the values above 
 
 **Manager screens:** AccountCard and AccountList (wallets in EC with type, ID, balance and status: Active, Suspended, Closed), StatTile, DataTable, Identifier (shortened ID with Copy), ConfidenceBadge (Certified, Measured, Estimated, Manual), PurposeTag in technical mode (raw purpose codes).
 
-**Shell:** TopBar, SideNav (icon plus label per item; four or five items for members), AppShell.
+**Shell:** TopBar, SideNav (icon plus label per item; four or five items for members), Footer (EU funding emblem, funding statement and legal links on `ink`), AppShell.
 
 ## Do's and Don'ts
 

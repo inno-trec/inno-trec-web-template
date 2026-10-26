@@ -12,6 +12,7 @@
  *   3. project/components/index.d.ts       -> packages/ui-web/src/index.d.ts (types)
  *   4. project/components/bundle.css       -> packages/ui-web/src/styles.css (fonts + tokens + component styles)
  *   5. uploads/Logos/*.png                 -> packages/ui-web/assets/logos/
+ *      uploads/Funding/*.png               -> packages/ui-web/assets/funding/ (EU funding emblem)
  *   6. reference documents                 -> docs/reference/ (brand book, DESIGN.md, open questions, component guide)
  *   7. writes design-system.lock.json with the version that was copied and a hash of every generated file
  *      (npm run check:generated compares them)
@@ -73,11 +74,17 @@ fs.writeFileSync(
   `${banner}${fontImport[0].trim()}\n\n${tokensCss}\n${css.replace(fontImport[0], '')}`,
 );
 
-/* 5. logos */
-const logoDir = path.join(ds, 'uploads/Logos');
-fs.mkdirSync(path.join(root, 'packages/ui-web/assets/logos'), { recursive: true });
-const logos = fs.existsSync(logoDir) ? fs.readdirSync(logoDir).filter((f) => f.endsWith('.png')) : [];
-for (const f of logos) fs.copyFileSync(path.join(logoDir, f), path.join(root, 'packages/ui-web/assets/logos', f));
+/* 5. logos and the EU funding emblem */
+const copyPngs = (from, to) => {
+  const src = path.join(ds, from);
+  const dest = path.join(root, to);
+  fs.mkdirSync(dest, { recursive: true });
+  const files = fs.existsSync(src) ? fs.readdirSync(src).filter((f) => f.endsWith('.png')) : [];
+  for (const f of files) fs.copyFileSync(path.join(src, f), path.join(dest, f));
+  return files;
+};
+const logos = copyPngs('uploads/Logos', 'packages/ui-web/assets/logos');
+const funding = copyPngs('uploads/Funding', 'packages/ui-web/assets/funding');
 
 /* 6. reference documents (owned by the design system; the hand-written docs link to them) */
 const refDir = path.join(root, 'docs/reference');
@@ -110,10 +117,11 @@ const lock = {
   syncedAt: new Date().toISOString(),
   components: names.length,
   logos: logos.length,
+  funding: funding.length,
   referenceDocs: ['brand-book.md', 'DESIGN.md', 'open-questions.md', 'components.md'],
   files: hashGenerated(root),
 };
 fs.writeFileSync(path.join(root, 'design-system.lock.json'), `${JSON.stringify(lock, null, 2)}\n`);
 
-console.log(`synced ${names.length} components, ${logos.length} logos from ${ds}`);
+console.log(`synced ${names.length} components, ${logos.length} logos, ${funding.length} funding emblems from ${ds}`);
 console.log(`wrote ${rel(path.join(root, 'design-system.lock.json'))}`);

@@ -91,11 +91,14 @@ You drive the form through `status`:
 Rules for this pattern:
 
 - **One column, at most 480px wide.** Wrap the card in `max-w-[480px]`. Member flows are a single column even on wide screens.
-- **Say that nothing moved when it fails.** The form's built-in error text does. If you write your own, keep that sentence.
+- **Say that nothing moved when it fails.** The form adds "Your credits were not moved." to every error, also to an `errorMessage` you pass.
+- **Do not predict the balance.** The check step shows the amount and the person only. The result screen shows `newBalance` as the backend reports it.
 - **Do not add steps, or fields the specification does not require.** For example, `TransferForm` does not ask for a purpose code, because P2P transfers have none (open question 4 in the [open questions](reference/open-questions.md)).
 - **Let people choose from a list.** `RecipientPicker` lists the people the backend supplies. Never ask someone to type a wallet address.
 
 ## 4. A page with several blocks
+
+Source: [`pages/MyWalletPage.tsx`](../apps/web-starter/src/pages/MyWalletPage.tsx)
 
 When a page needs more than one pattern, stack them in a column and keep each in its own `Card`:
 
@@ -109,6 +112,16 @@ When a page needs more than one pattern, stack them in a column and keep each in
 ```
 
 Components that already look like cards (`WalletBalance`, `EnergySummary`, `BalanceStatement`, `AccountCard`, `TransactionDetail`) do not go inside another `Card`. Nesting them draws a box inside a box.
+
+## Loading, empty and error
+
+Data from a backend arrives late, can be empty and can fail. `MyWalletPage.tsx` shows all three. Add `?demo=empty` or `?demo=error` to the address to see them.
+
+| State | What to show |
+| --- | --- |
+| Loading | A short sentence that says what loads, for example "Loading your credits…", with `role="status"`. |
+| Empty | The component's `emptyText`. Say what will appear there later. |
+| Error | An error `InlineAlert` that says what failed and that nothing changed, and one button to try again. |
 
 ## Member screens and manager screens
 

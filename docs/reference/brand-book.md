@@ -35,6 +35,19 @@ The logo is the symbol (a split disc with an outer arc and radial bars; the circ
   6. Never change the proportions of the logo vertically or horizontally or alter the appearance in any way
 - In practice: use the files as supplied, scale them proportionally, and never recolour or redraw them.
 
+## EU funding emblem
+
+INNO-TREC is funded by Horizon Europe (grant agreement 101230578), so its outputs show the EU emblem with the statement "Funded by the European Union". The files are the official English horizontal set from the European Commission's logo download centre.
+
+| File | Colour | Use on |
+| --- | --- | --- |
+| `assets/Funding/eu-funded-colour.png` | Full colour, blue text | Light grounds (`surface`, `surface-muted`) |
+| `assets/Funding/eu-funded-negative.png` | Full colour flag with a white border, white text | Dark grounds (`ink`, `black`); the Footer uses it |
+
+- Use the files as supplied: never recolour, crop, redraw or merge the emblem with other graphics or text. Use the colour versions; the monochrome versions in the official set are for media without colour.
+- Make the emblem at least as large as the biggest other logo beside it.
+- Put the full funding statement next to it. The Footer component carries the statement used on inno-trec.eu.
+
 ## Colour
 
 Three brand colours, each tied to a project theme:

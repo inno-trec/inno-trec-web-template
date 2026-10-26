@@ -72,7 +72,8 @@ Group: Status
 Use Icon beside words to help people recognise an action or kind of activity at a glance.
 
 - Provide: `name`. Icons are decorative by default; give `label` only when an icon stands alone, which member screens should avoid.
-- The set is small and original: sun, wind, plug, battery, clock, coins, panel, wrench, heart, star, exchange, arrows, person, check, info, alert, search, chevron, back.
+- The set is small and original: sun, wind, plug, battery, clock, wallet, coins, panel, wrench, heart, star, exchange, arrows, person, check, info, alert, search, chevron, back.
+- Use `wallet` for wallets and accounts, and `coins` for credits and investments.
 - Icons inherit the text colour.
 
 ## StatTile
@@ -189,7 +190,8 @@ Group: Member
 Use TransferForm to send credits to another member in three steps: choose a person, enter an amount, check and send.
 
 - Provide: `recipients`, `available` (from the backend), `onSubmit({ to, amount, note })`.
-- Report progress with `status`: `working` while the backend acts, `done` with `newBalance`, or `error` with the backend's `errorCode` (`INSUFFICIENT_BALANCE` has its own message; others show a generic one saying no credits moved).
+- Report progress with `status`: `working` while the backend acts, `done` with `newBalance`, or `error` with the backend's `errorCode` or your own `errorMessage`. `INSUFFICIENT_BALANCE` has its own message and other codes show a generic one; every error message ends by saying that no credits moved.
+- The check step shows the amount and the person, not the balance after the send: only the backend computes balances. The result screen shows `newBalance` as the backend reports it.
 - The form checks only that the amount is above zero and not above `available`. All other rules (limits, minimum balances, eligibility) are the backend's.
 
 ## SettlementRequestForm
@@ -240,11 +242,24 @@ Use SideNav for a tool's main navigation.
 - Member apps: four or five items at most, each with an `icon` and a plain label ("My credits", "Send credits", "History").
 - The current item gets `aria-current="page"` and a highlighted row. Under 720px wide it becomes a horizontal row.
 
+## Footer
+
+Group: Shell
+
+Use Footer at the bottom of every INNO-TREC web tool to show the EU funding emblem, the funding statement and the legal links.
+
+- Provide: `emblemSrc` (the negative emblem, `assets/Funding/eu-funded-negative.png`, because the footer ground is `ink`) and `links` (at least the tool's privacy policy).
+- The funding statement for the Horizon Europe grant (agreement 101230578) is built in. Replace it with `funding` only when the funding changes, and keep the EU wording.
+- Pass it to AppShell as `footer`; it then spans the full width under the side navigation and the main area.
+- Use the colour emblem; the monochrome versions are only for places where colour is not possible. Never recolour, crop or redraw it, and keep it at least as tall as any other logo on the page (48px here, the top-bar logo is 32px).
+- No social media links in a tool footer.
+
 ## AppShell
 
 Group: Shell
 
-Use AppShell as the page frame of an INNO-TREC web tool: TopBar, SideNav and a main area on `surface-muted`.
+Use AppShell as the page frame of an INNO-TREC web tool: TopBar, SideNav, a main area on `surface-muted` and an optional Footer.
 
 - Provide: `logoSrc`, `title`, `user`, `navItems` or `navSections`, `activeId`, `onNavigate`, `heading` (the page's h1) and `children` (the page content, usually Cards and StatTiles).
+- Pass a Footer as `footer`. It sits below the side navigation and the main area, and the main area grows so the footer stays at the bottom of the window.
 - Give the shell a full-height parent (`height: 100%` on html and body) so the side navigation runs to the bottom.
