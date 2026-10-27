@@ -356,3 +356,60 @@ Use AuthLayout as the frame of every screen without a session: sign in, create a
 - One task per screen, with one primary button. Put the way to the other screen in `aside` ("New here? Create an account").
 - Say what went wrong without helping an attacker: "The email or password is wrong", not which one. After a reset request, show the same message whether the email exists or not.
 - The panel is 440px wide at most and fills the width on a phone. Use the standard field size; members' screens may set `large`.
+
+## EmptyState
+
+Group: Status
+
+Use EmptyState when a whole section or page has nothing to show yet: no alerts, no users, no readings in a period.
+
+- Provide: `title` (what is missing: "No alerts yet"), one sentence as `children` (when something will appear, or what to do), and an optional `action` with the Button that adds the first item.
+- Say why it is empty when the page knows it. After a filter, say "Choose another filter to see more alerts", not only "Nothing found".
+- Use `plain` and `level={3}` inside a Card. An empty table inside a DataTable uses its `emptyText` instead.
+- An empty state is not an error. When loading fails, show an `InlineAlert` with `tone="error"` and a "Try again" button.
+
+## Tabs
+
+Group: Layout
+
+Use Tabs to switch between views of the same content on one page, for example alerts by state (Open, Resolved, All) or the sections of an asset.
+
+- Provide: `tabs` (`id`, `label`, and an optional `count` from the backend), `activeId` and `onChange`. The page keeps the active tab; put it in the address when people share links to it.
+- Give the list a `label` for screen readers ("Alerts by state"). The arrow keys, Home and End move between tabs.
+- Two to six tabs, with short labels. More choices, or choices that combine, go in a `Select`.
+- Not for steps (use a step flow with Back) and not for links to other pages (use the side navigation).
+- Pass the active view as `children`, or render it below the Tabs yourself.
+
+## Pagination
+
+Group: Dashboard
+
+Use Pagination below a long list that the backend sends in pages.
+
+- Provide: `page` (starting at 1), `pageSize`, `total` from the backend and `onChange`. A backend that does not count sends whether another page exists: pass `hasNext` instead of `total`.
+- Set `itemLabel` ("alerts") so the count reads "1–10 of 42 alerts".
+- Put it in the `footer` of the Card that holds the DataTable. It renders nothing when the whole list fits on one page.
+- Go back to page 1 when a filter or tab changes. The backend counts and pages the list; the interface never counts rows it did not receive.
+
+## Toast
+
+Group: Status
+
+Use Toast to confirm that a change was saved, after the dialog or form that made it has closed: "Alert resolved", "Invitation sent to ana@example.org".
+
+- Provide: `open`, `onClose` and one sentence as `children`. It closes by itself after 6 seconds (`duration`) and waits while the pointer or the keyboard focus is on it. It also has a Dismiss button.
+- Errors are never a toast. Show them next to the form or the section, where they stay until the person acts.
+- Do not put the only copy of important information in a toast. If people need it later (a link, a code), show it on the page.
+- One toast at a time. A new message replaces the previous one. An optional `action` holds one small button, for example "Undo".
+- Render it once per page. It sits at the bottom of the window and announces the message to screen readers.
+
+## FileUpload
+
+Group: Forms
+
+Use FileUpload to attach files to a form, for example photos of a repair. People choose files with the button or drop them on the field.
+
+- Provide: `label`, `files` (the list the page keeps: `name`, `size`), `onAdd` and `onRemove`. Set `multiple` to allow more than one file.
+- Say in `hint` what to attach and the limits ("Photos of the work, up to 10 MB each."). `accept` filters the browser's picker, but the backend checks the type and size and returns the message for `error`, or for one file in its `error`.
+- Files sent with the form need no status. Files sent at once show `status`: Uploading…, Uploaded or Not uploaded.
+- Keep the chosen files after a failed submit, so people do not choose them again.

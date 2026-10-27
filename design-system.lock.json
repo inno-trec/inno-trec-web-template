@@ -1,9 +1,9 @@
 {
   "designSystem": "inno-trec-design-system",
-  "publishedVersion": "1793037059-1308",
-  "publishedAt": "2026-10-26",
-  "syncedAt": "2026-10-26T17:51:21.780Z",
-  "components": 35,
+  "publishedVersion": "1793093980-6fac",
+  "publishedAt": "2026-10-27",
+  "syncedAt": "2026-10-27T09:40:16.970Z",
+  "components": 40,
   "logos": 8,
   "funding": 2,
   "referenceDocs": [
@@ -13,9 +13,9 @@
     "components.md"
   ],
   "files": {
-    "docs/reference/brand-book.md": "a4707a64221de2ef6563e50456ebe9a9e947c185aa709e1cd91b34fcf4453d29",
-    "docs/reference/components.md": "e0ff2fa981d1f37318fc9c3c6b87fe1833a395de5a845246063d6d5dda0146dd",
-    "docs/reference/DESIGN.md": "00c64918c43a1056d669192931818a8b15ed1fe67fffd0c157da4df532bcbd1a",
+    "docs/reference/brand-book.md": "a328811974f2a6cfdcb385ec7cbce03c0718185905fbb90430ae1434143c4225",
+    "docs/reference/components.md": "ca695042107c83aea8d78352cf240e8a814767f28f5125c89da275a8315d69bb",
+    "docs/reference/DESIGN.md": "6f81cea7ad34847dedfe5f6509b532ab2d22e4f2f62de10cefb3e50ea19ea633",
     "docs/reference/open-questions.md": "437864536fe551500dadf03d10836f3fefeaee1c09885bb398ef964022dd5eaf",
     "packages/tokens/dist/tailwind-preset.cjs": "6800aba7d7daaab3910ad79b978a4317dc49e2fd0c31c528118aef84621574f6",
     "packages/tokens/dist/tokens.cjs": "932ffd24537af5d6cf2a187a570824c86c281c91910c0fb07b1a3110dd27d0f7",
@@ -33,8 +33,8 @@
     "packages/ui-web/assets/logos/logo-stacked-grey.png": "cca5d979368c73df54a20642e07db02d70b9dd658c59a17cb5a8cbfd7128bed5",
     "packages/ui-web/assets/logos/logo-vertical-colour.png": "640143aaed84821f97e8843405fc20a42450cbaa662b565b40a523b1f083ca6e",
     "packages/ui-web/assets/logos/logo-vertical-grey.png": "4944b8ba4c71b8289cf0f47ee24628643c1dd3fdcf91b5e1b4697bbffe44f35d",
-    "packages/ui-web/src/index.d.ts": "c68e41f5dbeed3d526d055c876891ba00cb9d822dec597ca464594f53ed9e179",
-    "packages/ui-web/src/index.js": "b15fc2803f7b1158e8cdd522cdfc5da976bed80da377f909c133453f60d8467e",
-    "packages/ui-web/src/styles.css": "88896d1baa4a353e6e252b3b0ccde63bf1e57ebdced0ed2fe2415af5651dce6a"
+    "packages/ui-web/src/index.d.ts": "ac25727857450d5640579f43f9a54de113cd3dc1c40dd6a4cb9966faeed11869",
+    "packages/ui-web/src/index.js": "1c51ecf812a38d5041be6dfa74c6d9cffe5bb290611f1d11f2166c4af42c0cf5",
+    "packages/ui-web/src/styles.css": "d7f5f9bf215720b6d82680f246b05b778aba69de513717c0d89b34ad2aaeb7e2"
   }
 }

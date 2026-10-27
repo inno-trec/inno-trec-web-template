@@ -277,6 +277,30 @@ components:
   chart-tolerance-band:
     backgroundColor: "{colors.surface-muted}"
     textColor: "{colors.ink-muted}"
+  tab:
+    textColor: "{colors.ink-muted}"
+    height: 42px
+    padding: 16px
+  tab-selected:
+    textColor: "{colors.ink}"
+  toast:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.surface}"
+    rounded: "{rounded.none}"
+    padding: 16px
+    width: 520px
+  empty-state:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.none}"
+    padding: 32px
+  file-drop:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.none}"
+    padding: 16px
+  file-drop-over:
+    backgroundColor: "{colors.light-blue-tint}"
 ---
 
 # INNO-TREC
@@ -366,6 +390,8 @@ React 18 components are published under the global `InnoTrec`; the values above 
 - SettlementRequestForm: two steps to ask the community manager to exchange credits for money; confirms that the request was sent and that payment happens outside the app.
 
 **Manager screens:** AccountCard and AccountList (wallets in EC with type, ID, balance and status: Active, Suspended, Closed), StatTile, DataTable, Identifier (shortened ID with Copy), ConfidenceBadge (Certified, Measured, Estimated, Manual), PurposeTag in technical mode (raw purpose codes).
+
+**Lists and messages:** Tabs (views of one page's content; the active tab has a 4px `green` bar and bold text), Pagination ("1–10 of 42 alerts" with Previous and Next; the backend counts and pages), EmptyState (an icon, what is missing, one sentence and an optional action), Toast (one sentence on `ink` at the bottom of the window after a change is saved; closes after 6 seconds; never for errors), FileUpload (a dashed drop area with a Choose files button, and the list of chosen files with size and Remove).
 
 **Shell:** TopBar, SideNav (icon plus label per item; four or five items for members), Footer (EU funding emblem, funding statement and legal links on `ink`), AppShell, and AuthLayout (screens without a session: TopBar, one centered panel of at most 440px on `surface`, the same Footer).
 

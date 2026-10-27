@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { collectErrors, expectNoSidewaysScroll } from './helpers';
+import { chooseFile, collectErrors, expectNoSidewaysScroll } from './helpers';
 
 /** These tests start signed in as an administrator. The sign-in screens are tested in accounts.spec.ts. */
 test.beforeEach(async ({ page }) => {
@@ -119,6 +119,38 @@ test('an alert can be acknowledged and resolved', async ({ page }) => {
   await dialog.getByRole('textbox', { name: 'What was done' }).fill('Inverter replaced.');
   await dialog.getByRole('button', { name: 'Resolve alert' }).click();
   await expect(page.getByText('Alert resolved')).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('alerts come in tabs and pages, and a resolution can carry photos', async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto('/alerts');
+
+  // The backend counts and pages; the interface shows its numbers.
+  await page.getByRole('tab', { name: /^All/ }).click();
+  await expect(page.getByText('1–5 of 13 alerts')).toBeVisible();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await expect(page.getByText('6–10 of 13 alerts')).toBeVisible();
+  await page.getByRole('tab', { name: /^Open/ }).click();
+  await expect(page.getByRole('tab', { name: /^Open/ })).toHaveAttribute('aria-selected', 'true');
+  await expect(page.getByRole('navigation', { name: 'Pages' })).toHaveCount(0);
+
+  await page.getByRole('button', { name: 'Resolve', exact: true }).click();
+  const dialog = page.getByRole('dialog', { name: 'Resolve the alert' });
+  await dialog.getByRole('textbox', { name: 'What was done' }).fill('Inverter replaced.');
+  const photos = dialog.locator('input[type=file]');
+  await chooseFile(photos, 'too-big.jpg', 11 * 1024 * 1024);
+  await dialog.getByRole('button', { name: 'Resolve alert' }).click();
+  await expect(dialog.getByText('Each photo can be up to 10 MB. Remove the larger ones.')).toBeVisible();
+
+  await dialog.getByRole('button', { name: 'Remove too-big.jpg' }).click();
+  await chooseFile(photos, 'after.jpg', 2048);
+  await dialog.getByRole('button', { name: 'Resolve alert' }).click();
+  await expect(dialog).toBeHidden();
+  await expect(page.getByRole('status').filter({ hasText: 'Alert resolved' })).toBeVisible();
+
+  await page.getByRole('tab', { name: /^Resolved/ }).click();
+  await expect(page.getByText('after.jpg')).toBeVisible();
   expect(errors).toEqual([]);
 });
 

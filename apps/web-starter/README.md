@@ -9,7 +9,7 @@ The starter for an INNO-TREC web tool. Copy this app to start a tool of your own
 | Overview | Monitoring over time: a period filter, totals, a power chart (kW), a battery chart (%) and a table view | `src/pages/OverviewPage.tsx` |
 | PV performance | Indicators per system (performance ratio, availability, specific yield, efficiency) against each system's history and the community, with a bar chart and a reference line | `src/pages/PerformancePage.tsx` |
 | Data checks | Agreement between data sources (meters, inverters, DSS): deviations, coverage and status, and one source's deviation over time with a tolerance band | `src/pages/DataChecksPage.tsx` |
-| Alerts | Corrective and predictive alerts: filters, severity, state, acknowledge and resolve | `src/pages/AlertsPage.tsx` |
+| Alerts | Corrective and predictive alerts: tabs by state, pages, severity, acknowledge, and resolve with photos | `src/pages/AlertsPage.tsx` |
 | Assets | A list with detail: status, data quality and the asset's open alerts | `src/pages/AssetsPage.tsx` |
 | Users | Forms in dialogs: invite, approve or decline account requests, edit (role, access end date, alerts, note) and confirm deactivation, with the backend's errors under each field. Administrators and managers only | `src/pages/UsersPage.tsx` |
 | Your account | The signed-in person's profile and password, from "Account" in the top bar | `src/pages/AccountPage.tsx` |

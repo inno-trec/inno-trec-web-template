@@ -1,5 +1,5 @@
 import { colors } from '@inno-trec/tokens';
-import { Badge, Button, Card, DataTable, InlineAlert, Select, StatTile, type Column } from '@inno-trec/ui-web';
+import { Badge, Button, Card, DataTable, EmptyState, InlineAlert, Select, StatTile, type Column } from '@inno-trec/ui-web';
 import { useEffect, useState } from 'react';
 import { formatNumber } from '../charts/format';
 import { LazyBarChart } from '../charts/LazyCharts';
@@ -90,9 +90,9 @@ export function PerformancePage() {
       )}
 
       {load.state === 'ready' && load.report.systems.length === 0 && (
-        <InlineAlert tone="info" title="No PV systems to evaluate">
+        <EmptyState icon="sun" title="No PV systems to evaluate">
           Systems appear here once they send production data.
-        </InlineAlert>
+        </EmptyState>
       )}
 
       {load.state === 'ready' && load.report.systems.length > 0 && <Report report={load.report} />}
