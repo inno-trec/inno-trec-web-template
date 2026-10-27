@@ -54,6 +54,7 @@ Add a line for your change under `## [Unreleased]` in `CHANGELOG.md`.
 - Check every command and every class name you write down. The docs in this repository were checked against a running copy.
 - Link to `docs/reference/` for design system content instead of copying it.
 - The files in `docs/` are also the website. A new page needs an entry in the `sidebar` in `docs/.vitepress/config.mts`. Preview with `npm run docs:dev`. CI builds the site and fails on a broken link.
+- The component guide shows each component running. `scripts/build-gallery.mjs` builds the examples into `docs/public/gallery/` from `docs/reference/previews/` (copied from the design system by `npm run sync:ds`) and the components in `packages/ui-web`. The guide shows them in frames (`docs/.vitepress/theme/ComponentPreview.vue`). Nothing is loaded from claude.ai, so readers need no account there. To change an example, change its `preview.html` in the design system and sync.
 
 ## The website and the demo
 

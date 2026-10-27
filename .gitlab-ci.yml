@@ -32,7 +32,8 @@ default:
     - npm run check:generated
     - npm run typecheck
     - npm run build
-    # Fails on a broken link between pages, so the published site stays whole.
+    # The component gallery, then the site. VitePress fails on a broken link between pages.
+    - node scripts/build-gallery.mjs
     - npx vitepress build docs
     - npx -w web-starter playwright install --with-deps --only-shell chromium
     - npm test

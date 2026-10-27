@@ -2,11 +2,13 @@
 
 # Component guide
 
-One entry per component, copied from the design system. Props and types are in `packages/ui-web/src/index.d.ts`. For a live view of every component, open the design system gallery.
+One entry per component, copied from the design system. On the documentation site, each entry shows the component running, built from the components in `packages/ui-web`. Props and types are in `packages/ui-web/src/index.d.ts`.
 
 ## Button
 
 Group: Actions
+
+<ComponentPreview name="Button" :height="200" />
 
 Use Button for every action. Default is `secondary` (outlined); use `primary` (`light-blue` fill) at most once per screen, for the action the screen exists for.
 
@@ -19,6 +21,8 @@ Use Button for every action. Default is `secondary` (outlined); use `primary` (`
 
 Group: Forms
 
+<ComponentPreview name="TextField" :height="350" />
+
 Use TextField for single-line input, always with a visible `label`.
 
 - Provide: `label`, `value`/`onChange` (or `defaultValue`), and native input props.
@@ -28,6 +32,8 @@ Use TextField for single-line input, always with a visible `label`.
 ## PasswordField
 
 Group: Forms
+
+<ComponentPreview name="PasswordField" :height="260" />
 
 Use PasswordField for a password, with a visible `label` and a Show/Hide button so people can check what they typed.
 
@@ -40,6 +46,8 @@ Use PasswordField for a password, with a visible `label` and a Show/Hide button 
 
 Group: Forms
 
+<ComponentPreview name="Select" :height="210" />
+
 Use Select to pick one value from a short fixed list (up to about 10 options).
 
 - Provide: `label`, `options` (strings or `{value, label}`), `value`/`onChange` or `defaultValue`.
@@ -49,6 +57,8 @@ Use Select to pick one value from a short fixed list (up to about 10 options).
 ## Textarea
 
 Group: Forms
+
+<ComponentPreview name="Textarea" :height="330" />
 
 Use Textarea for text longer than one line, such as a description or a note, always with a visible `label`.
 
@@ -60,6 +70,8 @@ Use Textarea for text longer than one line, such as a description or a note, alw
 
 Group: Forms
 
+<ComponentPreview name="DateField" :height="200" />
+
 Use DateField to pick one day with the browser's own date picker, always with a visible `label`.
 
 - Provide: `label`, `value` and `onChange` (the value is "YYYY-MM-DD"), and `min`/`max` when only some days are allowed.
@@ -69,6 +81,8 @@ Use DateField to pick one day with the browser's own date picker, always with a 
 ## DateRangeField
 
 Group: Forms
+
+<ComponentPreview name="DateRangeField" :height="220" />
 
 Use DateRangeField to pick a period with a start day and an end day, under one label.
 
@@ -80,6 +94,8 @@ Use DateRangeField to pick a period with a start day and an end day, under one l
 
 Group: Forms
 
+<ComponentPreview name="Checkbox" :height="220" />
+
 Use Checkbox for one yes-or-no choice that the person confirms with the form, such as "Send an invitation email".
 
 - Provide: `label`, `checked`/`onChange` (or `defaultChecked`). The label says what happens when it is ticked.
@@ -89,6 +105,8 @@ Use Checkbox for one yes-or-no choice that the person confirms with the form, su
 ## RadioGroup
 
 Group: Forms
+
+<ComponentPreview name="RadioGroup" :height="300" />
 
 Use RadioGroup to choose one option from two to five, all visible at once.
 
@@ -100,6 +118,8 @@ Use RadioGroup to choose one option from two to five, all visible at once.
 
 Group: Forms
 
+<ComponentPreview name="Switch" :height="220" />
+
 Use Switch for a setting that is either on or off, such as "Account active" or "Email alerts".
 
 - Provide: `label`, `checked`/`onChange` (or `defaultChecked`). The current state is also written beside the label ("On", "Off", or your own `onLabel`/`offLabel`).
@@ -109,6 +129,8 @@ Use Switch for a setting that is either on or off, such as "Account active" or "
 ## Dialog
 
 Group: Forms
+
+<ComponentPreview name="Dialog" :height="360" />
 
 Use Dialog for a short task that needs the person's full attention, such as a form to invite a user or a confirmation before an action that is hard to undo.
 
@@ -121,6 +143,8 @@ Use Dialog for a short task that needs the person's full attention, such as a fo
 
 Group: Layout
 
+<ComponentPreview name="Card" :height="240" />
+
 Use Card to group one topic on a dashboard or detail page; its title carries the manual's short green rule.
 
 - Provide: `title`, `children`; optionally `subtitle`, `actions` (small buttons, top right) and `footer` (metadata on `surface-muted`).
@@ -130,6 +154,8 @@ Use Card to group one topic on a dashboard or detail page; its title carries the
 ## Badge
 
 Group: Status
+
+<ComponentPreview name="Badge" :height="64" />
 
 Use Badge for a one- or two-word status beside a name or amount, mostly in manager screens.
 
@@ -141,6 +167,8 @@ Use Badge for a one- or two-word status beside a name or amount, mostly in manag
 
 Group: Status
 
+<ComponentPreview name="InlineAlert" :height="350" />
+
 Use InlineAlert to tell people something important on the page: an outcome, a warning, or why something did not work.
 
 - Provide: `tone` (`info`, `success`, `warning`, `error`), a short `title` and one plain sentence as `children`.
@@ -150,6 +178,8 @@ Use InlineAlert to tell people something important on the page: an outcome, a wa
 ## Icon
 
 Group: Status
+
+<ComponentPreview name="Icon" :height="160" />
 
 Use Icon beside words to help people recognise an action or kind of activity at a glance.
 
@@ -162,6 +192,8 @@ Use Icon beside words to help people recognise an action or kind of activity at 
 
 Group: Dashboard
 
+<ComponentPreview name="StatTile" :height="176" />
+
 Use StatTile for one headline number on a manager dashboard, in a row of two to four.
 
 - Provide: `label`, `value`, `unit`. Negative values show a minus sign.
@@ -171,6 +203,8 @@ Use StatTile for one headline number on a manager dashboard, in a row of two to 
 ## DataTable
 
 Group: Dashboard
+
+<ComponentPreview name="DataTable" :height="210" />
 
 Use DataTable for rows of records with aligned columns.
 
@@ -183,6 +217,8 @@ Use DataTable for rows of records with aligned columns.
 
 Group: Ledger
 
+<ComponentPreview name="Identifier" :height="88" />
+
 Use Identifier to show a wallet ID, transaction ID or hash in manager and support screens. Never show identifiers on member screens outside "Technical details".
 
 - Provide: `value`; optional `label` names it for the Copy button ("transaction ID").
@@ -191,6 +227,8 @@ Use Identifier to show a wallet ID, transaction ID or hash in manager and suppor
 ## PurposeTag
 
 Group: Ledger
+
+<ComponentPreview name="PurposeTag" :height="400" />
 
 Use PurposeTag to say what kind of activity a movement was. Members see an icon and plain words; managers can see the raw code.
 
@@ -202,6 +240,8 @@ Use PurposeTag to say what kind of activity a movement was. Members see an icon 
 
 Group: Ledger
 
+<ComponentPreview name="ConfidenceBadge" :height="64" />
+
 Use ConfidenceBadge in manager and support screens to show how trustworthy the data behind a transaction is.
 
 - Provide: `level`: `CERTIFIED`, `MEASURED`, `ESTIMATED` or `MANUAL`. The tooltip explains each in one line.
@@ -210,6 +250,8 @@ Use ConfidenceBadge in manager and support screens to show how trustworthy the d
 ## WalletBalance
 
 Group: Member
+
+<ComponentPreview name="WalletBalance" :height="264" />
 
 Use WalletBalance as the first thing a member sees: how many credits they have.
 
@@ -221,6 +263,8 @@ Use WalletBalance as the first thing a member sees: how many credits they have.
 
 Group: Member
 
+<ComponentPreview name="BalanceStatement" :height="330" />
+
 Use BalanceStatement to show a member what changed in a period: the balance at the start, each kind of activity, and the balance at the end.
 
 - Provide: `period`, `opening`, `closing` and `lines` (`direction`, `purposeCode` or `txType`, `amount`, optional `count`). All values come from the backend.
@@ -229,6 +273,8 @@ Use BalanceStatement to show a member what changed in a period: the balance at t
 ## EnergySummary
 
 Group: Member
+
+<ComponentPreview name="EnergySummary" :height="280" />
 
 Use EnergySummary to connect a member's electricity with their credits for a period.
 
@@ -240,6 +286,8 @@ Use EnergySummary to connect a member's electricity with their credits for a per
 
 Group: Member
 
+<ComponentPreview name="TransactionList" :height="285" />
+
 Use TransactionList for a member's recent activity, newest first.
 
 - Provide: `transactions` (each with `direction`, `amount` and `purposeCode` or `txType`; `counterpartyName` for member-to-member transfers; `time` already formatted).
@@ -250,6 +298,8 @@ Use TransactionList for a member's recent activity, newest first.
 
 Group: Member
 
+<ComponentPreview name="TransactionDetail" :height="680" />
+
 Use TransactionDetail when a member or manager opens one movement.
 
 - Provide: `transaction`. The top shows the amount and what it was in plain words, then when, who, energy and note.
@@ -258,6 +308,8 @@ Use TransactionDetail when a member or manager opens one movement.
 ## RecipientPicker
 
 Group: Member
+
+<ComponentPreview name="RecipientPicker" :height="380" />
 
 Use RecipientPicker to choose who receives credits: a searchable list of people, never a typed address.
 
@@ -268,6 +320,8 @@ Use RecipientPicker to choose who receives credits: a searchable list of people,
 ## TransferForm
 
 Group: Member
+
+<ComponentPreview name="TransferForm" :height="520" />
 
 Use TransferForm to send credits to another member in three steps: choose a person, enter an amount, check and send.
 
@@ -280,6 +334,8 @@ Use TransferForm to send credits to another member in three steps: choose a pers
 
 Group: Member
 
+<ComponentPreview name="SettlementRequestForm" :height="350" />
+
 Use SettlementRequestForm when a member asks to exchange credits for money. It sends a request; it does not move credits.
 
 - Provide: `available`, `onSubmit({ amount })`; optional `estimate(credits)` returning a formatted money amount when the backend can give one.
@@ -289,6 +345,8 @@ Use SettlementRequestForm when a member asks to exchange credits for money. It s
 ## AccountCard
 
 Group: Manager
+
+<ComponentPreview name="AccountCard" :height="300" />
 
 Use AccountCard in manager screens for one member and their wallets.
 
@@ -300,6 +358,8 @@ Use AccountCard in manager screens for one member and their wallets.
 
 Group: Manager
 
+<ComponentPreview name="AccountList" :height="340" />
+
 Use AccountList in manager screens to list wallets with owner, type, ID, balance and status.
 
 - Provide: `wallets` (`id`, `name`, `type`: `MEMBER`, `COMMUNITY` or `DEPENDENT`, `balance`, `status`: `ACTIVE`, `SUSPENDED` or `CLOSED`).
@@ -308,6 +368,8 @@ Use AccountList in manager screens to list wallets with owner, type, ID, balance
 ## TopBar
 
 Group: Shell
+
+<ComponentPreview name="TopBar" :height="96" />
 
 Use TopBar at the top of every INNO-TREC web tool.
 
@@ -318,6 +380,8 @@ Use TopBar at the top of every INNO-TREC web tool.
 
 Group: Shell
 
+<ComponentPreview name="SideNav" :height="330" />
+
 Use SideNav for a tool's main navigation.
 
 - Provide: `items` or `sections` (`[{title, items: [{id, label, href?, icon?}]}]`), `activeId`, `onNavigate`.
@@ -327,6 +391,8 @@ Use SideNav for a tool's main navigation.
 ## Footer
 
 Group: Shell
+
+<ComponentPreview name="Footer" :height="200" />
 
 Use Footer at the bottom of every INNO-TREC web tool to show the EU funding emblem, the funding statement and the legal links.
 
@@ -340,6 +406,8 @@ Use Footer at the bottom of every INNO-TREC web tool to show the EU funding embl
 
 Group: Shell
 
+<ComponentPreview name="AppShell" :height="900" />
+
 Use AppShell as the page frame of an INNO-TREC web tool: TopBar, SideNav, a main area on `surface-muted` and an optional Footer.
 
 - Provide: `logoSrc`, `title`, `user`, `navItems` or `navSections`, `activeId`, `onNavigate`, `heading` (the page's h1) and `children` (the page content, usually Cards and StatTiles).
@@ -349,6 +417,8 @@ Use AppShell as the page frame of an INNO-TREC web tool: TopBar, SideNav, a main
 ## AuthLayout
 
 Group: Shell
+
+<ComponentPreview name="AuthLayout" :height="860" />
 
 Use AuthLayout as the frame of every screen without a session: sign in, create an account, accept an invitation, reset a password.
 
@@ -361,6 +431,8 @@ Use AuthLayout as the frame of every screen without a session: sign in, create a
 
 Group: Status
 
+<ComponentPreview name="EmptyState" :height="280" />
+
 Use EmptyState when a whole section or page has nothing to show yet: no alerts, no users, no readings in a period.
 
 - Provide: `title` (what is missing: "No alerts yet"), one sentence as `children` (when something will appear, or what to do), and an optional `action` with the Button that adds the first item.
@@ -371,6 +443,8 @@ Use EmptyState when a whole section or page has nothing to show yet: no alerts, 
 ## Tabs
 
 Group: Layout
+
+<ComponentPreview name="Tabs" :height="200" />
 
 Use Tabs to switch between views of the same content on one page, for example alerts by state (Open, Resolved, All) or the sections of an asset.
 
@@ -384,6 +458,8 @@ Use Tabs to switch between views of the same content on one page, for example al
 
 Group: Dashboard
 
+<ComponentPreview name="Pagination" :height="200" />
+
 Use Pagination below a long list that the backend sends in pages.
 
 - Provide: `page` (starting at 1), `pageSize`, `total` from the backend and `onChange`. A backend that does not count sends whether another page exists: pass `hasNext` instead of `total`.
@@ -394,6 +470,8 @@ Use Pagination below a long list that the backend sends in pages.
 ## Toast
 
 Group: Status
+
+<ComponentPreview name="Toast" :height="160" />
 
 Use Toast to confirm that a change was saved, after the dialog or form that made it has closed: "Alert resolved", "Invitation sent to ana@example.org".
 
@@ -406,6 +484,8 @@ Use Toast to confirm that a change was saved, after the dialog or form that made
 ## FileUpload
 
 Group: Forms
+
+<ComponentPreview name="FileUpload" :height="300" />
 
 Use FileUpload to attach files to a form, for example photos of a repair. People choose files with the button or drop them on the field.
 

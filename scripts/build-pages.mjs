@@ -1,6 +1,6 @@
 /**
- * Builds the documentation site (GitLab Pages): the documentation (VitePress, from docs/) with the starter app as a live
- * demo under demo/. The result is docs/.vitepress/dist.
+ * Builds the documentation site (GitLab Pages): the documentation (VitePress, from docs/) with the component gallery
+ * (scripts/build-gallery.mjs) and the starter app as a live demo under demo/. The result is docs/.vitepress/dist.
  *
  * Pages has no rewrites, so an address inside the demo (…/demo/alerts) would get the site's 404
  * page. The 404 page sends such addresses to demo/?p=<address>, and the demo puts the address back before
@@ -16,6 +16,7 @@ const demoOut = 'apps/web-starter/dist-pages';
 
 const run = (command) => execSync(command, { stdio: 'inherit', env: { ...process.env, DOCS_BASE: base } });
 
+run('node scripts/build-gallery.mjs');
 run('npx vitepress build docs');
 run(`npm exec -w web-starter -- vite build --base ${demoBase} --outDir dist-pages --emptyOutDir`);
 cpSync(demoOut, `${site}/demo`, { recursive: true });

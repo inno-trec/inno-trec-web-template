@@ -20,7 +20,7 @@
     "export:tokens": "node scripts/export-tokens.mjs",
     "test": "npm run test --workspaces --if-present",
     "check:generated": "node scripts/check-generated.mjs",
-    "docs:dev": "vitepress dev docs",
+    "docs:dev": "node scripts/build-gallery.mjs && vitepress dev docs",
     "pages:build": "node scripts/build-pages.mjs"
   },
   "devDependencies": {

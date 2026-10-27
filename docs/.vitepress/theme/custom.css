@@ -29,3 +29,8 @@ h1, h2, h3, .VPHero .name, .VPHero .text, .VPNavBarTitle .title {
 .VPButton, .VPFeature, div[class*='language-'], .custom-block, .DocSearch-Button, .VPLocalSearchBox .shell {
   border-radius: 0 !important;
 }
+
+/* Live component examples in the component guide (ComponentPreview.vue). */
+.it-preview { margin: 16px 0 24px; }
+.it-preview iframe { display: block; box-sizing: content-box; width: calc(100% - 2px); border: 1px solid var(--vp-c-divider); background: #fff; }
+.it-preview figcaption { margin-top: 4px; font-size: 13px; }

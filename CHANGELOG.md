@@ -15,6 +15,7 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ### Added
 
+- The component guide on the documentation site shows every component running. The examples are the design system's previews, copied by `npm run sync:ds` into `docs/reference/previews/` and built with the template's own React and `packages/ui-web` (`scripts/build-gallery.mjs`). Readers need no claude.ai account.
 - Five components (design system): `Tabs`, `Pagination`, `EmptyState`, `Toast` and `FileUpload`. The Alerts page uses tabs by state with counts, pages and photos when an alert is resolved; the sample backend filters, counts and pages the alerts. Changes on the Alerts and Users pages end with a toast, and the starter's empty pages use `EmptyState`. New rules in "Forms" and "Lists and empty sections".
 - Account screens in the starter: sign in (with "keep me signed in" and a return to the page asked for), ask for an account with a manager's approval on the Users page, accept an invitation, forgot and reset password, "Your account" (profile and password) and sign out. Pages without a session redirect to sign in, and `roles` in `NAV` hide pages from other roles. Pattern 10 and decision 12 describe them.
 - `AuthLayout` and `PasswordField` (design system): the frame of the screens without a session, and a password field with a Show/Hide button.
