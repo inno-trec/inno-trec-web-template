@@ -16,7 +16,7 @@ import {
   type Column,
 } from '@inno-trec/ui-web';
 import { useEffect, useState, type FormEvent } from 'react';
-import { formatDate, formatRelative } from '../charts/format';
+import { formatDate, formatRelative } from '../format';
 import { approveRequest, declineRequest, inviteUser, listUsers, updateUser, type Role, type RoleId, type User } from '../data/api';
 import { useSubmit } from '../forms/useSubmit';
 

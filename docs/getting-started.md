@@ -24,9 +24,9 @@ npm run dev
 
 SSH to gitlab.up.pt works only from the University of Porto network or its VPN. Elsewhere, use the HTTPS addresses with a personal access token.
 
-Vite serves the starter tool at <http://localhost:5173>. Open that address in a browser.
+Vite serves the starter at <http://localhost:5173>. Open that address in a browser.
 
-You now own a copy. It contains the design system packages and the starter app. Nothing connects it to this repository except what you choose to pull in later (see [Update the design system](#update-the-design-system)).
+You now own a copy. It contains the design system packages, the starter app (`apps/web-starter`) and two example apps (`apps/template-demo` and `apps/credits-example`). Nothing connects it to this repository except what you choose to pull in later (see [Update the design system](#update-the-design-system)).
 
 ## 2. Make it your tool
 
@@ -35,11 +35,18 @@ Do these four things first.
 1. **Rename the app.** In `apps/web-starter/package.json`, change `"name"`. If you rename the folder as well, update the `dev` script in the root `package.json`.
 2. **Set the tool name.** In `apps/web-starter/src/config.ts`, change `TOOL_NAME`. It appears in the top bar and on the sign-in screens. Set `PRIVACY_URL` and `FOOTER_LINKS` in the same file.
 3. **Set the page title and icon.** In `apps/web-starter/index.html`, change `<title>` and add your icon.
-4. **Remove the example pages you do not need.** Delete the files in `src/pages/`, their routes in `src/App.tsx`, and their entries in `NAV` in `ToolShell.tsx`. Delete `src/data/fakeServer.ts` and `src/data/synthetic.ts` when your own API replaces them. Keep the footer in `ToolShell.tsx`: it carries the EU funding emblem and statement.
+4. **Replace the example page.** `src/pages/HomePage.tsx` lists sample records and shows the loading, empty and error states. Make it your tool's first page, or delete it with its route in `src/App.tsx` and its entry in `NAV` in `ToolShell.tsx`. Keep the footer in `ToolShell.tsx`: it carries the EU funding emblem and statement.
 
-The starter's pages fit monitoring, PV performance and maintenance tools. For a tool that shows energy credits, copy the pages you need from `apps/credits-example/src/pages/` (and its `src/data/`), and read the [credit rules](design-rules.md#energy-credits).
+The starter also holds the account screens (sign in, ask for an account, invitation, password reset, the person's account) and the Users page. Keep them, or delete the ones your identity provider replaces.
 
-If your repository will hold only one tool, you can keep `apps/web-starter` as it is. If it will hold several, copy the folder once per tool and give each copy its own name.
+For complete pages, copy from the example apps:
+
+- `apps/template-demo` (run it with `npm run dev:demo`) holds the monitoring, PV performance and maintenance pages: an energy overview with charts, PV performance, data checks, alerts and assets. A page with a chart also needs `src/charts/` and the `echarts` dependency.
+- `apps/credits-example` (`npm run dev:credits`) holds the credit screens. Read the [credit rules](design-rules.md#energy-credits) before you use them.
+
+Delete the example apps from your copy when you no longer need them. The `pages` job in `.gitlab-ci.yml` publishes `apps/template-demo` as the demo: if you delete that app, delete the job too, or change `scripts/build-pages.mjs` to build your own app.
+
+If your repository will hold only one tool, keep `apps/web-starter` and rename it. If it will hold several, copy the folder once per tool and give each copy its own name.
 
 ## 3. Add a page
 
@@ -82,7 +89,7 @@ The pages call `src/data/api.ts`. Today it calls a sample backend (`src/data/fak
 
 1. Replace the types in `types.ts` with your backend's. If your backend publishes an OpenAPI description, `npx openapi-typescript <url> -o src/data/schema.d.ts` generates them.
 2. Replace each call in `api.ts` with `fetch`. Turn your backend's errors into `ApiError`: a code for the whole request, and one message per field when it rejects a value. The forms show those messages under the fields.
-3. Delete `fakeServer.ts` and `synthetic.ts`, and follow the compiler.
+3. Delete `fakeServer.ts`, and follow the compiler.
 
 Keep the loading, empty and error states that the pages show.
 

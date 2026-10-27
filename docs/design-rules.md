@@ -23,7 +23,7 @@ The first sections apply to every INNO-TREC tool. [Charts](#charts) applies to t
 
 ## Charts
 
-The design system has four series colors with a fixed meaning. Use them through `@inno-trec/tokens` (`colors['series-pv']`) or the Tailwind classes (`bg-series-pv`). The starter's [`TimeSeriesChart`](../apps/web-starter/src/charts/TimeSeriesChart.tsx) applies all of these rules.
+The design system has four series colors with a fixed meaning. Use them through `@inno-trec/tokens` (`colors['series-pv']`) or the Tailwind classes (`bg-series-pv`). The demo's [`TimeSeriesChart`](../apps/template-demo/src/charts/TimeSeriesChart.tsx) applies all of these rules.
 
 | Token | Series |
 | --- | --- |

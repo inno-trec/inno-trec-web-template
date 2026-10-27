@@ -11,12 +11,12 @@ Status: **To do**, **In progress**, **Done** (keep done items until the next rel
 | # | Item | Tools | Priority | Status | Notes |
 | --- | --- | --- | --- | --- | --- |
 | 1 | Data contract with WP2 (OpenAPI) | All | — | Dropped | Belongs to the systems that provide data. The draft is in the history (commit `bee526e`). The starter keeps example types in `src/data/types.ts`. |
-| 2 | Alerts inbox: corrective and predictive alerts with severity and state (new, acknowledged, resolved) | 2, 3 | 1 | Done | [Alerts page](../apps/web-starter/src/pages/AlertsPage.tsx), pattern 9. Notifications stay with the alert engine (outside the template). |
-| 3 | PV performance page: PR, availability, specific yield and efficiency per system, against historical and community references; bar chart and reference line | 2 (base for 3) | 1 | Done | [PV performance page](../apps/web-starter/src/pages/PerformancePage.tsx), pattern 7, `BarChart`. Indicator definitions are open (D2). |
-| 4 | Source coherence: compare the same quantity from several sources (meter, inverter, DSS) and show deviations | 1 | 1 | Done | [Data checks page](../apps/web-starter/src/pages/DataChecksPage.tsx), pattern 8, tolerance band in `TimeSeriesChart`. |
+| 2 | Alerts inbox: corrective and predictive alerts with severity and state (new, acknowledged, resolved) | 2, 3 | 1 | Done | [Alerts page](../apps/template-demo/src/pages/AlertsPage.tsx), pattern 9. Notifications stay with the alert engine (outside the template). |
+| 3 | PV performance page: PR, availability, specific yield and efficiency per system, against historical and community references; bar chart and reference line | 2 (base for 3) | 1 | Done | [PV performance page](../apps/template-demo/src/pages/PerformancePage.tsx), pattern 7, `BarChart`. Indicator definitions are open (D2). |
+| 4 | Source coherence: compare the same quantity from several sources (meter, inverter, DSS) and show deviations | 1 | 1 | Done | [Data checks page](../apps/template-demo/src/pages/DataChecksPage.tsx), pattern 8, tolerance band in `TimeSeriesChart`. |
 | 5 | Work order form (the Assets button is a placeholder) | 3 | 2 | To do | |
 | 6 | Remote device control: a command with confirmation and the device's answer (sent, done, failed) | 3 | 2 | To do | Needs a safety review: which commands, who may send them. |
-| 7 | Member screens for tools 1–3 (for example "My energy" with `EnergySummary`) | 1, 3 | 2 | To do | All starter pages are manager screens today. |
+| 7 | Member screens for tools 1–3 (for example "My energy" with `EnergySummary`) | 1, 3 | 2 | To do | All demo pages are manager screens today. |
 | 8 | Continuous updates: "Updated 2 minutes ago" and automatic refresh | 1, 2, 4 | 2 | To do | The pattern only; polling or push is each tool's choice. |
 | 9 | Free date range and export (CSV) on the Overview | 1 | 2 | To do | `DateRangeField` exists. |
 | 10 | Virtual energy allocation per member (manager view) | 1, 4 | 2 | To do | |
@@ -28,8 +28,8 @@ Status: **To do**, **In progress**, **Done** (keep done items until the next rel
 | 16 | Map the ECMS credit data into the contract | 4 | — | Dropped | Went with item 1. |
 | 17 | Describe live updates in AsyncAPI | 1, 3 | — | Dropped | Went with item 1. |
 | 18 | Account screens: sign in, ask for an account with manager approval, accept an invitation, forgot and reset password, your account, sign out | All | 1 | Done | `src/pages/auth/`, `AccountPage`, approval on the Users page. Design system: `AuthLayout`, `PasswordField`. |
-| 19 | Documentation site with the starter as a live demo | All | 1 | Done | GitLab Pages (`pages` job in `.gitlab-ci.yml`). Decisions, tracking and the ECMS open questions stay out of the site (`INTERNAL` in `docs/.vitepress/config.mts`). |
-| 20 | More shared components for the work package's tools | All | 1 | Done | `Tabs`, `Pagination`, `EmptyState`, `Toast`, `FileUpload`, used in the starter. The list is closed: new components come from the teams' requests. |
+| 19 | Documentation site with the template demo as a live demo | All | 1 | Done | GitLab Pages (`pages` job in `.gitlab-ci.yml`). Decisions, tracking and the ECMS open questions stay out of the site (`INTERNAL` in `docs/.vitepress/config.mts`). |
+| 20 | More shared components for the work package's tools | All | 1 | Done | `Tabs`, `Pagination`, `EmptyState`, `Toast`, `FileUpload`, used in the template demo. The list is closed: new components come from the teams' requests. |
 | 21 | Move to gitlab.up.pt: repository, CI, Pages, releases | All | 1 | Done | GitHub repositories archived. CI runs on a temporary group runner on les2-turbo-01 until FEUP provides one. The release job runs for the first time at v0.2.0. |
 | 22 | Automatic dependency updates (Dependabot did this on GitHub) | All | 3 | To do | Today: `npm outdated` once a month. Renovate is an option if the runners allow it. |
 

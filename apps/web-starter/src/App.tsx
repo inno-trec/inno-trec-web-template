@@ -2,17 +2,13 @@ import { Route, Routes } from 'react-router';
 import { RequireSession, SignOut } from './auth/session';
 import { ToolShell } from './layouts/ToolShell';
 import { AccountPage } from './pages/AccountPage';
-import { AlertsPage } from './pages/AlertsPage';
-import { AssetsPage } from './pages/AssetsPage';
+import { HomePage } from './pages/HomePage';
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
 import { InvitationPage } from './pages/auth/InvitationPage';
 import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
 import { SignInPage } from './pages/auth/SignInPage';
 import { SignUpPage } from './pages/auth/SignUpPage';
-import { DataChecksPage } from './pages/DataChecksPage';
 import { NotFoundPage } from './pages/NotFoundPage';
-import { OverviewPage } from './pages/OverviewPage';
-import { PerformancePage } from './pages/PerformancePage';
 import { UsersPage } from './pages/UsersPage';
 
 /**
@@ -40,11 +36,7 @@ export function App() {
           </RequireSession>
         }
       >
-        <Route index element={<OverviewPage />} />
-        <Route path="performance" element={<PerformancePage />} />
-        <Route path="data-checks" element={<DataChecksPage />} />
-        <Route path="alerts" element={<AlertsPage />} />
-        <Route path="assets" element={<AssetsPage />} />
+        <Route index element={<HomePage />} />
         <Route path="users" element={<UsersPage />} />
         <Route path="account" element={<AccountPage />} />
         <Route path="*" element={<NotFoundPage />} />

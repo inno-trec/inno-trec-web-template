@@ -1,6 +1,6 @@
 # credits-example
 
-An example for INNO-TREC tools that work with energy credits (the Energy Credit Management System, ECMS). Start from [`web-starter`](../web-starter) and copy the pages you need from here.
+An example for INNO-TREC tools that work with energy credits (the Energy Credit Management System, ECMS). Start from [`web-starter`](../web-starter) and copy the pages you need from here. For monitoring, PV performance and maintenance pages, see [`template-demo`](../template-demo).
 
 ## What it shows
 

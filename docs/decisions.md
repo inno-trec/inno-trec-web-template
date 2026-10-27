@@ -66,15 +66,21 @@ The starter has almost no logic: the backend computes values, and the components
 
 Three of the four INNO-TREC tools plot time series: a year of 15-minute readings is 35,000 points per series. ECharts draws that many points on a canvas without slowing down, and it has the tooltips, legends and time axes the chart rules ask for. Recharts slows down above a few thousand points; uPlot is smaller but leaves tooltips and legends to each team.
 
-**Consequence.** ECharts is large (about 175 kB compressed for a line chart). The starter imports only the parts it uses and loads the chart on demand, so pages without a chart do not wait for it. The chart colors come from the design system's series tokens, not from ECharts themes.
+**Consequence.** ECharts is large (about 175 kB compressed for a line chart). The demo's charts import only the parts they use and loads the chart on demand, so pages without a chart do not wait for it. The chart colors come from the design system's series tokens, not from ECharts themes.
 
 **Revisit when** the design system ships its own chart component, or a tool needs a chart ECharts cannot draw.
 
-### 10. One neutral starter, one example per domain
+### 10. A minimal starter, and example apps for the patterns
 
-The starter holds the patterns every tool needs (monitoring over time, list with detail). Credit screens live in `apps/credits-example`. A team copies the starter and takes credit pages only when its tool shows credits.
+The starter (`apps/web-starter`) holds only what every tool needs: the page frame with the EU funding footer, the account screens and user management (decision 12), the client for the backend with its errors, and one example page with the loading, empty and error states. A team copies it and replaces the example page with its first page.
 
-**Consequence.** The credit rules in the design rules apply to credit screens only. A new domain with its own patterns gets its own example app.
+The patterns live in example apps. `apps/template-demo` holds the monitoring, PV performance and maintenance pages (charts, data checks, alerts, assets), and the documentation site shows it as the demo. `apps/credits-example` holds the credit screens. A team copies a pattern from an example when its tool needs it.
+
+An earlier version of this decision made the starter itself hold the monitoring and maintenance patterns. A new team then started from seven pages, a large fake backend and a chart library, and first had to find out what to delete. The documentation site now shows every component, so the starter no longer has to show them.
+
+**Consequence.** The starter has no chart library. A tool with charts copies `src/charts/` from the demo and adds `echarts`. The credit rules in the design rules apply to credit screens only. A new domain with its own patterns gets its own example app.
+
+**Revisit when** most teams copy the same pages from the demo. Those pages then belong in the starter.
 
 ### 11. The backend sets the data; the community sets the clock
 
@@ -82,7 +88,7 @@ The backend computes PV indicators (performance ratio, specific yield, expected 
 
 The reader's own time zone would be simpler, and for readers in the community's time zone the result is the same. But it breaks for everyone else: days would not match the backend's daily totals, the solar peak would move away from midday, and alarm times would differ from what technicians see on site. INNO-TREC has pilots in more than one country, so readers in another time zone are expected.
 
-**Consequence.** ECharts has no time zone setting. `TimeSeriesChart` moves each instant by the community's offset and reads the result as UTC, so its axis shows the community's clock. On the night summer time ends, one hour repeats and the line steps back for that hour. `src/time/zone.ts` holds the conversions, with the browser's `Intl` API and no library. The browser's time zone is the fallback only when the backend sends none.
+**Consequence.** ECharts has no time zone setting. `TimeSeriesChart` (in `apps/template-demo`) moves each instant by the community's offset and reads the result as UTC, so its axis shows the community's clock. On the night summer time ends, one hour repeats and the line steps back for that hour. `src/time/zone.ts` holds the conversions, with the browser's `Intl` API and no library. The browser's time zone is the fallback only when the backend sends none.
 
 **Revisit when** a tool compares communities in different time zones on one chart. That chart needs one shared clock, probably UTC, and says so.
 

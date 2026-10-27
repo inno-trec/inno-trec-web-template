@@ -46,7 +46,7 @@ Problems that have already come up, with the cause and the fix.
 
 ## `Cannot find module '@inno-trec/ui-web'`
 
-**Cause.** Dependencies were installed inside `apps/web-starter` instead of at the root. The packages are npm workspaces and link only from the root.
+**Cause.** Dependencies were installed inside an app folder (such as `apps/web-starter`) instead of at the root. The packages are npm workspaces and link only from the root.
 
 **Fix.** Run `npm install` in the repository root.
 
