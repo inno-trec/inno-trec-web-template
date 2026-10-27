@@ -47,10 +47,6 @@ All notable changes to the template are listed here. The format follows [Keep a 
 - Every failed send or request now says "Your credits were not moved.", also for `INSUFFICIENT_BALANCE` and for a custom `errorMessage`.
 - The History and Suspend buttons on the Wallets page say in a comment that they are not connected yet.
 
-### Removed
-
-- `docs/decisions.md` and `docs/tracking.md` are no longer in the repository. They are the maintainer's notes; the reasons that matter to teams are in the guides.
-
 ## [0.1.0] - 2026-10-26
 
 First release of the template.
@@ -59,7 +55,7 @@ First release of the template.
 
 - Design system tokens (`@inno-trec/tokens`) and React components (`@inno-trec/ui-web`), generated from the INNO-TREC design system by `npm run sync:ds`.
 - The `web-starter` app: Vite, React 19, TypeScript 7, Tailwind 3.4 and React Router 8, with an overview, a wallet list and a send flow on sample data.
-- Team documentation: getting started, page patterns, design rules, architecture, troubleshooting and decisions.
+- Team documentation: getting started, page patterns, design rules, architecture and troubleshooting.
 - Browser smoke tests (`npm test`) that open every page in the side navigation at 1440px and 400px wide and fail on sideways scroll, a missing heading or route, or a console error.
 - `npm run check:generated`, which fails when a generated file was edited by hand. `npm run sync:ds` records a hash of every generated file in `design-system.lock.json`.
 - CI on every pull request and push to `main`, on the Node in `.nvmrc` and on the newest Node release.

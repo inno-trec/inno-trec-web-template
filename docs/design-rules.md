@@ -92,10 +92,6 @@ These rules apply to screens that show energy credits (the ECMS). [`apps/credits
 - **A balance below zero is not an error.** Community and dependent wallets are normally below zero. Show the minus sign in normal text. Never color it red.
 - Components never apply a valuation factor and never predict a balance.
 
-### Things the specification leaves open
-
-The ECMS specification and user stories are ambiguous in places (how members authorize a transfer, how to explain a negative balance, the states of a settlement request, and others). Components do not decide these. Read the [open questions](reference/open-questions.md) before you design a screen that touches one, and do not invent the answer in the interface. Ask the people who own the specification.
-
 ## A short checklist before a merge request
 
 - [ ] One primary button per screen

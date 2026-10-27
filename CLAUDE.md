@@ -113,12 +113,9 @@ Credit screens only:
 
 - A negative balance is normal: show it with a real minus sign (−) in normal text, never red. Never predict a balance in the UI.
 - Member screens never show EC, wallet IDs, purpose codes, hashes or formulas.
-- Do not decide anything listed in `docs/reference/open-questions.md` in the UI; flag it instead.
 - Use American English for interface text and docs, and write the project name as "INNO-TREC".
 
 ## Constraints to keep
-
-`docs/decisions.md` (why each constraint exists) and `docs/tracking.md` (pending work) are the maintainer's local notes. Git ignores them, so they exist only in the maintainer's copy. Read them when present; never add them to Git or link to them from other docs.
 
 - Stay on Tailwind 3.4. NativeWind 4 (mobile) needs `tailwindcss ~3`, and web and mobile share the preset. Never run `npm audit fix --force`, because it upgrades to Tailwind 4.
 - Web and mobile share tokens, not components. The Expo app lives in a separate repository and receives tokens via `export:tokens`.

@@ -58,7 +58,7 @@ Add a line for your change under `## [Unreleased]` in `CHANGELOG.md`.
 
 ## The website and the demo
 
-The `pages` job in `.gitlab-ci.yml` publishes `docs/` and the starter (under `demo/`) to GitLab Pages after every push to `main`. It runs only in the template project (`CI_PROJECT_PATH`); the site's path comes from the project's Pages address. Some pages stay out of the site: `INTERNAL` in `docs/.vitepress/config.mts` lists them (the ECMS open questions, and the maintainer's notes, which are not in the repository). Add a page there when it should not be on the site. Who can see the site is set in the project under **Settings → General → Visibility → Pages**.
+The `pages` job in `.gitlab-ci.yml` publishes `docs/` and the starter (under `demo/`) to GitLab Pages after every push to `main`. It runs only in the template project (`CI_PROJECT_PATH`); the site's path comes from the project's Pages address. Who can see the site is set in the project under **Settings → General → Visibility → Pages**.
 
 ## How teams copy the template
 

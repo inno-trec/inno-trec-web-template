@@ -125,7 +125,7 @@ Rules for this pattern:
 - **One column, at most 480px wide.** Wrap the card in `max-w-[480px]`. Member flows are a single column even on wide screens.
 - **Say that nothing moved when it fails.** The form adds "Your credits were not moved." to every error, also to an `errorMessage` you pass.
 - **Do not predict the balance.** The check step shows the amount and the person only. The result screen shows `newBalance` as the backend reports it.
-- **Do not add steps, or fields the specification does not require.** For example, `TransferForm` does not ask for a purpose code, because P2P transfers have none (open question 4 in the [open questions](reference/open-questions.md)).
+- **Do not add steps, or fields the specification does not require.** For example, `TransferForm` does not ask for a purpose code, because P2P transfers have none.
 - **Let people choose from a list.** `RecipientPicker` lists the people the backend supplies. Never ask someone to type a wallet address.
 
 ## 5. A page with several blocks
@@ -198,7 +198,7 @@ Use it to evaluate PV systems: performance ratio, availability, specific yield a
 
 Rules for this pattern:
 
-- **The backend computes the indicators and decides their status.** The page shows "Below normal" when the API says so. The definitions are still open.
+- **The backend computes the indicators and decides their status.** The page shows "Below normal" when the API says so.
 - **A reference is a dotted line**, labeled with its name and value. Dashed lines mean estimates.
 - **Bars have one color**, the series color of what is measured. Never color a bar by its status: the table carries a `Badge` instead.
 - **Show the usual value next to each indicator** ("usually 81"), so a reader can judge it without a second chart.

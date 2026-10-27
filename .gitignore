@@ -23,7 +23,3 @@ apps/*/playwright-report/
 
 # Personal Claude Code files (settings, skills)
 .claude/
-
-# The maintainer's notes: decisions and pending work stay out of the repository
-docs/decisions.md
-docs/tracking.md

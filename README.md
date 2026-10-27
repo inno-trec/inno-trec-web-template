@@ -65,7 +65,6 @@ The two packages are generated from the design system repository. Do not edit th
 | [Troubleshooting](docs/troubleshooting.md) | Fix a problem someone has already hit |
 | [Contributing](docs/contributing.md) | Change the template itself |
 | [Mobile](docs/mobile.md) | See how the mobile app shares tokens with the web tools |
-| [Open questions](docs/reference/open-questions.md) | See where the ECMS specification is ambiguous. Components do not decide these. |
 
 ## Commands
 

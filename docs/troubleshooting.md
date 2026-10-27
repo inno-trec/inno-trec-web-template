@@ -72,7 +72,7 @@ Problems that have already come up, with the cause and the fix.
 
 **Cause.** The components contain fixed English text ("Send credits", "Credits sent", "Step 1 of 3").
 
-**Fix.** There is no translation setting yet. This is still an open question. If your tool needs another language, tell the design system owners before you work around it.
+**Fix.** There is no translation setting. If your tool needs another language, tell the design system owners before you work around it.
 
 ## `npm test` says the browser executable does not exist
 

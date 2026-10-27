@@ -2,21 +2,19 @@
   "designSystem": "inno-trec-design-system",
   "publishedVersion": "1793093980-6fac",
   "publishedAt": "2026-10-27",
-  "syncedAt": "2026-10-27T11:17:25.092Z",
+  "syncedAt": "2026-10-27T12:38:03.359Z",
   "components": 40,
   "logos": 8,
   "funding": 2,
   "referenceDocs": [
     "brand-book.md",
     "DESIGN.md",
-    "open-questions.md",
     "components.md"
   ],
   "files": {
     "docs/reference/brand-book.md": "a328811974f2a6cfdcb385ec7cbce03c0718185905fbb90430ae1434143c4225",
     "docs/reference/components.md": "db3aa048f926834cd4e71d29e2bd3c3922ed21a2d938f1315b12aa97fa09a374",
     "docs/reference/DESIGN.md": "6f81cea7ad34847dedfe5f6509b532ab2d22e4f2f62de10cefb3e50ea19ea633",
-    "docs/reference/open-questions.md": "437864536fe551500dadf03d10836f3fefeaee1c09885bb398ef964022dd5eaf",
     "docs/reference/previews/AccountCard.html": "3a5ba9bc04653ca6a9d54cd58b3049c07a055f2026c9fec9754d2a35136fa976",
     "docs/reference/previews/AccountList.html": "51404006363051c5b29a95b6ae290ffe2e41c6c05b7077126c06ebf5eb5ce227",
     "docs/reference/previews/AppShell.html": "9a9929ee056ab86ee13fdfffdcdabc42592518483998bf4244679f7f6ed089b6",
