@@ -198,7 +198,7 @@ Use it to evaluate PV systems: performance ratio, availability, specific yield a
 
 Rules for this pattern:
 
-- **The backend computes the indicators and decides their status.** The page shows "Below normal" when the API says so. The definitions are still open (tracking D2).
+- **The backend computes the indicators and decides their status.** The page shows "Below normal" when the API says so. The definitions are still open.
 - **A reference is a dotted line**, labeled with its name and value. Dashed lines mean estimates.
 - **Bars have one color**, the series color of what is measured. Never color a bar by its status: the table carries a `Badge` instead.
 - **Show the usual value next to each indicator** ("usually 81"), so a reader can judge it without a second chart.

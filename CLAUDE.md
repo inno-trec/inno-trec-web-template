@@ -36,7 +36,7 @@ There is no linter and no unit test runner. CI (`.gitlab-ci.yml`, gitlab.up.pt) 
 
 Versions: the template version is the root `package.json` version, recorded in `CHANGELOG.md` (Keep a Changelog). Pushing a `vX.Y.Z` tag runs the `release-notes` and `release` jobs, which check the tag against `package.json` and `CHANGELOG.md` and create the GitLab release. Add every user-visible change under `## [Unreleased]` in `CHANGELOG.md`.
 
-Node: `.nvmrc` pins the newest LTS release (24); `engines` requires >= 24. The policy is "newest stable": see decision 7 in `docs/decisions.md`.
+Node: `.nvmrc` pins the newest LTS release (24); `engines` requires >= 24. The policy is "newest stable": each copy starts with the longest support window.
 
 ## Architecture
 
@@ -73,7 +73,7 @@ Generated files start with a `GENERATED` banner. The sync records a SHA-256 hash
 
 ### Starter app wiring (`apps/web-starter`)
 
-The starter holds only what every tool needs (decision 10). Patterns go in the example apps, not here.
+The starter holds only what every tool needs. Patterns go in the example apps, not here.
 
 - `src/main.tsx`: `BrowserRouter` (with `basename` from `BASE_URL`) and `SessionProvider`, imports `styles.css` and then `index.css`.
 - `src/App.tsx`: the screens without a session (`sign-in`, `sign-up`, `invitation`, `forgot-password`, `reset-password`, `sign-out`), then the routes nested under `RequireSession` and `ToolShell`.
@@ -81,7 +81,7 @@ The starter holds only what every tool needs (decision 10). Patterns go in the e
 - `src/layouts/ToolShell.tsx`: wraps the design system `AppShell`. The `NAV` array drives the side navigation, the page heading (`label`) and who sees each page (`roles`). The top bar shows the signed-in person, "Account" and "Sign out". Nav links get the base path from `import.meta.env.BASE_URL`. Screens without a session use `src/layouts/SignedOutFrame.tsx` (the design system's `AuthLayout`). It passes a `Footer` with the EU funding emblem (`@inno-trec/ui-web/assets/funding/eu-funded-negative.png`) and `FOOTER_LINKS`; every tool keeps the footer.
 - Adding a page takes three edits: a file in `src/pages/`, a `<Route>` in `App.tsx`, and a `NAV` entry.
 - Pages: `HomePage.tsx` (the example page to replace: a list of sample records with loading, empty and error states), `UsersPage.tsx` (forms in `Dialog`s; approve or decline account requests), `AccountPage.tsx` (profile and password), `NotFoundPage.tsx` and `pages/auth/` (sign in, ask for an account, accept an invitation, forgot and reset password). `src/forms/useSubmit.ts` sends a form and keeps the backend's messages per field. `src/format.ts` holds number and date formats; `src/labels.ts` the words and tones for API codes.
-- Data layer: `src/data/fakeServer.ts` is a sample backend in the shapes of `src/data/types.ts` (sample records and accounts; `?demo=empty` / `?demo=error`). `src/data/api.ts` is the client the pages call: it turns every failure into `ApiError` (`src/data/errors.ts`: a `code` and `fields`). Replacing the backend means changing `types.ts` and `api.ts` and deleting `fakeServer.ts`. Data APIs and their contracts belong to each system, not to the template (decision 12).
+- Data layer: `src/data/fakeServer.ts` is a sample backend in the shapes of `src/data/types.ts` (sample records and accounts; `?demo=empty` / `?demo=error`). `src/data/api.ts` is the client the pages call: it turns every failure into `ApiError` (`src/data/errors.ts`: a `code` and `fields`). Replacing the backend means changing `types.ts` and `api.ts` and deleting `fakeServer.ts`. Data APIs and their contracts belong to each system, not to the template.
 - `src/index.css` holds a workaround that hides the `TopBar` title and user below 560px. Remove it when the design system fixes the gap. The example apps carry the same workaround.
 
 ### Example apps
@@ -116,14 +116,16 @@ Credit screens only:
 - Do not decide anything listed in `docs/reference/open-questions.md` in the UI; flag it instead.
 - Use American English for interface text and docs, and write the project name as "INNO-TREC".
 
-## Constraints to keep (see `docs/decisions.md`)
+## Constraints to keep
+
+`docs/decisions.md` (why each constraint exists) and `docs/tracking.md` (pending work) are the maintainer's local notes. Git ignores them, so they exist only in the maintainer's copy. Read them when present; never add them to Git or link to them from other docs.
 
 - Stay on Tailwind 3.4. NativeWind 4 (mobile) needs `tailwindcss ~3`, and web and mobile share the preset. Never run `npm audit fix --force`, because it upgrades to Tailwind 4.
 - Web and mobile share tokens, not components. The Expo app lives in a separate repository and receives tokens via `export:tokens`.
 - Use Vite with client-side routing, not a framework. Deployment is static; for sub-path hosting set `base` in `vite.config.ts` (the router and nav links follow it).
 - The packages are copied into each team's repository, not published.
-- Charts use Apache ECharts with tree-shaken imports, loaded on demand (decision 9). They live in `template-demo`, not in the starter.
-- The starter stays minimal; a new pattern goes in an example app (decision 10).
+- Charts use Apache ECharts with tree-shaken imports, loaded on demand. They live in `template-demo`, not in the starter.
+- The starter stays minimal; a new pattern goes in an example app.
 
 ## Documentation map
 

@@ -103,4 +103,4 @@ apps/web-starter/src/
 
 ## Web and mobile
 
-The components in `ui-web` are DOM-based React and run on the web only. The mobile app, built with Expo and NativeWind, does not use them. Web and mobile share the tokens, so both look the same, and each has its own components. See [Decisions](decisions.md) for the reasoning.
+The components in `ui-web` are DOM-based React and run on the web only. The mobile app, built with Expo and NativeWind, does not use them. Web and mobile share the tokens, so both look the same, and each has its own components.

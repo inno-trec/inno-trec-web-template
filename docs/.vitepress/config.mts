@@ -20,6 +20,7 @@ const REPO = 'https://gitlab.up.pt/inno-trec/inno-trec-web-template';
  * Internal pages stay out of the public site. They remain in the (private) repository, and links to them
  * from other pages open the file on gitlab.up.pt, which asks for a sign-in.
  */
+// decisions.md and tracking.md are the maintainer's local notes (ignored by Git); keep them off the site in local builds too.
 const INTERNAL = ['decisions.md', 'tracking.md', 'reference/open-questions.md'];
 
 export default defineConfig({
