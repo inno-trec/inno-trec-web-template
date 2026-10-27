@@ -4,6 +4,11 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ## [Unreleased]
 
+### Fixed
+
+- Links from the documentation site to source files (for example the example pages) opened a 404 on GitHub. They now open the file.
+- The release no longer treats a failed `npm view` (network or auth error) as "not on npm": it stops instead of publishing again. `docs/contributing.md` shows how to set up npm trusted publishing (with `--allow-publish`) and what to do when `npm-publish` fails.
+
 ## [1.0.1] - 2026-10-27
 
 ### Changed

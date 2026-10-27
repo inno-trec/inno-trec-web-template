@@ -13,7 +13,7 @@
  * The repository does not change: each package is copied to .publish/, and its manifest is set there
  * (version, no "private"). A version that is already on npm is skipped, so the job can run again.
  */
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -51,6 +51,15 @@ function setManifest(file, extra = {}) {
   writeJson(file, { ...pkg, ...extra });
 }
 
+/** The version npm has for `id`, or '' when npm answers 404. Any other failure (network, auth) stops the script. */
+function publishedVersion(id, dir) {
+  const result = spawnSync('npm', ['view', id, 'version'], { cwd: dir, encoding: 'utf8' });
+  if (result.status === 0) return result.stdout.trim();
+  if (/\bE404\b/.test(result.stderr)) return '';
+  process.stderr.write(result.stderr);
+  throw new Error(`npm view ${id} failed, so it is not known whether ${id} is already on npm.`);
+}
+
 fs.rmSync(out, { recursive: true, force: true });
 fs.mkdirSync(out);
 
@@ -85,13 +94,7 @@ for (const name of ['tokens', 'ui-web', 'create-tool']) {
     console.log(`packed ${id}`);
     continue;
   }
-  let published = '';
-  try {
-    published = run('npm', ['view', id, 'version'], dir).trim();
-  } catch {
-    /* not on npm yet */
-  }
-  if (published === version) {
+  if (publishedVersion(id, dir) === version) {
     console.log(`skipped ${id}: already on npm`);
     continue;
   }
