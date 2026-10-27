@@ -1,4 +1,14 @@
-# INNO-TREC template
+<p align="center">
+  <img src="packages/ui-web/assets/logos/logo-landscape-colour.png" alt="INNO-TREC" width="360">
+</p>
+
+<p align="center">
+  <a href="https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/pipelines?ref=main"><img src="https://gitlab.up.pt/inno-trec/inno-trec-web-template/badges/main/pipeline.svg" alt="Pipeline status"></a>
+  <a href="https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/releases"><img src="https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/badges/release.svg" alt="Latest release"></a>
+  <a href="https://glpages.up.pt/inno-trec/inno-trec-web-template/"><img src="https://img.shields.io/badge/docs-website-0a6ebd" alt="Documentation website"></a>
+  <a href=".nvmrc"><img src="https://img.shields.io/badge/node-%E2%89%A524-339933" alt="Node 24 or newer"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey" alt="MIT license"></a>
+</p>
 
 A starting point for INNO-TREC web tools. It packages the INNO-TREC design system (colors, type, components) with a working React app, so a team can build a new tool by changing pages instead of setting up styling and navigation from scratch.
 
