@@ -4,6 +4,10 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-27
+
+The first version on npmjs.com. It has the same content as 0.2.0, which was never published to npm. From 1.0.0 on, `npm update` brings every minor release (design system updates, new patterns), and only a major release asks teams to change their own code.
+
 ## [0.2.0] - 2026-10-27
 
 ### Changed
@@ -69,6 +73,7 @@ First release of the template.
 
 - Node 24 LTS or newer, npm 11.
 
-[Unreleased]: https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/compare/v0.2.0...main
+[Unreleased]: https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/compare/v1.0.0...main
+[1.0.0]: https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/compare/v0.2.0...v1.0.0
 [0.2.0]: https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/compare/v0.1.0...v0.2.0
 [0.1.0]: https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/tags/v0.1.0
