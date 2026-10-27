@@ -12,7 +12,8 @@ INNO-TREC design system repository          (source of truth: tokens, components
 │  packages/ui-web     components as an ES module + one stylesheet + logos │
 │  docs/reference      brand book, component guide, open questions         │
 │                                                                          │
-│  apps/web-starter    starter app: monitoring and maintenance pages       │
+│  apps/web-starter    starter app: page frame, accounts, one example page │
+│  apps/template-demo  example pages: monitoring, PV, maintenance, charts  │
 │  apps/credits-example  example pages for energy credit tools             │
 └──────────────────────────────────────────────────────────────────────────┘
         │
@@ -30,7 +31,8 @@ The design system repository decides how things look and behave. This repository
 | A color, a font size, a spacing step | The design system repository, then `npm run sync:ds` |
 | How a component looks or behaves | The design system repository, then `npm run sync:ds` |
 | Brand or content rules | The design system repository, then `npm run sync:ds` |
-| The page frame, example pages or setup | This template (`apps/web-starter`) |
+| The page frame, account screens or setup | This template (`apps/web-starter`) |
+| The example pages | This template (`apps/template-demo`, `apps/credits-example`) |
 | Your tool's pages, data and routes | Your own repository |
 
 `packages/tokens` and `packages/ui-web` are generated. Each generated file starts with a `GENERATED` comment. Edits to them are lost at the next sync.
@@ -71,7 +73,7 @@ import '@inno-trec/ui-web/styles.css';
 
 The package has no build step. Vite compiles it as source.
 
-## The starter app
+## The starter and example apps
 
 ```text
 apps/web-starter/src/
@@ -82,17 +84,18 @@ apps/web-starter/src/
   auth/session.tsx      who is signed in, the redirect to sign in, roles per page
   layouts/ToolShell.tsx top bar (Account, Sign out), side navigation, page heading, footer
   layouts/SignedOutFrame.tsx  the frame of the screens without a session (AuthLayout)
-  pages/                one file per screen (Overview, PV performance, Data checks, Alerts, Assets, Users, Your account, not found)
+  pages/                one file per screen (Home, Users, Your account, not found)
   pages/auth/           sign in, ask for an account, accept an invitation, forgot and reset password
   forms/useSubmit.ts    sends a form and keeps the backend's messages per field
-  charts/               TimeSeriesChart (ECharts), its lazy loader, number and time formats
   data/api.ts           the client the pages call; replace its calls with fetch
   data/types.ts         the shapes of the backend's data (examples)
   data/errors.ts        ApiError: a code, and one message per field
   data/fakeServer.ts    sample backend (?demo=empty, ?demo=error)
-  data/synthetic.ts     synthetic 15-minute readings behind the sample backend
+  format.ts             number and date formats
   labels.ts             words and tones for the codes the API sends
 ```
+
+`apps/template-demo` has the same structure and adds the monitoring, PV performance and maintenance pages (Overview, PV performance, Data checks, Alerts, Assets), `charts/` (`TimeSeriesChart` and `BarChart` with ECharts, their lazy loader, number and time formats), `time/zone.ts` (the community's time zone) and `data/synthetic.ts` (synthetic 15-minute readings behind its sample backend).
 
 `apps/credits-example` has the same structure, with the credit pages (ledger overview, wallets, send flow, member wallet) and ECMS sample data.
 

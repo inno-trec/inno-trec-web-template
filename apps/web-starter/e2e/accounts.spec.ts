@@ -33,14 +33,14 @@ test('every screen without a session renders its heading and footer', async ({ p
 
 test('a page without a session asks to sign in, then opens', async ({ page }) => {
   const errors = collectErrors(page);
-  await page.goto('/alerts');
-  await expect(page).toHaveURL(/\/sign-in\?next=%2Falerts$/);
+  await page.goto('/users');
+  await expect(page).toHaveURL(/\/sign-in\?next=%2Fusers$/);
 
   await signIn(page, 'ana.ribeiro@example.org', 'wrong-password');
   await expect(page.getByText('The email or password is wrong')).toBeVisible();
 
   await signIn(page, 'ana.ribeiro@example.org', 'sample-password');
-  await expect(page.locator('.it-shell-main > h1')).toHaveText('Alerts');
+  await expect(page.locator('.it-shell-main > h1')).toHaveText('Users');
 
   await page.getByRole('button', { name: 'Sign out' }).click();
   await expect(page.getByText('You are signed out.')).toBeVisible();
@@ -87,7 +87,7 @@ test('an invitation sets a password and signs the person in', async ({ page }) =
   await page.getByLabel(/^Password/).fill('a-long-enough-password');
   await page.getByLabel('I accept the').check();
   await page.getByRole('button', { name: 'Create account' }).click();
-  await expect(page.locator('.it-shell-main > h1')).toHaveText('Overview');
+  await expect(page.locator('.it-shell-main > h1')).toHaveText('Home');
   // A viewer does not see the Users page.
   await expect(page.locator('.it-sidenav a', { hasText: 'Users' })).toHaveCount(0);
   expect(errors).toEqual([]);

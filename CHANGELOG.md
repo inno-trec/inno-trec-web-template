@@ -6,6 +6,7 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ### Changed
 
+- **The starter is minimal, and the complete tool moved to `apps/template-demo`.** `web-starter` now holds the page frame, the account screens, the Users page, the client for the backend and one example page (`HomePage`) with the loading, empty and error states. It no longer depends on ECharts. The monitoring, PV performance, data checks, alerts and assets pages, the charts and the synthetic data are in `apps/template-demo` (`npm run dev:demo`), which the documentation site shows as the demo. Decision 10 records why.
 - `getting-started.md` names `src/config.ts` for the tool's name, and decision 7 no longer mentions Dependabot.
 - **The template moved to gitlab.up.pt** (`inno-trec/inno-trec-web-template`). CI, the documentation site and releases run in GitLab CI (`.gitlab-ci.yml`); the GitHub workflows and Dependabot are removed. Teams copy the template into a new project instead of using GitHub's "Use this template".
 - **The starter is no longer about credits.** `web-starter` now fits the monitoring, PV performance and maintenance tools: an energy overview with time-series charts and an asset list with maintenance suggestions, on synthetic data.

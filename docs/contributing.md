@@ -44,7 +44,7 @@ Add a line for your change under `## [Unreleased]` in `CHANGELOG.md`.
 3. Make the example teach one thing. Say what it teaches at the top of its README.
 4. Use sample data and mark it as sample data in the code.
 5. Add a row for it to the table in the root `README.md`, and a `dev:<name>` script to the root `package.json`.
-6. Give its `playwright.config.ts` its own port, so `npm test` can run every app (`web-starter` uses 4173, `credits-example` 4174).
+6. Give its `playwright.config.ts` its own port, so `npm test` can run every app (`web-starter` uses 4173, `credits-example` 4174, `template-demo` 4175).
 
 ## Writing documentation
 
@@ -95,4 +95,4 @@ git fetch template
 git diff HEAD template/main -- packages scripts docs apps/web-starter
 ```
 
-Packages, scripts and docs are safe to take as they are. For `apps/web-starter`, apply only the changes that fit their tool.
+Packages, scripts and docs are safe to take as they are. For `apps/web-starter`, apply only the changes that fit their tool. The example apps (`apps/template-demo`, `apps/credits-example`) are for copying pages from: compare them the same way when a team wants a new pattern.

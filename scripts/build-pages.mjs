@@ -1,10 +1,10 @@
 /**
  * Builds the documentation site (GitLab Pages): the documentation (VitePress, from docs/) with the component gallery
- * (scripts/build-gallery.mjs) and the starter app as a live demo under demo/. The result is docs/.vitepress/dist.
+ * (scripts/build-gallery.mjs) and the template demo app (apps/template-demo) as a live demo under demo/. The result is docs/.vitepress/dist.
  *
  * Pages has no rewrites, so an address inside the demo (…/demo/alerts) would get the site's 404
  * page. The 404 page sends such addresses to demo/?p=<address>, and the demo puts the address back before
- * the router starts. Both small scripts are added here, so the starter itself stays unchanged.
+ * the router starts. Both small scripts are added here, so the demo app itself stays unchanged.
  */
 import { execSync } from 'node:child_process';
 import { cpSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -12,13 +12,13 @@ import { cpSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 const base = process.env.DOCS_BASE ?? '/inno-trec-template/';
 const demoBase = `${base}demo/`;
 const site = 'docs/.vitepress/dist';
-const demoOut = 'apps/web-starter/dist-pages';
+const demoOut = 'apps/template-demo/dist-pages';
 
 const run = (command) => execSync(command, { stdio: 'inherit', env: { ...process.env, DOCS_BASE: base } });
 
 run('node scripts/build-gallery.mjs');
 run('npx vitepress build docs');
-run(`npm exec -w web-starter -- vite build --base ${demoBase} --outDir dist-pages --emptyOutDir`);
+run(`npm exec -w template-demo -- vite build --base ${demoBase} --outDir dist-pages --emptyOutDir`);
 cpSync(demoOut, `${site}/demo`, { recursive: true });
 rmSync(demoOut, { recursive: true, force: true });
 

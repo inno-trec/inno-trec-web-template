@@ -11,11 +11,18 @@ npm install
 npm run dev          # serves the starter at http://localhost:5173
 ```
 
-You get a tool with a top bar, side navigation, the EU funding footer and example pages on synthetic data: sign in and the other account screens, an energy overview with time-series charts, PV performance against references, checks of agreement between data sources, maintenance alerts, assets, and user management with forms in dialogs. Sign in as `ana.ribeiro@example.org` with the password `sample-password`. Edit `apps/web-starter/src/pages/` and the browser updates.
+You get a minimal tool: a top bar, side navigation, the EU funding footer, the account screens (sign in, ask for an account, invitation, password reset, your account), user management, and one example page to replace with your own. Sign in as `ana.ribeiro@example.org` with the password `sample-password`. Edit `apps/web-starter/src/pages/` and the browser updates.
 
-The documentation is also a website with the starter as a live demo and every component running in the component guide (GitLab Pages). Preview it with `npm run docs:dev`.
+Two example apps hold complete pages to copy:
 
-The template serves the INNO-TREC web tools: energy monitoring (consumption, PV, storage), PV yield and performance, asset maintenance, and the energy credit system. The starter fits the first three. For credit screens, run `npm run dev:credits` and copy pages from `apps/credits-example/`.
+```sh
+npm run dev:demo     # template demo: energy overview with charts, PV performance, data checks, alerts, assets
+npm run dev:credits  # credit screens (ECMS): ledger overview, wallets, send flow, member wallet
+```
+
+The documentation is also a website with the template demo as a live demo and every component running in the component guide (GitLab Pages). Preview it with `npm run docs:dev`.
+
+The template serves the INNO-TREC web tools: energy monitoring (consumption, PV, storage), PV yield and performance, asset maintenance, and the energy credit system.
 
 To build a tool of your own, read [Getting started](docs/getting-started.md).
 
@@ -23,7 +30,8 @@ To build a tool of your own, read [Getting started](docs/getting-started.md).
 
 | Path | What it is |
 | --- | --- |
-| `apps/web-starter/` | The starter app: Vite, React 19, TypeScript, Tailwind, ECharts. Monitoring and maintenance pages. Copy it to start a tool. |
+| `apps/web-starter/` | The starter app: Vite, React 19, TypeScript, Tailwind. The page frame, account screens, user management and one example page. Copy it to start a tool. |
+| `apps/template-demo/` | Example pages for monitoring, PV performance and maintenance tools, with ECharts charts on synthetic data. The live demo on the website. |
 | `apps/credits-example/` | Example pages for energy credit tools (ECMS): ledger overview, wallets, send flow, member wallet. |
 | `packages/ui-web/` | The design system components for React on the web, with their styles and logos. Generated. |
 | `packages/tokens/` | The design tokens as a Tailwind preset, CSS variables and JavaScript constants. Generated. |

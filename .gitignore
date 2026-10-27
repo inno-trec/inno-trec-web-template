@@ -20,3 +20,6 @@ apps/*/playwright-report/
 
 # Project instructions for AI agents are shared with every team
 !CLAUDE.md
+
+# Personal Claude Code settings for this project
+.claude/settings.local.json

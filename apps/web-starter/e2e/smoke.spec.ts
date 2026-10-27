@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { chooseFile, collectErrors, expectNoSidewaysScroll } from './helpers';
+import { collectErrors, expectNoSidewaysScroll } from './helpers';
 
 /** These tests start signed in as an administrator. The sign-in screens are tested in accounts.spec.ts. */
 test.beforeEach(async ({ page }) => {
@@ -59,11 +59,18 @@ test('side navigation changes page without a full reload', async ({ page, viewpo
   expect(await page.evaluate(() => (window as unknown as { __marker?: boolean }).__marker)).toBe(true);
 });
 
-test('the overview draws its charts', async ({ page }) => {
+test('the home page shows its records, the empty state and the error state', async ({ page }) => {
   const errors = collectErrors(page);
   await page.goto('/');
-  await expect(page.locator('[data-chart] canvas')).toHaveCount(2);
+  await expect(page.getByRole('cell', { name: 'First record' })).toBeVisible();
+  await page.goto('/?demo=empty');
+  await expect(page.getByRole('heading', { name: 'No records yet' })).toBeVisible();
   expect(errors).toEqual([]);
+
+  // A failed request shows a message and a way to try again, not an empty page.
+  await page.goto('/?demo=error');
+  await expect(page.getByText('The records could not be loaded')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Try again' })).toBeVisible();
 });
 
 test('a user can be invited and deactivated', async ({ page }) => {
@@ -91,66 +98,6 @@ test('a user can be invited and deactivated', async ({ page }) => {
   const confirm = page.getByRole('dialog', { name: 'Deactivate Teresa Lima?' });
   await confirm.getByRole('button', { name: 'Deactivate' }).click();
   await expect(page.getByText('Teresa Lima is deactivated')).toBeVisible();
-  expect(errors).toEqual([]);
-});
-
-test('the performance and data checks pages draw their charts', async ({ page }) => {
-  const errors = collectErrors(page);
-  await page.goto('/performance');
-  await expect(page.locator('[data-chart] canvas')).toHaveCount(1);
-  await expect(page.getByText('Below normal').first()).toBeVisible();
-  await page.goto('/data-checks');
-  await expect(page.locator('[data-chart] canvas')).toHaveCount(1);
-  await expect(page.getByText('Outside tolerance').first()).toBeVisible();
-  expect(errors).toEqual([]);
-});
-
-test('an alert can be acknowledged and resolved', async ({ page }) => {
-  const errors = collectErrors(page);
-  await page.goto('/alerts');
-  await expect(page.getByRole('heading', { name: 'Inverter 3 stopped with fault F07' })).toBeVisible();
-  await page.getByRole('button', { name: 'Acknowledge' }).click();
-  await expect(page.getByText('Alert acknowledged')).toBeVisible();
-
-  await page.getByRole('button', { name: 'Resolve' }).click();
-  const dialog = page.getByRole('dialog', { name: 'Resolve the alert' });
-  await dialog.getByRole('button', { name: 'Resolve alert' }).click();
-  await expect(dialog.getByText('Write what was done.')).toBeVisible();
-  await dialog.getByRole('textbox', { name: 'What was done' }).fill('Inverter replaced.');
-  await dialog.getByRole('button', { name: 'Resolve alert' }).click();
-  await expect(page.getByText('Alert resolved')).toBeVisible();
-  expect(errors).toEqual([]);
-});
-
-test('alerts come in tabs and pages, and a resolution can carry photos', async ({ page }) => {
-  const errors = collectErrors(page);
-  await page.goto('/alerts');
-
-  // The backend counts and pages; the interface shows its numbers.
-  await page.getByRole('tab', { name: /^All/ }).click();
-  await expect(page.getByText('1–5 of 13 alerts')).toBeVisible();
-  await page.getByRole('button', { name: 'Next' }).click();
-  await expect(page.getByText('6–10 of 13 alerts')).toBeVisible();
-  await page.getByRole('tab', { name: /^Open/ }).click();
-  await expect(page.getByRole('tab', { name: /^Open/ })).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByRole('navigation', { name: 'Pages' })).toHaveCount(0);
-
-  await page.getByRole('button', { name: 'Resolve', exact: true }).click();
-  const dialog = page.getByRole('dialog', { name: 'Resolve the alert' });
-  await dialog.getByRole('textbox', { name: 'What was done' }).fill('Inverter replaced.');
-  const photos = dialog.locator('input[type=file]');
-  await chooseFile(photos, 'too-big.jpg', 11 * 1024 * 1024);
-  await dialog.getByRole('button', { name: 'Resolve alert' }).click();
-  await expect(dialog.getByText('Each photo can be up to 10 MB. Remove the larger ones.')).toBeVisible();
-
-  await dialog.getByRole('button', { name: 'Remove too-big.jpg' }).click();
-  await chooseFile(photos, 'after.jpg', 2048);
-  await dialog.getByRole('button', { name: 'Resolve alert' }).click();
-  await expect(dialog).toBeHidden();
-  await expect(page.getByRole('status').filter({ hasText: 'Alert resolved' })).toBeVisible();
-
-  await page.getByRole('tab', { name: /^Resolved/ }).click();
-  await expect(page.getByText('after.jpg')).toBeVisible();
   expect(errors).toEqual([]);
 });
 

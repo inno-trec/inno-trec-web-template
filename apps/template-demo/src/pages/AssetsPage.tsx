@@ -135,7 +135,7 @@ function AssetDetail({ asset }: { asset: Asset }) {
               Open alerts
             </Button>
           )}
-          {/* TODO: connect to your work-order system. It does nothing in the starter (tracking item 5). */}
+          {/* TODO: connect to your work-order system. It does nothing in the demo (tracking item 5). */}
           <Button size="sm" onClick={() => console.info('TODO: create a work order for', asset.id)}>
             Create work order
           </Button>

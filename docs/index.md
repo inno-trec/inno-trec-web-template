@@ -30,4 +30,4 @@ features:
 2. Follow [Getting started](getting-started.md): install, run, rename the tool, and replace the sample backend in `src/data/`.
 3. Keep the rules in [Design rules](design-rules.md) and the shapes in [Page patterns](page-patterns.md).
 
-The demo runs the starter app with sample data. Sign in as `ana.ribeiro@example.org` with the password `sample-password`.
+The demo runs the template demo app (`apps/template-demo`) with sample data. Sign in as `ana.ribeiro@example.org` with the password `sample-password`.

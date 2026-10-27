@@ -2,7 +2,7 @@
   "name": "inno-trec-template",
   "version": "0.1.0",
   "private": true,
-  "description": "Starter template and example apps for INNO-TREC web tools, built on the INNO-TREC design system.",
+  "description": "Starter app and example apps for INNO-TREC web tools, built on the INNO-TREC design system.",
   "workspaces": [
     "packages/*",
     "apps/*"
@@ -12,6 +12,7 @@
   },
   "scripts": {
     "dev": "npm run dev -w web-starter",
+    "dev:demo": "npm run dev -w template-demo",
     "dev:credits": "npm run dev -w credits-example",
     "build": "npm run build --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
