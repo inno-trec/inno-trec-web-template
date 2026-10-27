@@ -121,6 +121,26 @@ export interface Alert {
   acknowledgedBy?: string | null;
   resolvedAt?: string | null;
   resolution?: string | null;
+  /** Files attached when the alert was resolved. */
+  photos?: Array<{ name: string; sizeBytes: number }>;
+}
+
+/** Which alerts a list shows. `open` means new and acknowledged. */
+export type AlertShow = 'open' | 'new' | 'acknowledged' | 'resolved' | 'all';
+
+export interface AlertQuery {
+  show: AlertShow;
+  kind: 'all' | Alert['kind'];
+  /** Starts at 1. */
+  page: number;
+  pageSize: number;
+}
+
+/** One page of alerts, newest first. `total` counts the alerts that match; `counts` gives each `show` for the same kind. */
+export interface AlertPageDto {
+  alerts: Alert[];
+  total: number;
+  counts: Record<AlertShow, number>;
 }
 
 export interface Asset {

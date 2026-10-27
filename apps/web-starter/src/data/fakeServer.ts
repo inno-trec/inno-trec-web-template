@@ -3,6 +3,9 @@ import { ApiError } from './errors';
 import { COMMUNITY, generateReadings, type Sample } from './synthetic';
 import type {
   Alert,
+  AlertPageDto,
+  AlertQuery,
+  AlertShow,
   Asset,
   EnergyPeriod,
   EnergyReportDto as EnergyReport,
@@ -271,9 +274,39 @@ let alerts: Alert[] = [
   },
 ];
 
-export async function listAlerts(): Promise<{ alerts: Alert[] }> {
+// Older alerts, already resolved, so the list has more than one page.
+const HISTORY: Array<[string, string, string, string]> = [
+  ['pv-01', 'School roof', 'Inverter monitoring lost', 'Router restarted on site.'],
+  ['bat-01', 'Community battery', 'Battery temperature above 40 °C', 'Ventilation fan replaced.'],
+  ['pv-03', 'Community center roof', 'Performance ratio below normal for 3 days', 'Leaves removed from the panels.'],
+  ['mtr-01', 'Community meter', 'No readings for 6 hours', 'Meter modem replaced by the grid operator.'],
+  ['inv-03', 'Inverter 3', 'Inverter restarted 4 times in one day', 'Firmware updated.'],
+  ['pv-02', 'Sports hall roof', 'String 2 produces no power', 'Loose connector fixed.'],
+  ['pv-04', 'Library roof', 'Performance ratio below normal for 4 days', 'Panels cleaned.'],
+  ['bat-01', 'Community battery', 'Battery stopped charging', 'Battery management system reset.'],
+];
+alerts.push(
+  ...HISTORY.map(([assetId, assetName, title, resolution], i): Alert => ({
+    id: `al-h${i + 1}`, kind: title.startsWith('Performance') ? 'predictive' : 'corrective', severity: 'warning', state: 'resolved', assetId, assetName,
+    title, text: 'Resolved. Kept for the maintenance history.', raisedAt: ago((7 + i * 5) * DAY),
+    acknowledgedAt: ago((7 + i * 5) * DAY - HOUR), acknowledgedBy: 'Carla Sousa', resolvedAt: ago((6 + i * 5) * DAY), resolution,
+  })),
+);
+
+const SHOWS: AlertShow[] = ['open', 'new', 'acknowledged', 'resolved', 'all'];
+const shows = (a: Alert, show: AlertShow) => show === 'all' || (show === 'open' ? a.state !== 'resolved' : a.state === show);
+
+/** One page of alerts. The backend filters, counts and pages; the interface shows the result. */
+export async function listAlerts(query: AlertQuery): Promise<AlertPageDto> {
   await respond(400);
-  return { alerts: demo() === 'empty' ? [] : [...alerts].sort((a, b) => b.raisedAt.localeCompare(a.raisedAt)) };
+  const ofKind = demo() === 'empty' ? [] : alerts.filter((a) => query.kind === 'all' || a.kind === query.kind);
+  const matching = ofKind.filter((a) => shows(a, query.show)).sort((a, b) => b.raisedAt.localeCompare(a.raisedAt));
+  const start = (query.page - 1) * query.pageSize;
+  return {
+    alerts: matching.slice(start, start + query.pageSize),
+    total: matching.length,
+    counts: Object.fromEntries(SHOWS.map((show) => [show, ofKind.filter((a) => shows(a, show)).length])) as Record<AlertShow, number>,
+  };
 }
 
 function changeAlert(id: string, change: Partial<Alert>) {
@@ -286,10 +319,18 @@ export async function acknowledgeAlert(id: string): Promise<Alert> {
   return changeAlert(id, { state: 'acknowledged', acknowledgedAt: iso(Date.now()), acknowledgedBy: 'Sample User' });
 }
 
-export async function resolveAlert(id: string, resolution: string): Promise<Alert> {
+const MAX_PHOTO_BYTES = 10 * 1024 * 1024;
+
+/** A real backend receives the photos as multipart/form-data and stores them. */
+export async function resolveAlert(id: string, resolution: string, photos: Array<{ name: string; sizeBytes: number; type: string }> = []): Promise<Alert> {
   await respond(400);
   if (!resolution.trim()) invalid('resolution', 'required', 'Write what was done.');
-  return changeAlert(id, { state: 'resolved', resolvedAt: iso(Date.now()), resolution: resolution.trim() });
+  if (photos.some((p) => !p.type.startsWith('image/'))) invalid('photos', 'not_an_image', 'Attach photos only (JPEG, PNG or HEIC).');
+  if (photos.some((p) => p.sizeBytes > MAX_PHOTO_BYTES)) invalid('photos', 'too_large', 'Each photo can be up to 10 MB. Remove the larger ones.');
+  return changeAlert(id, {
+    state: 'resolved', resolvedAt: iso(Date.now()), resolution: resolution.trim(),
+    photos: photos.map(({ name, sizeBytes }) => ({ name, sizeBytes })),
+  });
 }
 
 /* ---------- Assets ---------- */

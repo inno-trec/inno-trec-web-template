@@ -17,7 +17,7 @@ hero:
       link: /reference/components
 features:
   - title: One look for every tool
-    details: Design tokens and 35 components from the INNO-TREC design system. Tailwind handles layout only.
+    details: Design tokens and 40 components from the INNO-TREC design system. Tailwind handles layout only.
   - title: Screens that already work
     details: Sign in, ask for an account, invitations, password reset, your account, users and roles, and pages for monitoring, PV performance, data checks, alerts and assets.
   - title: Rules built in

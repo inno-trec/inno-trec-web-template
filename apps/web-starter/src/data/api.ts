@@ -2,6 +2,7 @@ import { ApiError } from './errors';
 import * as server from './fakeServer';
 import type {
   Alert,
+  AlertQuery,
   EnergyPeriod,
   EnergyReportDto,
   Invitation,
@@ -22,7 +23,7 @@ import type {
  */
 
 export { ApiError };
-export type { Alert, Asset, Indicator, PerformancePeriod, PvPerformanceReport, Role, RoleId, Session, SystemPerformance, User } from './types';
+export type { Alert, AlertPageDto, AlertQuery, AlertShow, Asset, Indicator, PerformancePeriod, PvPerformanceReport, Role, RoleId, Session, SystemPerformance, User } from './types';
 
 /** Runs a request. A backend error passes through; anything else (no network, a crash) becomes `network`. */
 async function call<T>(request: () => Promise<T>): Promise<T> {
@@ -114,9 +115,11 @@ export async function getSourceChecks(period: Period): Promise<{ timeZone: strin
 
 /* ---------- Alerts and assets ---------- */
 
-export const listAlerts = () => call(() => server.listAlerts()).then((r) => r.alerts);
+export const listAlerts = (query: AlertQuery) => call(() => server.listAlerts(query));
 export const acknowledgeAlert = (id: string): Promise<Alert> => call(() => server.acknowledgeAlert(id));
-export const resolveAlert = (id: string, resolution: string): Promise<Alert> => call(() => server.resolveAlert(id, resolution));
+/** With fetch, send a FormData with `resolution` and one `photos` entry per file. */
+export const resolveAlert = (id: string, resolution: string, photos: File[] = []): Promise<Alert> =>
+  call(() => server.resolveAlert(id, resolution, photos.map((f) => ({ name: f.name, sizeBytes: f.size, type: f.type }))));
 export const listAssets = () => call(() => server.listAssets()).then((r) => r.assets);
 
 /* ---------- Users ---------- */

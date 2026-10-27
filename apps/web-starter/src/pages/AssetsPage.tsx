@@ -1,4 +1,4 @@
-import { Badge, Button, Card, ConfidenceBadge, DataTable, InlineAlert, type Column } from '@inno-trec/ui-web';
+import { Badge, Button, Card, ConfidenceBadge, DataTable, EmptyState, InlineAlert, type Column } from '@inno-trec/ui-web';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { formatMonth, formatQuantities, formatRelative } from '../charts/format';
@@ -63,9 +63,9 @@ export function AssetsPage() {
   const { assets } = load;
   if (assets.length === 0) {
     return (
-      <InlineAlert tone="info" title="No assets yet">
+      <EmptyState icon="panel" title="No assets yet">
         Assets appear here once they are registered.
-      </InlineAlert>
+      </EmptyState>
     );
   }
   // Select the first asset on load, so the detail panel is never empty.

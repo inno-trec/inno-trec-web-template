@@ -33,7 +33,7 @@ You now own a copy. It contains the design system packages and the starter app. 
 Do these four things first.
 
 1. **Rename the app.** In `apps/web-starter/package.json`, change `"name"`. If you rename the folder as well, update the `dev` script in the root `package.json`.
-2. **Set the tool name.** In `apps/web-starter/src/layouts/ToolShell.tsx`, change `TOOL_NAME`. It appears in the top bar.
+2. **Set the tool name.** In `apps/web-starter/src/config.ts`, change `TOOL_NAME`. It appears in the top bar and on the sign-in screens. Set `PRIVACY_URL` and `FOOTER_LINKS` in the same file.
 3. **Set the page title and icon.** In `apps/web-starter/index.html`, change `<title>` and add your icon.
 4. **Remove the example pages you do not need.** Delete the files in `src/pages/`, their routes in `src/App.tsx`, and their entries in `NAV` in `ToolShell.tsx`. Delete `src/data/fakeServer.ts` and `src/data/synthetic.ts` when your own API replaces them. Keep the footer in `ToolShell.tsx`: it carries the EU funding emblem and statement.
 

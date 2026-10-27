@@ -224,10 +224,12 @@ Use it for corrective alerts (a failure to repair) and predictive alerts (perfor
 
 Rules for this pattern:
 
-- **Filters on top**: state (open by default) and type.
+- **Tabs by state** (Open by default, then New, Acknowledged, Resolved, All) with the counts the backend sends, and a `Select` for the type above them.
+- **The backend pages the list.** `Pagination` in the Card's footer shows "1–5 of 13 alerts" from the backend's `total`. A new tab or filter goes back to page 1.
 - **Severity and state are words with color**: `Badge` in the list, an `InlineAlert` with the backend's text in the detail.
 - **A predictive alert shows its indicator** with the usual value ("Performance ratio 66 % (usually 81 %)").
-- **Acknowledge says someone is on it; resolve asks what was done.** Resolving opens a `Dialog` with a required `Textarea`. The record keeps who acknowledged and what was done.
+- **Acknowledge says someone is on it; resolve asks what was done.** Resolving opens a `Dialog` with a required `Textarea` and optional photos (`FileUpload`); the backend checks their type and size. The record keeps who acknowledged, what was done and the photos.
+- **A `Toast` confirms each change** ("Alert resolved"). Errors stay on the page in an `InlineAlert`.
 - **The asset page links here.** An asset shows its open alerts and an "Open alerts" button.
 
 ## 10. Account screens

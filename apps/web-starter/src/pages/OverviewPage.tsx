@@ -1,5 +1,5 @@
 import { colors } from '@inno-trec/tokens';
-import { Button, Card, DataTable, InlineAlert, Select, StatTile, type Column } from '@inno-trec/ui-web';
+import { Button, Card, DataTable, EmptyState, InlineAlert, Select, StatTile, type Column } from '@inno-trec/ui-web';
 import { useEffect, useState } from 'react';
 import { formatDay, formatHour, formatNumber } from '../charts/format';
 import { LazyTimeSeriesChart as TimeSeriesChart } from '../charts/LazyCharts';
@@ -79,9 +79,9 @@ export function OverviewPage() {
       )}
 
       {load.state === 'ready' && load.report.readings.length === 0 && (
-        <InlineAlert tone="info" title="No readings for this period">
+        <EmptyState icon="clock" title="No readings for this period">
           Readings appear here once the meters send data.
-        </InlineAlert>
+        </EmptyState>
       )}
 
       {load.state === 'ready' && load.report.readings.length > 0 && (

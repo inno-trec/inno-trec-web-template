@@ -51,6 +51,14 @@ The design system has four series colors with a fixed meaning. Use them through 
 - **Write errors as one sentence** that says what to do: "Enter an email address, for example name@example.org."
 - **Confirm in a `Dialog` before an action that takes something away** (deactivate, delete, restart). Use a `danger` button with a verb.
 - **One task per dialog.** Longer forms get their own page.
+- **Confirm a saved change with a `Toast`**, one sentence that names what changed ("Invitation sent to ana@example.org"). Never put an error in a toast: errors stay next to the form until the person acts.
+- **Attach files with `FileUpload`.** The hint says what to attach and the limits; the backend checks type and size and answers per field. Keep the chosen files after a failed submit.
+
+## Lists and empty sections
+
+- **The backend counts and pages long lists.** Show its numbers in `Tabs` counts and in `Pagination` ("1–10 of 42 alerts"); never count rows the page did not receive.
+- **An empty section says why and what to do** with `EmptyState`: "No users yet. Invite the first person who will use this tool." After a filter, say how to see more. A failed load is not empty: show the error and "Try again".
+- **Tabs switch views of the same content.** Not for steps, and not for links to other pages.
 
 ## Accessibility
 

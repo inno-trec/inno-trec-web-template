@@ -50,7 +50,7 @@ The components and the design system documents are in English, and the template 
 
 The template runs on the newest LTS release of Node (pinned in `.nvmrc`) and the newest stable release of every dependency, except where another decision holds one back (Tailwind, decision 3). Teams copy the template, so a copy made from an old version stays old for a long time. Starting each copy current gives it the longest support window.
 
-**Consequence.** Dependabot proposes updates every week, and CI warns when a newer Node LTS exists. CI also runs on the newest Node release, so a break shows up before that release becomes LTS. Release candidates and odd-numbered Node versions are not used.
+**Consequence.** Someone checks for updates with `npm outdated` once a month (see `docs/contributing.md`); automatic updates are tracking item 22. CI also runs on the newest Node release, so a break shows up before that release becomes LTS. Release candidates and odd-numbered Node versions are not used.
 
 **Revisit when** keeping up costs more than the support window is worth, for example when updates break the starter often.
 

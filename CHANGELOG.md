@@ -6,6 +6,7 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ### Changed
 
+- `getting-started.md` names `src/config.ts` for the tool's name, and decision 7 no longer mentions Dependabot.
 - **The template moved to gitlab.up.pt** (`inno-trec/inno-trec-web-template`). CI, the documentation site and releases run in GitLab CI (`.gitlab-ci.yml`); the GitHub workflows and Dependabot are removed. Teams copy the template into a new project instead of using GitHub's "Use this template".
 - **The starter is no longer about credits.** `web-starter` now fits the monitoring, PV performance and maintenance tools: an energy overview with time-series charts and an asset list with maintenance suggestions, on synthetic data.
 - **The credit pages moved to `apps/credits-example`** (ledger overview, wallets, send flow, "My wallet"). Run it with `npm run dev:credits`.
@@ -14,6 +15,7 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ### Added
 
+- Five components (design system): `Tabs`, `Pagination`, `EmptyState`, `Toast` and `FileUpload`. The Alerts page uses tabs by state with counts, pages and photos when an alert is resolved; the sample backend filters, counts and pages the alerts. Changes on the Alerts and Users pages end with a toast, and the starter's empty pages use `EmptyState`. New rules in "Forms" and "Lists and empty sections".
 - Account screens in the starter: sign in (with "keep me signed in" and a return to the page asked for), ask for an account with a manager's approval on the Users page, accept an invitation, forgot and reset password, "Your account" (profile and password) and sign out. Pages without a session redirect to sign in, and `roles` in `NAV` hide pages from other roles. Pattern 10 and decision 12 describe them.
 - `AuthLayout` and `PasswordField` (design system): the frame of the screens without a session, and a password field with a Show/Hide button.
 - Documentation website (VitePress) built from `docs/`, with the starter as a live demo; the `pages` job publishes it to GitLab Pages. `npm run docs:dev` previews it.

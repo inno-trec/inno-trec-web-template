@@ -41,7 +41,7 @@ The two packages are generated from the design system repository. Do not edit th
 | [Getting started](docs/getting-started.md) | Create a tool, add a page, connect your backend, deploy |
 | [Page patterns](docs/page-patterns.md) | Build monitoring, performance, data checks, alerts, lists with detail, step flows, forms and account screens the way the design system expects |
 | [Design rules](docs/design-rules.md) | Check what the design system requires before you design a screen |
-| [Components](docs/reference/components.md) | Look up when to use each of the 35 components and what it needs |
+| [Components](docs/reference/components.md) | Look up when to use each of the 40 components and what it needs |
 | [Tokens and Tailwind](docs/tokens-and-tailwind.md) | Use the right class names, colors and spacing |
 | [Architecture](docs/architecture.md) | Understand how the repository fits together |
 | [Troubleshooting](docs/troubleshooting.md) | Fix a problem someone has already hit |

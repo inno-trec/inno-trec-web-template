@@ -22,16 +22,16 @@ Status: **To do**, **In progress**, **Done** (keep done items until the next rel
 | 10 | Virtual energy allocation per member (manager view) | 1, 4 | 2 | To do | |
 | 11 | Credit rules per community (configuration page) | 4 | 3 | Blocked | Waits for ECMS open questions 1, 3 and 11. |
 | 12 | Market insights for members (credit value, prices) | 4 | 3 | To do | Needs a chart rule and a data source. |
-| 13 | File upload (maintenance photos) | 3 | 3 | To do | Design system component. |
+| 13 | File upload (maintenance photos) | 3 | 3 | Done | `FileUpload` (design system); photos when an alert is resolved. |
 | 14 | Settings page (PV system registration: kWp, tilt, azimuth, commissioning date) | 2, 3 | 3 | To do | |
 | 15 | Roles in the interface: hide pages a role cannot open, explain when access is missing | All | 2 | Done | `roles` in `NAV`, `allowed()` in `src/auth/session.tsx`. Read-only views inside a page are still to do. |
 | 16 | Map the ECMS credit data into the contract | 4 | — | Dropped | Went with item 1. |
 | 17 | Describe live updates in AsyncAPI | 1, 3 | — | Dropped | Went with item 1. |
 | 18 | Account screens: sign in, ask for an account with manager approval, accept an invitation, forgot and reset password, your account, sign out | All | 1 | Done | `src/pages/auth/`, `AccountPage`, approval on the Users page. Design system: `AuthLayout`, `PasswordField`. |
 | 19 | Documentation site with the starter as a live demo | All | 1 | Done | GitLab Pages (`pages` job in `.gitlab-ci.yml`). Decisions, tracking and the ECMS open questions stay out of the site (`INTERNAL` in `docs/.vitepress/config.mts`). |
+| 20 | More shared components for the work package's tools | All | 1 | Done | `Tabs`, `Pagination`, `EmptyState`, `Toast`, `FileUpload`, used in the starter. The list is closed: new components come from the teams' requests. |
 | 21 | Move to gitlab.up.pt: repository, CI, Pages, releases | All | 1 | Done | GitHub repositories archived. CI runs on a temporary group runner on les2-turbo-01 until FEUP provides one. The release job runs for the first time at v0.2.0. |
 | 22 | Automatic dependency updates (Dependabot did this on GitHub) | All | 3 | To do | Today: `npm outdated` once a month. Renovate is an option if the runners allow it. |
-| 20 | More shared components for the work package's tools (list to agree with the teams) | All | 1 | To do | Candidates: file upload (item 13), empty state, tabs, pagination, toast for saved changes. |
 
 ## Decisions waiting for an owner
 
