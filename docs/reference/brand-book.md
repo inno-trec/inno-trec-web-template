@@ -138,6 +138,5 @@ Rules that apply to all of them:
 - Components display what the backend reports and collect input. Valuation, limits, balance rules, eligibility, signing and recording are the backend's job.
 - Write amounts with their unit, with + or − in activity lists. Members see "credits"; managers see "EC".
 - Ledger records are final once written: there is no "pending" or "failed" transaction. Requests that wait for the community manager (exchanging credits for money) are shown as requests, not as transactions.
-- Open questions about the specification are listed in the section "Open questions"; components do not take a position on them.
 - Each component's README lists the props it needs.
 
