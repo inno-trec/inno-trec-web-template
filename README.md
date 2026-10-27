@@ -16,12 +16,23 @@ The repository holds the template and example apps only. Each team builds its ow
 
 ## Start in two minutes
 
+To build a tool, create it from the starter:
+
+```sh
+npm create @inno-trec/tool my-tool
+cd my-tool && npm install && npm run dev    # http://localhost:5173
+```
+
+The new folder holds only your tool's code. The components and tokens come from npm (`@inno-trec/ui-web`, `@inno-trec/tokens`), and `npm update` brings new versions. Read [Getting started](docs/getting-started.md).
+
+To work on the template itself, clone this repository:
+
 ```sh
 npm install
 npm run dev          # serves the starter at http://localhost:5173
 ```
 
-You get a minimal tool: a top bar, side navigation, the EU funding footer, the account screens (sign in, ask for an account, invitation, password reset, your account), user management, and one example page to replace with your own. Sign in as `ana.ribeiro@example.org` with the password `sample-password`. Edit `apps/web-starter/src/pages/` and the browser updates.
+The starter is a minimal tool: a top bar, side navigation, the EU funding footer, the account screens (sign in, ask for an account, invitation, password reset, your account), user management, and one example page to replace with your own. Sign in as `ana.ribeiro@example.org` with the password `sample-password`. Edit `apps/web-starter/src/pages/` and the browser updates.
 
 Two example apps hold complete pages to copy:
 
@@ -34,7 +45,6 @@ The documentation is also a website with the template demo as a live demo and ev
 
 The template serves the INNO-TREC web tools: energy monitoring (consumption, PV, storage), PV yield and performance, asset maintenance, and the energy credit system.
 
-To build a tool of your own, read [Getting started](docs/getting-started.md).
 
 ## What is inside
 
@@ -80,6 +90,7 @@ The two packages are generated from the design system repository. Do not edit th
 | `npm run pages:build` | Builds the website and the demo into `docs/.vitepress/dist/` |
 | `npm run tokens` | Rebuilds the tokens package from `tokens.json` |
 | `npm run sync:ds` | Copies the latest design system into this repository |
+| `npm run packages:pack` | Builds the npm packages into `.publish/` without publishing them |
 | `npm run export:tokens -- <folder>` | Copies the tokens into another project, such as the mobile app |
 
 ## What this template does not include

@@ -76,7 +76,11 @@ The template version is the `version` in the root `package.json`. It follows sem
    git push --follow-tags
    ```
 
-3. The tag pipeline runs all checks, confirms that the tag matches `package.json` and that `CHANGELOG.md` has a section for it (`release-notes`), and creates a GitLab release with that section as its notes (`release`).
+3. The tag pipeline runs all checks, confirms that the tag matches `package.json` and that `CHANGELOG.md` has a section for it (`release-notes`), creates a GitLab release with that section as its notes (`release`), and publishes the npm packages (`npm-publish`).
+
+The `npm-publish` job runs `scripts/publish-packages.mjs`. It publishes `@inno-trec/tokens`, `@inno-trec/ui-web` and `@inno-trec/create-tool` with the root `package.json` version; the `version` inside each package folder is not used. It copies each package to `.publish/` and publishes the copy, so the repository does not change. `@inno-trec/create-tool` carries `apps/web-starter` as its template, with its README and `.gitignore` from `packages/create-tool/files/`. Run `npm run packages:pack` to build the packages into `.publish/` and try them before a release.
+
+The job needs the CI/CD variable `NPM_TOKEN` (masked and protected): an npm granular access token that can publish the `@inno-trec` scope. Protect the `v*` tags in **Settings → Repository → Protected tags**, so only maintainers can start a release. A version that is already on npm is skipped, so the job can run again.
 
 ## Keeping versions current
 
@@ -87,12 +91,6 @@ The template uses the newest stable release of Node and of every dependency, so 
 
 ## Telling teams about changes
 
-A team that wants an update from the template can compare against it:
+Teams receive the design system as npm packages: each release publishes `@inno-trec/tokens` and `@inno-trec/ui-web`, and a team takes it with `npm update` (see [Getting started](getting-started.md#update-the-design-system)). Write the changelog section for them: say what changed in the components and what a team must change in its own code.
 
-```sh
-git remote add template git@gitlab.up.pt:inno-trec/inno-trec-web-template.git   # if you do not have it yet
-git fetch template
-git diff HEAD template/main -- packages scripts docs apps/web-starter
-```
-
-Packages, scripts and docs are safe to take as they are. For `apps/web-starter`, apply only the changes that fit their tool. The example apps (`apps/template-demo`, `apps/credits-example`) are for copying pages from: compare them the same way when a team wants a new pattern.
+The pages a team created with `npm create @inno-trec/tool` are its own and do not update. When the starter's pages get a fix that teams should take, say so in the changelog and name the files in `apps/web-starter`.

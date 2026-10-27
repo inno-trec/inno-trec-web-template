@@ -17,9 +17,10 @@ INNO-TREC design system repository          (source of truth: tokens, components
 │  apps/credits-example  example pages for energy credit tools             │
 └──────────────────────────────────────────────────────────────────────────┘
         │
-        │  copied into a new project (git clone, then push)
+        │  a vX.Y.Z tag publishes to npmjs.com: @inno-trec/tokens, @inno-trec/ui-web,
+        │  @inno-trec/create-tool (npm create @inno-trec/tool, a copy of apps/web-starter)
         ▼
-each team's own repository                  (their tools, their backend)
+each team's own repository                  (their tools, their backend; the packages as dependencies)
 ```
 
 The design system repository decides how things look and behave. This repository decides how a team starts a tool with that look. Each team's repository decides what the tool does.

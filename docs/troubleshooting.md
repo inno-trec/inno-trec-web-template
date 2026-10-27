@@ -36,19 +36,19 @@ Problems that have already come up, with the cause and the fix.
 
 **Cause.** `styles.css` loads Figtree and Open Sans from Google Fonts when the page opens. A network that blocks Google, or an offline machine, falls back to the system font.
 
-**Fix.** On a restricted network, host the font files yourself and replace the `@import` line at the top of `packages/ui-web/src/styles.css`. That file is generated, so make the change in the design system repository and sync, or ask for a self-hosted option.
+**Fix.** On a restricted network, host the font files yourself and load them from your own `@font-face` rules. `@inno-trec/ui-web/styles.css` imports Google Fonts on its first line; it comes from the design system, so ask its owners for a self-hosted option rather than editing it in `node_modules`.
 
-## A type error appears after `npm run sync:ds`
+## A type error appears after updating `@inno-trec/ui-web`
 
 **Cause.** A component prop was added, renamed or removed in the design system.
 
-**Fix.** Read the diff of `packages/ui-web/src/index.d.ts` and `docs/reference/components.md`, then update your pages. Commit the sync separately so the cause is easy to find.
+**Fix.** Read the release's section in the [changelog](https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/blob/main/CHANGELOG.md) and the [component guide](reference/components.md), then update your pages. Commit the update separately so the cause is easy to find.
 
 ## `Cannot find module '@inno-trec/ui-web'`
 
-**Cause.** Dependencies were installed inside an app folder (such as `apps/web-starter`) instead of at the root. The packages are npm workspaces and link only from the root.
+**Cause.** In your tool: the packages are not installed yet. In the template repository: dependencies were installed inside an app folder instead of at the root, where the npm workspaces link.
 
-**Fix.** Run `npm install` in the repository root.
+**Fix.** Run `npm install` in your tool's folder, or in the template repository's root.
 
 ## `Invalid hook call` or two copies of React
 
@@ -78,7 +78,7 @@ Problems that have already come up, with the cause and the fix.
 
 **Cause.** Playwright downloads its browser separately from `npm install`.
 
-**Fix.** Run `npx -w web-starter playwright install chromium` once. On Linux, add `--with-deps` to install the system libraries as well.
+**Fix.** Run `npx playwright install chromium` once (in the template repository: `npx -w web-starter playwright install chromium`). On Linux, add `--with-deps` to install the system libraries as well.
 
 ## `npm run check:generated` fails
 
