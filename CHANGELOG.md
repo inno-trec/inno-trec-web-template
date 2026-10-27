@@ -4,6 +4,10 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ## [Unreleased]
 
+### Fixed
+
+- Links from the documentation site to source files (for example the example pages) opened a 404 on GitHub. They now open the file.
+
 ## [1.0.1] - 2026-10-27
 
 ### Changed

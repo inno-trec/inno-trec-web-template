@@ -88,7 +88,7 @@ export default defineConfig({
         if (href && !/^([a-z]+:|#|\/)/i.test(href)) {
           const target = path.posix.normalize(path.posix.join('docs', path.posix.dirname(env.relativePath), href));
           const [file, hash] = target.split('#');
-          if (!target.startsWith('docs/')) tokens[idx].attrSet('href', `${REPO}/-/blob/main/${file}${hash ? `#${hash}` : ''}`);
+          if (!target.startsWith('docs/')) tokens[idx].attrSet('href', `${REPO}/blob/main/${file}${hash ? `#${hash}` : ''}`);
         }
         return render(tokens, idx, options, env, self);
       };
