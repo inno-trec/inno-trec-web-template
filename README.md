@@ -13,7 +13,7 @@ npm run dev          # serves the starter at http://localhost:5173
 
 You get a tool with a top bar, side navigation, the EU funding footer and example pages on synthetic data: sign in and the other account screens, an energy overview with time-series charts, PV performance against references, checks of agreement between data sources, maintenance alerts, assets, and user management with forms in dialogs. Sign in as `ana.ribeiro@example.org` with the password `sample-password`. Edit `apps/web-starter/src/pages/` and the browser updates.
 
-The documentation is also a website with the starter as a live demo (GitLab Pages). Preview it with `npm run docs:dev`.
+The documentation is also a website with the starter as a live demo and every component running in the component guide (GitLab Pages). Preview it with `npm run docs:dev`.
 
 The template serves the INNO-TREC web tools: energy monitoring (consumption, PV, storage), PV yield and performance, asset maintenance, and the energy credit system. The starter fits the first three. For credit screens, run `npm run dev:credits` and copy pages from `apps/credits-example/`.
 

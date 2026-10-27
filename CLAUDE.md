@@ -23,7 +23,7 @@ npm run build                        # typecheck + vite build for every app (app
 npm test                             # Playwright smoke tests (needs: npx -w web-starter playwright install chromium)
 npx -w web-starter playwright test -g "unknown"   # run one test by name
 npm run check:generated              # fail if a generated file differs from its hash in design-system.lock.json
-npm run docs:dev                     # preview the documentation website (VitePress, docs/.vitepress/)
+npm run docs:dev                     # preview the documentation website (VitePress, docs/.vitepress/), after building the component gallery
 npm run pages:build                  # build the website with the starter as demo/ into docs/.vitepress/dist
 npm run build -w web-starter         # build one app
 npm run tokens                       # rebuild packages/tokens/dist from tokens.json
@@ -53,7 +53,7 @@ design system repo ──npm run sync:ds──► packages/tokens, packages/ui-w
 
 - `packages/tokens/tokens.json` and `packages/tokens/dist/*`
 - `packages/ui-web/src/*` and `packages/ui-web/assets/` (logos and the EU funding emblem; its `package.json` is hand-maintained)
-- `docs/reference/*`
+- `docs/reference/*` (including `docs/reference/previews/`, each component's example page)
 - `design-system.lock.json`
 
 Generated files start with a `GENERATED` banner. The sync records a SHA-256 hash of each one in `design-system.lock.json`, and `npm run check:generated` fails in CI when a file differs. Only re-running the sync updates the hashes. To change a color, component or brand rule, change the design system repository and re-sync. If the sync script fails because `bundle.js` changed shape, fix the script, not the output.

@@ -4,6 +4,7 @@ apps/*/dist-pages/
 docs/.vitepress/dist/
 docs/.vitepress/cache/
 docs/public/logo.png
+docs/public/gallery/
 .playwright-mcp/
 *.log
 .DS_Store
