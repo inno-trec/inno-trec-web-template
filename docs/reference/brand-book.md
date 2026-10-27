@@ -129,6 +129,7 @@ React 18 components under the global `InnoTrec` (load React and ReactDOM 18, the
 - **Manager screens:** `AccountCard`, `AccountList`, `StatTile`, `DataTable`, `Identifier`, `ConfidenceBadge`, `PurposeTag` (technical mode).
 - **Shared:** `Button`, `TextField`, `Select`, `Card`, `Badge`, `InlineAlert`, `Icon`, `PurposeTag`.
 - **Forms:** `TextField`, `Select`, `Textarea`, `DateField`, `DateRangeField`, `Checkbox`, `RadioGroup`, `Switch`, `PasswordField` (with Show/Hide, so a new password is asked once), and `Dialog` for short tasks and confirmations. Every control has a visible label; the backend validates what the form sends, and the form shows its errors next to the fields.
+- **Lists and messages:** `Tabs` (views of the same content on one page), `Pagination` (Previous and Next for a list the backend sends in pages, with its count), `EmptyState` (what a section shows before it has content, with the action that adds the first item) and `Toast` (a short confirmation after a change is saved; errors stay on the page). `FileUpload` attaches files to a form; the backend checks their type and size.
 - **Shell:** `TopBar`, `SideNav`, `Footer`, `AppShell`, and `AuthLayout` for screens without a session (sign in, create an account, accept an invitation, reset a password).
 - **Signing in:** one task per screen. Errors do not tell an attacker which part was wrong ("The email or password is wrong"), and a reset request gets the same answer whether the email exists or not. Fields carry `autoComplete` (`username`, `current-password`, `new-password`) so password managers work.
 
@@ -137,6 +138,5 @@ Rules that apply to all of them:
 - Components display what the backend reports and collect input. Valuation, limits, balance rules, eligibility, signing and recording are the backend's job.
 - Write amounts with their unit, with + or − in activity lists. Members see "credits"; managers see "EC".
 - Ledger records are final once written: there is no "pending" or "failed" transaction. Requests that wait for the community manager (exchanging credits for money) are shown as requests, not as transactions.
-- Open questions about the specification are listed in the section "Open questions"; components do not take a position on them.
 - Each component's README lists the props it needs.
 

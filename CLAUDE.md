@@ -6,7 +6,7 @@ When asked to explain something, explain it using the spirit of ASD STE100. Keep
 
 ## What this repository is
 
-A starter template for INNO-TREC web tools: energy monitoring (consumption, PV, storage), PV yield and performance, asset maintenance, and the energy credit system (ECMS). It packages the INNO-TREC design system (tokens, React components, brand rules) with a working React app, so teams copy the repository ("Use this template") and build their own tool on top of it. The goal is a setup that different frontend and backend stacks can reuse: the tokens package is the stack-neutral layer (Tailwind preset, CSS variables, JS constants), and `ui-web` is the React-on-the-web layer.
+A starter template for INNO-TREC web tools: energy monitoring (consumption, PV, storage), PV yield and performance, asset maintenance, and the energy credit system (ECMS). It packages the INNO-TREC design system (tokens, React components, brand rules) with a working React app, so teams create a tool with `npm create @inno-trec/tool` and build on top of it. The starter app is minimal (frame, account screens, one example page); the example apps hold the complete pages to copy. The goal is a setup that different frontend and backend stacks can reuse: the tokens package is the stack-neutral layer (Tailwind preset, CSS variables, JS constants), and `ui-web` is the React-on-the-web layer.
 
 The design system itself lives in a separate repository (by default `../inno-trec-design-system`, also published in Claude Design). It is the source of truth for anything visual.
 
@@ -17,25 +17,27 @@ Run everything from the repository root. The packages are npm workspaces and lin
 ```sh
 npm install
 npm run dev                          # web-starter at http://localhost:5173
+npm run dev:demo                     # template-demo (monitoring, PV, maintenance pages with charts)
 npm run dev:credits                  # credits-example (ECMS pages)
 npm run typecheck                    # tsc --noEmit in every workspace
 npm run build                        # typecheck + vite build for every app (apps/*/dist/)
 npm test                             # Playwright smoke tests (needs: npx -w web-starter playwright install chromium)
 npx -w web-starter playwright test -g "unknown"   # run one test by name
 npm run check:generated              # fail if a generated file differs from its hash in design-system.lock.json
-npm run docs:dev                     # preview the documentation website (VitePress, docs/.vitepress/)
+npm run docs:dev                     # preview the documentation website (VitePress, docs/.vitepress/), after building the component gallery
 npm run pages:build                  # build the website with the starter as demo/ into docs/.vitepress/dist
 npm run build -w web-starter         # build one app
 npm run tokens                       # rebuild packages/tokens/dist from tokens.json
 npm run sync:ds [-- <path-to-ds>]    # copy the design system in (or set INNO_TREC_DS)
 npm run export:tokens -- <folder>    # copy tokens into another project (e.g. the Expo app)
+npm run packages:pack                # build the npm packages into .publish/ (no publish)
 ```
 
-There is no linter and no unit test runner. CI (`.github/workflows/ci.yml`) runs `check:generated`, `typecheck`, `build` and `npm test` on the Node in `.nvmrc` (required) and on the newest Node (warning only). The smoke tests in `apps/web-starter/e2e/` open every page listed in the side navigation at 1440px and 400px wide and fail on sideways scroll, a missing heading or a console error. They read the pages from the rendered nav, so a new `NAV` entry is tested automatically. A wide table in its own scroll container does not count as sideways scroll.
+There is no linter and no unit test runner. CI (`.github/workflows/ci.yml`, GitHub Actions) runs `check:generated`, `typecheck`, `build`, the docs site build and `npm test` on Node 24 (required, keep in step with `.nvmrc`) and on the newest Node (warning only). `pages.yml` publishes the docs site (GitHub Pages) with `template-demo` as `demo/`. The smoke tests in each app's `e2e/` open every page listed in the side navigation at 1440px and 400px wide and fail on sideways scroll, a missing heading or a console error. They read the pages from the rendered nav, so a new `NAV` entry is tested automatically. A wide table in its own scroll container does not count as sideways scroll.
 
-Versions: the template version is the root `package.json` version, recorded in `CHANGELOG.md` (Keep a Changelog). Pushing a `vX.Y.Z` tag runs `.github/workflows/release.yml`, which checks the tag against `package.json` and `CHANGELOG.md` and creates the GitHub release. Add every user-visible change under `## [Unreleased]` in `CHANGELOG.md`.
+Versions: the template version is the root `package.json` version, recorded in `CHANGELOG.md` (Keep a Changelog). Pushing a `vX.Y.Z` tag runs `release.yml`: the checks, a check of the tag against `package.json` and `CHANGELOG.md`, the GitHub release, and `npm-publish`, which publishes `@inno-trec/tokens`, `@inno-trec/ui-web` and `@inno-trec/create-tool` to npmjs.com with the root version (`scripts/publish-packages.mjs`, npm trusted publishing in the `npm` environment, no token). `main` takes changes only through pull requests with passing checks; only organization admins create `v*` tags. Add every user-visible change under `## [Unreleased]` in `CHANGELOG.md`.
 
-Node: `.nvmrc` pins the newest LTS release (24); `engines` requires >= 24. The policy is "newest stable": see decision 7 in `docs/decisions.md`.
+Node: `.nvmrc` pins the newest LTS release (24); `engines` requires >= 24. The policy is "newest stable": each copy starts with the longest support window.
 
 ## Architecture
 
@@ -43,7 +45,8 @@ Node: `.nvmrc` pins the newest LTS release (24); `engines` requires >= 24. The p
 design system repo ──npm run sync:ds──► packages/tokens, packages/ui-web, docs/reference, design-system.lock.json
                                               │
                                               ▼
-                                      apps/web-starter (Vite + React 19 + TS + Tailwind 3.4 + React Router 8 + ECharts 6)
+                                      apps/web-starter (Vite + React 19 + TS + Tailwind 3.4 + React Router 8): the minimal starter
+                                      apps/template-demo (same stack + ECharts 6): monitoring, PV, maintenance pages
                                       apps/credits-example (same stack, credit pages)
 ```
 
@@ -53,7 +56,7 @@ design system repo ──npm run sync:ds──► packages/tokens, packages/ui-w
 
 - `packages/tokens/tokens.json` and `packages/tokens/dist/*`
 - `packages/ui-web/src/*` and `packages/ui-web/assets/` (logos and the EU funding emblem; its `package.json` is hand-maintained)
-- `docs/reference/*`
+- `docs/reference/*` (including `docs/reference/previews/`, each component's example page)
 - `design-system.lock.json`
 
 Generated files start with a `GENERATED` banner. The sync records a SHA-256 hash of each one in `design-system.lock.json`, and `npm run check:generated` fails in CI when a file differs. Only re-running the sync updates the hashes. To change a color, component or brand rule, change the design system repository and re-sync. If the sync script fails because `bundle.js` changed shape, fix the script, not the output.
@@ -71,16 +74,25 @@ Generated files start with a `GENERATED` banner. The sync records a SHA-256 hash
 
 ### Starter app wiring (`apps/web-starter`)
 
+The starter holds only what every tool needs. Patterns go in the example apps, not here.
+
 - `src/main.tsx`: `BrowserRouter` (with `basename` from `BASE_URL`) and `SessionProvider`, imports `styles.css` and then `index.css`.
 - `src/App.tsx`: the screens without a session (`sign-in`, `sign-up`, `invitation`, `forgot-password`, `reset-password`, `sign-out`), then the routes nested under `RequireSession` and `ToolShell`.
 - `src/auth/session.tsx`: who is signed in (`SessionProvider`, `useSession`), the redirect to `/sign-in?next=…`, and `allowed(role, roles)`. The sample keeps the session in browser storage; a real tool takes it from its backend or identity provider. `src/config.ts` holds `TOOL_NAME`, `PRIVACY_URL` and `FOOTER_LINKS`.
 - `src/layouts/ToolShell.tsx`: wraps the design system `AppShell`. The `NAV` array drives the side navigation, the page heading (`label`) and who sees each page (`roles`). The top bar shows the signed-in person, "Account" and "Sign out". Nav links get the base path from `import.meta.env.BASE_URL`. Screens without a session use `src/layouts/SignedOutFrame.tsx` (the design system's `AuthLayout`). It passes a `Footer` with the EU funding emblem (`@inno-trec/ui-web/assets/funding/eu-funded-negative.png`) and `FOOTER_LINKS`; every tool keeps the footer.
 - Adding a page takes three edits: a file in `src/pages/`, a `<Route>` in `App.tsx`, and a `NAV` entry.
-- Pages: `OverviewPage.tsx` (monitoring: period filter, totals, power chart in kW, battery chart in %, table view), `PerformancePage.tsx` (PV indicators per system against history and community references, `BarChart` with a dotted reference line), `DataChecksPage.tsx` (agreement between data sources: table of deviations, one source's deviation over time with a tolerance band), `AlertsPage.tsx` (corrective and predictive alerts: filters, acknowledge, resolve in a `Dialog`), `AssetsPage.tsx` (list with detail and the asset's open alerts), `UsersPage.tsx` (forms in `Dialog`s; approve or decline account requests), `AccountPage.tsx` (profile and password) and `pages/auth/` (sign in, ask for an account, accept an invitation, forgot and reset password). All show loading, empty and error states. `src/forms/useSubmit.ts` sends a form and keeps the backend's messages per field. `src/labels.ts` holds the words and tones for API codes.
+- Pages: `HomePage.tsx` (the example page to replace: a list of sample records with loading, empty and error states), `UsersPage.tsx` (forms in `Dialog`s; approve or decline account requests), `AccountPage.tsx` (profile and password), `NotFoundPage.tsx` and `pages/auth/` (sign in, ask for an account, accept an invitation, forgot and reset password). `src/forms/useSubmit.ts` sends a form and keeps the backend's messages per field. `src/format.ts` holds number and date formats; `src/labels.ts` the words and tones for API codes.
+- Data layer: `src/data/fakeServer.ts` is a sample backend in the shapes of `src/data/types.ts` (sample records and accounts; `?demo=empty` / `?demo=error`). `src/data/api.ts` is the client the pages call: it turns every failure into `ApiError` (`src/data/errors.ts`: a `code` and `fields`). Replacing the backend means changing `types.ts` and `api.ts` and deleting `fakeServer.ts`. Data APIs and their contracts belong to each system, not to the template.
+- `src/index.css` holds a workaround that hides the `TopBar` title and user below 560px. Remove it when the design system fixes the gap. The example apps carry the same workaround.
+
+### Example apps
+
+`apps/template-demo` is the complete monitoring, PV performance and maintenance tool, built on the same frame and account screens as the starter (the files are copies; keep them in step). It is the `demo/` on the docs site (`scripts/build-pages.mjs`), Playwright port 4175.
+
+- Pages: `OverviewPage.tsx` (monitoring: period filter, totals, power chart in kW, battery chart in %, table view), `PerformancePage.tsx` (PV indicators per system against history and community references, `BarChart` with a dotted reference line), `DataChecksPage.tsx` (agreement between data sources: table of deviations, one source's deviation over time with a tolerance band), `AlertsPage.tsx` (corrective and predictive alerts: `Tabs` by state with the backend's counts, `Pagination`, acknowledge, resolve in a `Dialog` with photos in `FileUpload`, a `Toast` after each change), `AssetsPage.tsx` (list with detail and the asset's open alerts), plus the starter's Users, Account and auth pages. All show loading, empty (`EmptyState`) and error states.
 - `src/charts/TimeSeriesChart.tsx` wraps Apache ECharts (tree-shaken imports from `echarts/core`). It takes `SeriesSpec`s whose `color` must be a series token (`colors['series-pv']` from `@inno-trec/tokens`), draws one y-axis, a legend, end labels when they fit, dashed estimates and gaps for `null`. Pages import `LazyTimeSeriesChart`, which loads ECharts on demand. `src/charts/format.ts` holds the shared number and time formats.
 - Times follow the community's time zone, sent by the backend (`EnergyReport.timeZone`), never the reader's. `src/time/zone.ts` converts with `Intl` only; `TimeSeriesChart` shifts instants by the zone offset and sets `useUTC`, because ECharts has no time zone option. Pass `timeZone` to the chart and to the `format.ts` functions.
-- Data layer: `src/data/fakeServer.ts` is a sample backend in the shapes of `src/data/types.ts` (it computes totals, indicators and statuses, keeps the sample accounts; `?demo=empty` / `?demo=error`), over `src/data/synthetic.ts` (deterministic 15-minute samples). `src/data/api.ts` is the client the pages call: it adapts the JSON (ISO times to numbers) and turns every failure into `ApiError` (`src/data/errors.ts`: a `code` and `fields`). Replacing the backend means changing `types.ts` and `api.ts` and deleting `fakeServer.ts`. Data APIs and their contracts belong to each system, not to the template (decision 12).
-- `src/index.css` holds a workaround that hides the `TopBar` title and user below 560px. Remove it when the design system fixes the gap.
+- Data: `src/data/fakeServer.ts` computes totals, indicators and statuses over `src/data/synthetic.ts` (deterministic 15-minute samples); `src/data/api.ts` adapts the JSON (ISO times to numbers).
 
 `apps/credits-example` holds the ECMS pages (ledger overview, wallets, send flow, member wallet) with ECMS sample data, its own fake backend and the same smoke tests on port 4174. `apps/*` may hold more example apps. Each one depends on `@inno-trec/tokens` and `@inno-trec/ui-web` at version `*`, should teach one domain or pattern, and needs its own Playwright port (see `docs/contributing.md`).
 
@@ -102,17 +114,17 @@ Credit screens only:
 
 - A negative balance is normal: show it with a real minus sign (−) in normal text, never red. Never predict a balance in the UI.
 - Member screens never show EC, wallet IDs, purpose codes, hashes or formulas.
-- Do not decide anything listed in `docs/reference/open-questions.md` in the UI; flag it instead.
 - Use American English for interface text and docs, and write the project name as "INNO-TREC".
 
-## Constraints to keep (see `docs/decisions.md`)
+## Constraints to keep
 
 - Stay on Tailwind 3.4. NativeWind 4 (mobile) needs `tailwindcss ~3`, and web and mobile share the preset. Never run `npm audit fix --force`, because it upgrades to Tailwind 4.
 - Web and mobile share tokens, not components. The Expo app lives in a separate repository and receives tokens via `export:tokens`.
 - Use Vite with client-side routing, not a framework. Deployment is static; for sub-path hosting set `base` in `vite.config.ts` (the router and nav links follow it).
-- The packages are copied into each team's repository, not published.
-- Charts use Apache ECharts with tree-shaken imports, loaded on demand (decision 9).
+- Teams start with `npm create @inno-trec/tool` (`packages/create-tool`, which carries a copy of `apps/web-starter` when published) and install `@inno-trec/tokens` and `@inno-trec/ui-web` from npmjs.com. Keep `apps/web-starter` free of anything that needs the monorepo: it must run on its own after `npm create`.
+- Charts use Apache ECharts with tree-shaken imports, loaded on demand. They live in `template-demo`, not in the starter.
+- The starter stays minimal; a new pattern goes in an example app.
 
 ## Documentation map
 
-The `docs/` files were checked against a running copy; keep them accurate when behavior changes. Start with `docs/getting-started.md` (team workflow), `docs/architecture.md`, `docs/tokens-and-tailwind.md` (class names), `docs/troubleshooting.md` (known issues) and `docs/reference/components.md` (when to use each of the 35 components; props are typed in `packages/ui-web/src/index.d.ts`).
+The `docs/` files were checked against a running copy; keep them accurate when behavior changes. Start with `docs/getting-started.md` (team workflow), `docs/architecture.md`, `docs/tokens-and-tailwind.md` (class names), `docs/troubleshooting.md` (known issues) and `docs/reference/components.md` (when to use each of the 40 components; props are typed in `packages/ui-web/src/index.d.ts`).

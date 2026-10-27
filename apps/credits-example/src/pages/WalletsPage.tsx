@@ -21,8 +21,7 @@ export function WalletsPage() {
           wallets: [{ id: selected.id, type: selected.type, balance: selected.balance, status: selected.status }],
         }}
         // TODO: connect both actions to your backend. They do nothing in the starter.
-        // Ask for confirmation before you suspend a wallet. The specification names no error code
-        // for a suspended member yet (open question 10 in docs/reference/open-questions.md).
+        // Ask for confirmation before you suspend a wallet.
         actions={[
           <Button key="history" size="sm" onClick={() => console.info('TODO: open the history of', selected.id)}>
             History

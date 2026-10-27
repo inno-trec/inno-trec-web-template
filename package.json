@@ -1,8 +1,8 @@
 {
   "name": "inno-trec-template",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "private": true,
-  "description": "Starter template and example apps for INNO-TREC web tools, built on the INNO-TREC design system.",
+  "description": "Starter app and example apps for INNO-TREC web tools, built on the INNO-TREC design system.",
   "workspaces": [
     "packages/*",
     "apps/*"
@@ -12,6 +12,7 @@
   },
   "scripts": {
     "dev": "npm run dev -w web-starter",
+    "dev:demo": "npm run dev -w template-demo",
     "dev:credits": "npm run dev -w credits-example",
     "build": "npm run build --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
@@ -20,8 +21,9 @@
     "export:tokens": "node scripts/export-tokens.mjs",
     "test": "npm run test --workspaces --if-present",
     "check:generated": "node scripts/check-generated.mjs",
-    "docs:dev": "vitepress dev docs",
-    "pages:build": "node scripts/build-pages.mjs"
+    "docs:dev": "node scripts/build-gallery.mjs && vitepress dev docs",
+    "pages:build": "node scripts/build-pages.mjs",
+    "packages:pack": "node scripts/publish-packages.mjs --pack"
   },
   "devDependencies": {
     "vitepress": "1.6.4"

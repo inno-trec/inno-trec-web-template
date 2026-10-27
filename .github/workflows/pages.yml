@@ -17,9 +17,8 @@ concurrency:
 
 jobs:
   build:
-    # Only the template repository publishes. In a copy, delete this line to publish your own site,
-    # and set DOCS_BASE below to "/<your-repository>/".
-    if: github.event.repository.is_template
+    # Only the template repository publishes. In a copy, change the name to your repository's.
+    if: github.repository == 'inno-trec/inno-trec-web-template'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:

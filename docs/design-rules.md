@@ -23,7 +23,7 @@ The first sections apply to every INNO-TREC tool. [Charts](#charts) applies to t
 
 ## Charts
 
-The design system has four series colors with a fixed meaning. Use them through `@inno-trec/tokens` (`colors['series-pv']`) or the Tailwind classes (`bg-series-pv`). The starter's [`TimeSeriesChart`](../apps/web-starter/src/charts/TimeSeriesChart.tsx) applies all of these rules.
+The design system has four series colors with a fixed meaning. Use them through `@inno-trec/tokens` (`colors['series-pv']`) or the Tailwind classes (`bg-series-pv`). The demo's [`TimeSeriesChart`](../apps/template-demo/src/charts/TimeSeriesChart.tsx) applies all of these rules.
 
 | Token | Series |
 | --- | --- |
@@ -51,6 +51,14 @@ The design system has four series colors with a fixed meaning. Use them through 
 - **Write errors as one sentence** that says what to do: "Enter an email address, for example name@example.org."
 - **Confirm in a `Dialog` before an action that takes something away** (deactivate, delete, restart). Use a `danger` button with a verb.
 - **One task per dialog.** Longer forms get their own page.
+- **Confirm a saved change with a `Toast`**, one sentence that names what changed ("Invitation sent to ana@example.org"). Never put an error in a toast: errors stay next to the form until the person acts.
+- **Attach files with `FileUpload`.** The hint says what to attach and the limits; the backend checks type and size and answers per field. Keep the chosen files after a failed submit.
+
+## Lists and empty sections
+
+- **The backend counts and pages long lists.** Show its numbers in `Tabs` counts and in `Pagination` ("1–10 of 42 alerts"); never count rows the page did not receive.
+- **An empty section says why and what to do** with `EmptyState`: "No users yet. Invite the first person who will use this tool." After a filter, say how to see more. A failed load is not empty: show the error and "Try again".
+- **Tabs switch views of the same content.** Not for steps, and not for links to other pages.
 
 ## Accessibility
 
@@ -84,11 +92,7 @@ These rules apply to screens that show energy credits (the ECMS). [`apps/credits
 - **A balance below zero is not an error.** Community and dependent wallets are normally below zero. Show the minus sign in normal text. Never color it red.
 - Components never apply a valuation factor and never predict a balance.
 
-### Things the specification leaves open
-
-The ECMS specification and user stories are ambiguous in places (how members authorize a transfer, how to explain a negative balance, the states of a settlement request, and others). Components do not decide these. Read the [open questions](reference/open-questions.md) before you design a screen that touches one, and do not invent the answer in the interface. Ask the people who own the specification.
-
-## A short checklist before a pull request
+## A short checklist before a review
 
 - [ ] One primary button per screen
 - [ ] No shadows, gradients or rounded corners that you added

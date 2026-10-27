@@ -3,6 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "description": "INNO-TREC design system components for React on the web. Generated from the design system by npm run sync:ds.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inno-trec/inno-trec-web-template.git",
+    "directory": "packages/ui-web"
+  },
+  "homepage": "https://inno-trec.github.io/inno-trec-web-template/",
+  "files": [
+    "src",
+    "assets"
+  ],
   "type": "module",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",

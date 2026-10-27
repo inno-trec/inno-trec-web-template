@@ -59,11 +59,18 @@ test('side navigation changes page without a full reload', async ({ page, viewpo
   expect(await page.evaluate(() => (window as unknown as { __marker?: boolean }).__marker)).toBe(true);
 });
 
-test('the overview draws its charts', async ({ page }) => {
+test('the home page shows its records, the empty state and the error state', async ({ page }) => {
   const errors = collectErrors(page);
   await page.goto('/');
-  await expect(page.locator('[data-chart] canvas')).toHaveCount(2);
+  await expect(page.getByRole('cell', { name: 'First record' })).toBeVisible();
+  await page.goto('/?demo=empty');
+  await expect(page.getByRole('heading', { name: 'No records yet' })).toBeVisible();
   expect(errors).toEqual([]);
+
+  // A failed request shows a message and a way to try again, not an empty page.
+  await page.goto('/?demo=error');
+  await expect(page.getByText('The records could not be loaded')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Try again' })).toBeVisible();
 });
 
 test('a user can be invited and deactivated', async ({ page }) => {
@@ -91,34 +98,6 @@ test('a user can be invited and deactivated', async ({ page }) => {
   const confirm = page.getByRole('dialog', { name: 'Deactivate Teresa Lima?' });
   await confirm.getByRole('button', { name: 'Deactivate' }).click();
   await expect(page.getByText('Teresa Lima is deactivated')).toBeVisible();
-  expect(errors).toEqual([]);
-});
-
-test('the performance and data checks pages draw their charts', async ({ page }) => {
-  const errors = collectErrors(page);
-  await page.goto('/performance');
-  await expect(page.locator('[data-chart] canvas')).toHaveCount(1);
-  await expect(page.getByText('Below normal').first()).toBeVisible();
-  await page.goto('/data-checks');
-  await expect(page.locator('[data-chart] canvas')).toHaveCount(1);
-  await expect(page.getByText('Outside tolerance').first()).toBeVisible();
-  expect(errors).toEqual([]);
-});
-
-test('an alert can be acknowledged and resolved', async ({ page }) => {
-  const errors = collectErrors(page);
-  await page.goto('/alerts');
-  await expect(page.getByRole('heading', { name: 'Inverter 3 stopped with fault F07' })).toBeVisible();
-  await page.getByRole('button', { name: 'Acknowledge' }).click();
-  await expect(page.getByText('Alert acknowledged')).toBeVisible();
-
-  await page.getByRole('button', { name: 'Resolve' }).click();
-  const dialog = page.getByRole('dialog', { name: 'Resolve the alert' });
-  await dialog.getByRole('button', { name: 'Resolve alert' }).click();
-  await expect(dialog.getByText('Write what was done.')).toBeVisible();
-  await dialog.getByRole('textbox', { name: 'What was done' }).fill('Inverter replaced.');
-  await dialog.getByRole('button', { name: 'Resolve alert' }).click();
-  await expect(page.getByText('Alert resolved')).toBeVisible();
   expect(errors).toEqual([]);
 });
 

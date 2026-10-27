@@ -6,15 +6,17 @@ import {
   DataTable,
   DateField,
   Dialog,
+  EmptyState,
   InlineAlert,
   RadioGroup,
   Switch,
   TextField,
   Textarea,
+  Toast,
   type Column,
 } from '@inno-trec/ui-web';
 import { useEffect, useState, type FormEvent } from 'react';
-import { formatDate, formatRelative } from '../charts/format';
+import { formatDate, formatRelative } from '../format';
 import { approveRequest, declineRequest, inviteUser, listUsers, updateUser, type Role, type RoleId, type User } from '../data/api';
 import { useSubmit } from '../forms/useSubmit';
 
@@ -122,7 +124,7 @@ export function UsersPage() {
 
   return (
     <div className="flex flex-col gap-space-4">
-      {requests.length > 0 && !notice && (
+      {requests.length > 0 && (
         <InlineAlert tone="info" title={requests.length === 1 ? `${requests[0].name} asks for an account` : `${requests.length} people ask for an account`}>
           Choose them in the list to approve or decline. They can sign in once you approve.
         </InlineAlert>
@@ -132,16 +134,11 @@ export function UsersPage() {
           Check your connection and try again. Nothing was changed.
         </InlineAlert>
       )}
-      {notice && (
-        <InlineAlert tone="success" title={notice}>
-          The change is saved.
-        </InlineAlert>
-      )}
 
       {users.length === 0 ? (
-        <Card title="Users" actions={invite}>
-          <p className="m-0 text-ink-muted">No users yet. Invite the first person who will use this tool.</p>
-        </Card>
+        <EmptyState icon="person" title="No users yet" action={invite}>
+          Invite the first person who will use this tool.
+        </EmptyState>
       ) : (
         <div className="grid items-start gap-space-4 lg:grid-cols-[minmax(0,1fr)_380px]">
           <Card title="Users" subtitle="Choose a user to see the details" actions={invite} flush>
@@ -175,6 +172,9 @@ export function UsersPage() {
           <DeclineDialog open={open === 'decline'} user={selected} onClose={() => setOpen(null)} onDeclined={() => declined(selected)} />
         </>
       )}
+      <Toast open={!!notice} onClose={() => setNotice(undefined)}>
+        {notice}
+      </Toast>
     </div>
   );
 }

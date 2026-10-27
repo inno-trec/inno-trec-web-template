@@ -10,7 +10,7 @@ This page is for the person who builds the mobile app. Web teams do not need it.
 | --- | --- |
 | Colors, type scale, spacing steps, square corners | Components: `@inno-trec/ui-web` is DOM-based React and does not run in React Native |
 | The Tailwind preset (the same class names on both) | The component styles in `styles.css` |
-| Rules: [design rules](design-rules.md), [brand book](reference/brand-book.md), [open questions](reference/open-questions.md) | |
+| Rules: [design rules](design-rules.md), [brand book](reference/brand-book.md) | |
 
 The mobile app builds its own components from React Native primitives and styles them with the preset's class names, so a `bg-light-blue` button is the same blue on both. For what each component must do, use the [component guide](reference/components.md) and the design system's previews as the specification.
 

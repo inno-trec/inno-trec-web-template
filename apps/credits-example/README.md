@@ -1,6 +1,6 @@
 # credits-example
 
-An example for INNO-TREC tools that work with energy credits (the Energy Credit Management System, ECMS). Start from [`web-starter`](../web-starter) and copy the pages you need from here.
+An example for INNO-TREC tools that work with energy credits (the Energy Credit Management System, ECMS). Start from [`web-starter`](../web-starter) and copy the pages you need from here. For monitoring, PV performance and maintenance pages, see [`template-demo`](../template-demo).
 
 ## What it shows
 
@@ -35,6 +35,5 @@ These rules come from the design system and apply to every screen that shows cre
 - The backend computes every credit amount, balance and limit. The interface displays them.
 - A negative balance is normal: show it with a minus sign in normal text, never red.
 - Member screens never show EC, wallet IDs, purpose codes, hashes or formulas.
-- Do not decide anything listed in the [open questions](../../docs/reference/open-questions.md) in the interface.
 
 The data in `src/data/sample.ts` is example data from ECMS user story 4.

@@ -1,6 +1,6 @@
 # Page patterns
 
-Two apps show the patterns most tools need. `web-starter` holds the patterns of the monitoring, PV performance and maintenance tools (monitoring over time, performance against references, data checks, alerts, lists with detail, forms). `credits-example` holds the patterns of credit tools (ledger overview, step flow, member screen). Each pattern is a real file you can copy. This page explains what each one is for and which rules shape it.
+Two example apps show the patterns most tools need. `template-demo` holds the patterns of the monitoring, PV performance and maintenance tools (monitoring over time, performance against references, data checks, alerts, lists with detail, forms). `credits-example` holds the patterns of credit tools (ledger overview, step flow, member screen). Each pattern is a real file you can copy. This page explains what each one is for and which rules shape it.
 
 All patterns sit inside `ToolShell`, which draws the top bar, the side navigation and the page heading. A page returns its content only.
 
@@ -16,7 +16,7 @@ Put blocks in a column with `flex flex-col gap-space-4`. Put wide content in a g
 
 ## 1. Monitoring over time
 
-Source: [`web-starter/src/pages/OverviewPage.tsx`](../apps/web-starter/src/pages/OverviewPage.tsx)
+Source: [`template-demo/src/pages/OverviewPage.tsx`](../apps/template-demo/src/pages/OverviewPage.tsx)
 
 Use it for consumption, PV production and storage over a period. Put a period filter on top, two to four `StatTile` components with the totals, then one chart per unit.
 
@@ -71,7 +71,7 @@ Rules for this pattern:
 
 ## 3. List with detail
 
-Sources: [`web-starter/src/pages/AssetsPage.tsx`](../apps/web-starter/src/pages/AssetsPage.tsx) (assets and maintenance suggestions), [`credits-example/src/pages/WalletsPage.tsx`](../apps/credits-example/src/pages/WalletsPage.tsx) (wallets)
+Sources: [`template-demo/src/pages/AssetsPage.tsx`](../apps/template-demo/src/pages/AssetsPage.tsx) (assets and maintenance suggestions), [`credits-example/src/pages/WalletsPage.tsx`](../apps/credits-example/src/pages/WalletsPage.tsx) (wallets)
 
 Use it when a person scans a list and opens one item. The list sits on the left, and the detail sits on the right at wide widths and below the list on narrow ones.
 
@@ -125,7 +125,7 @@ Rules for this pattern:
 - **One column, at most 480px wide.** Wrap the card in `max-w-[480px]`. Member flows are a single column even on wide screens.
 - **Say that nothing moved when it fails.** The form adds "Your credits were not moved." to every error, also to an `errorMessage` you pass.
 - **Do not predict the balance.** The check step shows the amount and the person only. The result screen shows `newBalance` as the backend reports it.
-- **Do not add steps, or fields the specification does not require.** For example, `TransferForm` does not ask for a purpose code, because P2P transfers have none (open question 4 in the [open questions](reference/open-questions.md)).
+- **Do not add steps, or fields the specification does not require.** For example, `TransferForm` does not ask for a purpose code, because P2P transfers have none.
 - **Let people choose from a list.** `RecipientPicker` lists the people the backend supplies. Never ask someone to type a wallet address.
 
 ## 5. A page with several blocks
@@ -180,7 +180,7 @@ Rules for this pattern:
 
 ## 7. Performance against references
 
-Source: [`web-starter/src/pages/PerformancePage.tsx`](../apps/web-starter/src/pages/PerformancePage.tsx)
+Source: [`template-demo/src/pages/PerformancePage.tsx`](../apps/template-demo/src/pages/PerformancePage.tsx)
 
 Use it to evaluate PV systems: performance ratio, availability, specific yield and efficiency, each against the system's own history and the community as a whole.
 
@@ -198,7 +198,7 @@ Use it to evaluate PV systems: performance ratio, availability, specific yield a
 
 Rules for this pattern:
 
-- **The backend computes the indicators and decides their status.** The page shows "Below normal" when the API says so. The definitions are still open (tracking D2).
+- **The backend computes the indicators and decides their status.** The page shows "Below normal" when the API says so.
 - **A reference is a dotted line**, labeled with its name and value. Dashed lines mean estimates.
 - **Bars have one color**, the series color of what is measured. Never color a bar by its status: the table carries a `Badge` instead.
 - **Show the usual value next to each indicator** ("usually 81"), so a reader can judge it without a second chart.
@@ -206,7 +206,7 @@ Rules for this pattern:
 
 ## 8. Data checks: do the sources agree?
 
-Source: [`web-starter/src/pages/DataChecksPage.tsx`](../apps/web-starter/src/pages/DataChecksPage.tsx)
+Source: [`template-demo/src/pages/DataChecksPage.tsx`](../apps/template-demo/src/pages/DataChecksPage.tsx)
 
 Use it to validate the coherence between sources of the same quantity: a meter, inverter monitoring, a model such as the DSS. For each quantity the backend names one reference source and compares every other source with it.
 
@@ -218,16 +218,18 @@ Rules for this pattern:
 
 ## 9. Alerts inbox
 
-Source: [`web-starter/src/pages/AlertsPage.tsx`](../apps/web-starter/src/pages/AlertsPage.tsx)
+Source: [`template-demo/src/pages/AlertsPage.tsx`](../apps/template-demo/src/pages/AlertsPage.tsx)
 
 Use it for corrective alerts (a failure to repair) and predictive alerts (performance below normal). The alert engine raises them, writes their text and notifies the people responsible; this page shows them and records who handles them.
 
 Rules for this pattern:
 
-- **Filters on top**: state (open by default) and type.
+- **Tabs by state** (Open by default, then New, Acknowledged, Resolved, All) with the counts the backend sends, and a `Select` for the type above them.
+- **The backend pages the list.** `Pagination` in the Card's footer shows "1–5 of 13 alerts" from the backend's `total`. A new tab or filter goes back to page 1.
 - **Severity and state are words with color**: `Badge` in the list, an `InlineAlert` with the backend's text in the detail.
 - **A predictive alert shows its indicator** with the usual value ("Performance ratio 66 % (usually 81 %)").
-- **Acknowledge says someone is on it; resolve asks what was done.** Resolving opens a `Dialog` with a required `Textarea`. The record keeps who acknowledged and what was done.
+- **Acknowledge says someone is on it; resolve asks what was done.** Resolving opens a `Dialog` with a required `Textarea` and optional photos (`FileUpload`); the backend checks their type and size. The record keeps who acknowledged, what was done and the photos.
+- **A `Toast` confirms each change** ("Alert resolved"). Errors stay on the page in an `InlineAlert`.
 - **The asset page links here.** An asset shows its open alerts and an "Open alerts" button.
 
 ## 10. Account screens

@@ -17,7 +17,7 @@ hero:
       link: /reference/components
 features:
   - title: One look for every tool
-    details: Design tokens and 35 components from the INNO-TREC design system. Tailwind handles layout only.
+    details: Design tokens and 40 components from the INNO-TREC design system. Tailwind handles layout only.
   - title: Screens that already work
     details: Sign in, ask for an account, invitations, password reset, your account, users and roles, and pages for monitoring, PV performance, data checks, alerts and assets.
   - title: Rules built in
@@ -26,8 +26,8 @@ features:
 
 ## Use the template
 
-1. On GitHub, choose **Use this template** to create your tool's repository.
+1. Create your tool with `npm create @inno-trec/tool my-tool`, as in [Getting started](getting-started.md).
 2. Follow [Getting started](getting-started.md): install, run, rename the tool, and replace the sample backend in `src/data/`.
 3. Keep the rules in [Design rules](design-rules.md) and the shapes in [Page patterns](page-patterns.md).
 
-The demo runs the starter app with sample data. Sign in as `ana.ribeiro@example.org` with the password `sample-password`.
+The demo runs the template demo app (`apps/template-demo`) with sample data. Sign in as `ana.ribeiro@example.org` with the password `sample-password`.

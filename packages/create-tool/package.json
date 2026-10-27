@@ -1,0 +1,24 @@
+{
+  "name": "@inno-trec/create-tool",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Creates a new INNO-TREC web tool from the starter: npm create @inno-trec/tool my-tool",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inno-trec/inno-trec-web-template.git",
+    "directory": "packages/create-tool"
+  },
+  "homepage": "https://inno-trec.github.io/inno-trec-web-template/",
+  "files": [
+    "index.mjs",
+    "template"
+  ],
+  "type": "module",
+  "bin": {
+    "create-tool": "index.mjs"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

@@ -13,11 +13,7 @@ type Page = NavItem & { href: string; roles?: RoleId[] };
  * everyone). Manager tools may use more than five items; member tools should not.
  */
 const NAV: Page[] = [
-  { id: '/', href: '/', label: 'Overview', icon: 'sun' },
-  { id: '/performance', href: '/performance', label: 'PV performance', icon: 'panel' },
-  { id: '/data-checks', href: '/data-checks', label: 'Data checks', icon: 'check' },
-  { id: '/alerts', href: '/alerts', label: 'Alerts', icon: 'alert' },
-  { id: '/assets', href: '/assets', label: 'Assets', icon: 'wrench' },
+  { id: '/', href: '/', label: 'Home', icon: 'sun' },
   { id: '/users', href: '/users', label: 'Users', icon: 'person', roles: ['admin', 'manager'] },
 ];
 

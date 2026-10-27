@@ -151,7 +151,7 @@ export interface InlineAlertProps {
 export declare function InlineAlert(props: InlineAlertProps): React.ReactElement;
 
 export type IconName = 'sun' | 'wind' | 'plug' | 'battery' | 'clock' | 'wallet' | 'coins' | 'panel' | 'wrench' | 'heart' | 'star' | 'exchange'
-  | 'arrowIn' | 'arrowOut' | 'person' | 'check' | 'info' | 'alert' | 'search' | 'chevron' | 'back';
+  | 'arrowIn' | 'arrowOut' | 'person' | 'check' | 'info' | 'alert' | 'search' | 'chevron' | 'back' | 'upload' | 'file';
 export interface IconProps { name: IconName; size?: number; strokeWidth?: number; /** Set only when the icon is the sole content. */ label?: string; className?: string }
 export declare function Icon(props: IconProps): React.ReactElement;
 
@@ -394,3 +394,110 @@ export interface AuthLayoutProps {
   className?: string;
 }
 export declare function AuthLayout(props: AuthLayoutProps): React.ReactElement;
+
+/** What a section shows when it has nothing yet. */
+export interface EmptyStateProps {
+  /** Default "info". */
+  icon?: IconName;
+  /** What is missing, for example "No alerts yet". */
+  title?: React.ReactNode;
+  /** One sentence: when something will appear, or what to do. */
+  children?: React.ReactNode;
+  /** Usually one Button that starts the first item. */
+  action?: React.ReactNode;
+  /** Heading level of the title. Default 2; use 3 inside a Card. */
+  level?: 2 | 3 | 4;
+  /** No border and no background, for use inside a Card. */
+  plain?: boolean;
+  className?: string;
+}
+export declare function EmptyState(props: EmptyStateProps): React.ReactElement;
+
+export interface TabItem {
+  id: string;
+  label: React.ReactNode;
+  /** A number the backend sends, shown beside the label. */
+  count?: number;
+}
+/** Views of the same content on one page (not steps, not links to other pages). The page keeps `activeId`. */
+export interface TabsProps {
+  tabs: TabItem[];
+  activeId?: string;
+  onChange?: (id: string) => void;
+  /** Names the tab list for screen readers, for example "Alerts by state". */
+  label?: string;
+  /** The active view. Omit it to use the tabs above content that the page renders itself. */
+  children?: React.ReactNode;
+  className?: string;
+}
+export declare function Tabs(props: TabsProps): React.ReactElement;
+
+/** Previous and Next for a list the backend sends in pages. Renders nothing when the list fits on one page. */
+export interface PaginationProps {
+  /** Starts at 1. */
+  page: number;
+  pageSize: number;
+  /** Items in the whole list, from the backend. Without it, set `hasNext`. */
+  total?: number;
+  /** For a backend that does not count: whether another page exists. */
+  hasNext?: boolean;
+  onChange?: (page: number) => void;
+  /** Plural noun after the count, for example "alerts". */
+  itemLabel?: string;
+  /** Names the navigation for screen readers. Default "Pages". */
+  label?: string;
+  disabled?: boolean;
+  className?: string;
+}
+export declare function Pagination(props: PaginationProps): React.ReactElement | null;
+
+/** A short confirmation after a change is saved. Never for errors: those stay on the page. */
+export interface ToastProps {
+  open: boolean;
+  /** Called by the Dismiss button and after `duration`. */
+  onClose?: () => void;
+  /** Default "success". */
+  tone?: 'success' | 'info';
+  /** One sentence, for example "Alert resolved". */
+  children?: React.ReactNode;
+  /** Milliseconds before it closes; 0 keeps it open. Default 6000. It waits while the pointer or focus is on it. */
+  duration?: number;
+  /** One small Button, for example "Undo". */
+  action?: React.ReactNode;
+  closeLabel?: string;
+  className?: string;
+}
+export declare function Toast(props: ToastProps): React.ReactElement;
+
+export interface FileItem {
+  name: string;
+  /** In bytes. */
+  size?: number;
+  /** For files sent at once. Omit it for files sent with the form. */
+  status?: 'uploading' | 'done' | 'failed';
+  /** The backend's message for this file. */
+  error?: React.ReactNode;
+  key?: string;
+}
+/** Choose files with a button or drop them on the field. The page keeps the list in `files`. */
+export interface FileUploadProps {
+  label?: React.ReactNode;
+  hint?: React.ReactNode;
+  /** Replaces the hint and marks the field invalid. */
+  error?: React.ReactNode;
+  required?: boolean;
+  /** Passed to the browser's file picker, for example "image/*". The backend still checks the type. */
+  accept?: string;
+  multiple?: boolean;
+  files?: FileItem[];
+  onAdd?: (files: File[]) => void;
+  onRemove?: (file: FileItem, index: number) => void;
+  buttonLabel?: string;
+  /** Names the list of chosen files. Default "Chosen files". */
+  listLabel?: string;
+  name?: string;
+  id?: string;
+  disabled?: boolean;
+  className?: string;
+}
+export declare function FileUpload(props: FileUploadProps): React.ReactElement;

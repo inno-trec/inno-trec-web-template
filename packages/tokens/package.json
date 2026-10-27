@@ -3,6 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "description": "INNO-TREC design tokens as a Tailwind preset (web and NativeWind), CSS variables and plain JS constants.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inno-trec/inno-trec-web-template.git",
+    "directory": "packages/tokens"
+  },
+  "homepage": "https://inno-trec.github.io/inno-trec-web-template/",
+  "files": [
+    "dist",
+    "tokens.json"
+  ],
   "main": "./dist/tokens.cjs",
   "types": "./dist/tokens.d.ts",
   "exports": {

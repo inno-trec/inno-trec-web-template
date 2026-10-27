@@ -4,25 +4,43 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-27
+
 ### Changed
 
+- **The template moved to GitHub** (`inno-trec/inno-trec-web-template`). CI, the documentation site (now at <https://inno-trec.github.io/inno-trec-web-template/>), releases and npm publishing run in GitHub Actions. The packages are published with npm provenance, through trusted publishing. The old addresses on gitlab.up.pt send you to the new ones.
+- The package pages on npmjs.com link to the GitHub repository and the new documentation site, and `npm create @inno-trec/tool` prints the new guide address.
+
+## [1.0.0] - 2026-10-27
+
+The first version on npmjs.com. It has the same content as 0.2.0, which was never published to npm. From 1.0.0 on, `npm update` brings every minor release (design system updates, new patterns), and only a major release asks teams to change their own code.
+
+## [0.2.0] - 2026-10-27
+
+### Changed
+
+- **The starter is minimal, and the complete tool moved to `apps/template-demo`.** `web-starter` now holds the page frame, the account screens, the Users page, the client for the backend and one example page (`HomePage`) with the loading, empty and error states. It no longer depends on ECharts. The monitoring, PV performance, data checks, alerts and assets pages, the charts and the synthetic data are in `apps/template-demo` (`npm run dev:demo`), which the documentation site shows as the demo.
+- `getting-started.md` names `src/config.ts` for the tool's name.
+- **The template moved to gitlab.up.pt** (`inno-trec/inno-trec-web-template`). CI, the documentation site and releases run in GitLab CI (`.gitlab-ci.yml`); the GitHub workflows and Dependabot are removed. Teams copy the template into a new project instead of using GitHub's "Use this template".
 - **The starter is no longer about credits.** `web-starter` now fits the monitoring, PV performance and maintenance tools: an energy overview with time-series charts and an asset list with maintenance suggestions, on synthetic data.
 - **The credit pages moved to `apps/credits-example`** (ledger overview, wallets, send flow, "My wallet"). Run it with `npm run dev:credits`.
 - The design rules separate the rules for every tool from the rules for credit screens, and add rules for charts.
-- Times in the starter follow the community's time zone, which the fake backend sends, instead of the reader's. A reader in Tokyo and one in Lisbon see the same days, hours and totals. Decision 11 records this, and that the backend sets PV indicators and the reading interval.
+- Times in the starter follow the community's time zone, which the fake backend sends, instead of the reader's. A reader in Tokyo and one in Lisbon see the same days, hours and totals. The backend also sets PV indicators and the reading interval.
 
 ### Added
 
-- Account screens in the starter: sign in (with "keep me signed in" and a return to the page asked for), ask for an account with a manager's approval on the Users page, accept an invitation, forgot and reset password, "Your account" (profile and password) and sign out. Pages without a session redirect to sign in, and `roles` in `NAV` hide pages from other roles. Pattern 10 and decision 12 describe them.
+- **npm packages.** `@inno-trec/tokens` and `@inno-trec/ui-web` are published to npmjs.com with each release, and `npm create @inno-trec/tool my-tool` creates a new tool from the starter, with only the tool's own code in its folder. Teams take design system updates with `npm update`. The `npm-publish` job publishes on a `vX.Y.Z` tag; `npm run packages:pack` builds the packages locally.
+- The component guide on the documentation site shows every component running. The examples are the design system's previews, copied by `npm run sync:ds` into `docs/reference/previews/` and built with the template's own React and `packages/ui-web` (`scripts/build-gallery.mjs`). Readers need no claude.ai account.
+- Five components (design system): `Tabs`, `Pagination`, `EmptyState`, `Toast` and `FileUpload`. The Alerts page uses tabs by state with counts, pages and photos when an alert is resolved; the sample backend filters, counts and pages the alerts. Changes on the Alerts and Users pages end with a toast, and the starter's empty pages use `EmptyState`. New rules in "Forms" and "Lists and empty sections".
+- Account screens in the starter: sign in (with "keep me signed in" and a return to the page asked for), ask for an account with a manager's approval on the Users page, accept an invitation, forgot and reset password, "Your account" (profile and password) and sign out. Pages without a session redirect to sign in, and `roles` in `NAV` hide pages from other roles. Pattern 10 describes them.
 - `AuthLayout` and `PasswordField` (design system): the frame of the screens without a session, and a password field with a Show/Hide button.
-- Documentation website (VitePress) built from `docs/`, with the starter as a live demo; `.github/workflows/pages.yml` publishes it to GitHub Pages. `npm run docs:dev` previews it.
+- Documentation website (VitePress) built from `docs/`, with the starter as a live demo; the `pages` job publishes it to GitLab Pages. `npm run docs:dev` previews it.
 - The starter's router follows `base` in `vite.config.ts`, so the app also works under a sub-path.
 - The starter's sample backend answers in the shapes of `src/data/types.ts`; `api.ts` turns every failure into an `ApiError` with messages per field.
 - PV performance page: indicators per system against history and the community, `BarChart` with a dotted reference line.
 - Data checks page: agreement between data sources, with a tolerance band in `TimeSeriesChart`.
 - Alerts page: corrective and predictive alerts with filters, acknowledge and resolve. Assets show their open alerts.
 - Chart rules (design system): reference lines, bars, and comparing data sources.
-- `docs/tracking.md`: a provisional list of pending work and decisions.
 - Form components (design system): `Textarea`, `DateField`, `DateRangeField`, `Checkbox`, `RadioGroup`, `Switch`, and `Dialog` on the browser's `<dialog>` element.
 - "Users" page in the starter: invite, edit and deactivate users with forms in dialogs, field errors from the backend and a confirmation before deactivating. A smoke test runs the whole flow. New "Forms in dialogs" pattern and form rules in the docs.
 - Chart series colors (design system): `series-consumption`, `series-pv`, `series-storage` and `series-grid`. Each has a fixed meaning. They were checked together for contrast and for colorblind readers. They are in `DESIGN.md` and in the brand book's new "Charts" section.
@@ -51,7 +69,7 @@ First release of the template.
 
 - Design system tokens (`@inno-trec/tokens`) and React components (`@inno-trec/ui-web`), generated from the INNO-TREC design system by `npm run sync:ds`.
 - The `web-starter` app: Vite, React 19, TypeScript 7, Tailwind 3.4 and React Router 8, with an overview, a wallet list and a send flow on sample data.
-- Team documentation: getting started, page patterns, design rules, architecture, troubleshooting and decisions.
+- Team documentation: getting started, page patterns, design rules, architecture and troubleshooting.
 - Browser smoke tests (`npm test`) that open every page in the side navigation at 1440px and 400px wide and fail on sideways scroll, a missing heading or route, or a console error.
 - `npm run check:generated`, which fails when a generated file was edited by hand. `npm run sync:ds` records a hash of every generated file in `design-system.lock.json`.
 - CI on every pull request and push to `main`, on the Node in `.nvmrc` and on the newest Node release.
@@ -62,5 +80,8 @@ First release of the template.
 
 - Node 24 LTS or newer, npm 11.
 
-[Unreleased]: https://github.com/joaocarlos/inno-trec-template/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/joaocarlos/inno-trec-template/releases/tag/v0.1.0
+[Unreleased]: https://github.com/inno-trec/inno-trec-web-template/compare/v1.0.1...main
+[1.0.1]: https://github.com/inno-trec/inno-trec-web-template/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/inno-trec/inno-trec-web-template/compare/v0.2.0...v1.0.0
+[0.2.0]: https://github.com/inno-trec/inno-trec-web-template/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/inno-trec/inno-trec-web-template/releases/tag/v0.1.0

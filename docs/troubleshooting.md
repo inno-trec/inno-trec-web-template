@@ -36,19 +36,19 @@ Problems that have already come up, with the cause and the fix.
 
 **Cause.** `styles.css` loads Figtree and Open Sans from Google Fonts when the page opens. A network that blocks Google, or an offline machine, falls back to the system font.
 
-**Fix.** On a restricted network, host the font files yourself and replace the `@import` line at the top of `packages/ui-web/src/styles.css`. That file is generated, so make the change in the design system repository and sync, or ask for a self-hosted option.
+**Fix.** On a restricted network, host the font files yourself and load them from your own `@font-face` rules. `@inno-trec/ui-web/styles.css` imports Google Fonts on its first line; it comes from the design system, so ask its owners for a self-hosted option rather than editing it in `node_modules`.
 
-## A type error appears after `npm run sync:ds`
+## A type error appears after updating `@inno-trec/ui-web`
 
 **Cause.** A component prop was added, renamed or removed in the design system.
 
-**Fix.** Read the diff of `packages/ui-web/src/index.d.ts` and `docs/reference/components.md`, then update your pages. Commit the sync separately so the cause is easy to find.
+**Fix.** Read the release's section in the [changelog](https://github.com/inno-trec/inno-trec-web-template/blob/main/CHANGELOG.md) and the [component guide](reference/components.md), then update your pages. Commit the update separately so the cause is easy to find.
 
 ## `Cannot find module '@inno-trec/ui-web'`
 
-**Cause.** Dependencies were installed inside `apps/web-starter` instead of at the root. The packages are npm workspaces and link only from the root.
+**Cause.** In your tool: the packages are not installed yet. In the template repository: dependencies were installed inside an app folder instead of at the root, where the npm workspaces link.
 
-**Fix.** Run `npm install` in the repository root.
+**Fix.** Run `npm install` in your tool's folder, or in the template repository's root.
 
 ## `Invalid hook call` or two copies of React
 
@@ -66,19 +66,19 @@ Problems that have already come up, with the cause and the fix.
 
 **Cause.** The reports come from development tools, mostly the packages Tailwind 3 uses to read files. `npm audit --omit=dev` reports none for the code that ships.
 
-**Fix.** There is nothing to fix in your tool. Do not run `npm audit fix --force`: it installs Tailwind 4, a breaking change that the preset and the mobile app do not support yet. The warnings go away when the project moves to Tailwind 4. See [Decisions](decisions.md).
+**Fix.** There is nothing to fix in your tool. Do not run `npm audit fix --force`: it installs Tailwind 4, a breaking change that the preset and the mobile app do not support yet. The warnings go away when the project moves to Tailwind 4.
 
 ## A component shows English text I need in another language
 
 **Cause.** The components contain fixed English text ("Send credits", "Credits sent", "Step 1 of 3").
 
-**Fix.** There is no translation setting yet. This is an open item in [Decisions](decisions.md). If your tool needs another language, tell the design system owners before you work around it.
+**Fix.** There is no translation setting. If your tool needs another language, tell the design system owners before you work around it.
 
 ## `npm test` says the browser executable does not exist
 
 **Cause.** Playwright downloads its browser separately from `npm install`.
 
-**Fix.** Run `npx -w web-starter playwright install chromium` once. On Linux, add `--with-deps` to install the system libraries as well.
+**Fix.** Run `npx playwright install chromium` once (in the template repository: `npx -w web-starter playwright install chromium`). On Linux, add `--with-deps` to install the system libraries as well.
 
 ## `npm run check:generated` fails
 

@@ -4,37 +4,46 @@ This guide takes you from nothing to a running tool with your own page, then cov
 
 ## Before you begin
 
-- Node 24 or newer. The repository pins the current LTS release in `.nvmrc`, so `nvm use` picks it.
+- Node 24 or newer (`nvm use` picks the version in the project's `.nvmrc`).
 - npm 11 or newer.
 - Git.
 
-## 1. Create your repository from the template
-
-On GitHub, open this repository and choose **Use this template**, then **Create a new repository**. Clone your new repository and install:
+## 1. Create your tool
 
 ```sh
-git clone <your-repository-url>
-cd <your-repository>
+npm create @inno-trec/tool my-tool
+cd my-tool
 npm install
 npm run dev
 ```
 
-Vite serves the starter tool at <http://localhost:5173>. Open that address in a browser.
+Vite serves the tool at <http://localhost:5173>. Open that address in a browser and sign in with the sample account `ana.ribeiro@example.org`, password `sample-password`.
 
-You now own a copy. It contains the design system packages and the starter app. Nothing connects it to this repository except what you choose to pull in later (see [Update the design system](#update-the-design-system)).
+The command copies the starter into `my-tool/`: the page frame, the account screens, the Users page and one example page. The components and tokens are npm packages (`@inno-trec/ui-web` and `@inno-trec/tokens`), so the folder holds only your tool's code. Put it in Git and push it to your own project:
+
+```sh
+git init
+git add -A
+git commit -m "Start from the INNO-TREC starter"
+git remote add origin <your-project-url>
+git push -u origin main
+```
 
 ## 2. Make it your tool
 
 Do these four things first.
 
-1. **Rename the app.** In `apps/web-starter/package.json`, change `"name"`. If you rename the folder as well, update the `dev` script in the root `package.json`.
-2. **Set the tool name.** In `apps/web-starter/src/layouts/ToolShell.tsx`, change `TOOL_NAME`. It appears in the top bar.
-3. **Set the page title and icon.** In `apps/web-starter/index.html`, change `<title>` and add your icon.
-4. **Remove the example pages you do not need.** Delete the files in `src/pages/`, their routes in `src/App.tsx`, and their entries in `NAV` in `ToolShell.tsx`. Delete `src/data/fakeServer.ts` and `src/data/synthetic.ts` when your own API replaces them. Keep the footer in `ToolShell.tsx`: it carries the EU funding emblem and statement.
+1. **Set the tool name.** In `src/config.ts`, change `TOOL_NAME`. It appears in the top bar and on the sign-in screens. Set `PRIVACY_URL` and `FOOTER_LINKS` in the same file.
+2. **Set the page title and icon.** In `index.html`, change `<title>` and add your icon.
+3. **Replace the example page.** `src/pages/HomePage.tsx` lists sample records and shows the loading, empty and error states. Make it your tool's first page, or delete it with its route in `src/App.tsx` and its entry in `NAV` in `src/layouts/ToolShell.tsx`.
+4. **Keep the footer** in `ToolShell.tsx`: it carries the EU funding emblem and statement.
 
-The starter's pages fit monitoring, PV performance and maintenance tools. For a tool that shows energy credits, copy the pages you need from `apps/credits-example/src/pages/` (and its `src/data/`), and read the [credit rules](design-rules.md#energy-credits).
+The starter also holds the account screens (sign in, ask for an account, invitation, password reset, the person's account) and the Users page. Keep them, or delete the ones your identity provider replaces.
 
-If your repository will hold only one tool, you can keep `apps/web-starter` as it is. If it will hold several, copy the folder once per tool and give each copy its own name.
+For complete pages, copy from the example apps in the [template repository](https://github.com/inno-trec/inno-trec-web-template):
+
+- `apps/template-demo` holds the monitoring, PV performance and maintenance pages: an energy overview with charts, PV performance, data checks, alerts and assets. The demo on this site runs it. A page with a chart also needs `src/charts/`, `src/time/zone.ts` and the `echarts` dependency.
+- `apps/credits-example` holds the credit screens. Read the [credit rules](design-rules.md#energy-credits) before you use them.
 
 ## 3. Add a page
 
@@ -77,7 +86,7 @@ The pages call `src/data/api.ts`. Today it calls a sample backend (`src/data/fak
 
 1. Replace the types in `types.ts` with your backend's. If your backend publishes an OpenAPI description, `npx openapi-typescript <url> -o src/data/schema.d.ts` generates them.
 2. Replace each call in `api.ts` with `fetch`. Turn your backend's errors into `ApiError`: a code for the whole request, and one message per field when it rejects a value. The forms show those messages under the fields.
-3. Delete `fakeServer.ts` and `synthetic.ts`, and follow the compiler.
+3. Delete `fakeServer.ts`, and follow the compiler.
 
 Keep the loading, empty and error states that the pages show.
 
@@ -87,43 +96,42 @@ The screens without a session are in `src/pages/auth/` (sign in, ask for an acco
 
 The design system has one rule here: **the interface displays what the backend reports and collects input.** Energy totals, shares, performance indicators, credit amounts and balances all come from the API. Do not calculate them in a component. The [design rules](design-rules.md#numbers-and-units) explain why.
 
-Keep a short list of what your tool needs from the backend, because the components expect these shapes. They are typed in `packages/ui-web/src/index.d.ts`: `Movement`, `Wallet`, `WalletRow`, `Recipient` and the transaction, purpose and wallet vocabularies.
+Keep a short list of what your tool needs from the backend, because the components expect these shapes. They are typed in `node_modules/@inno-trec/ui-web/src/index.d.ts`: `Movement`, `Wallet`, `WalletRow`, `Recipient` and the transaction, purpose and wallet vocabularies.
 
 ## 5. Check your work
 
 ```sh
-npm run typecheck    # types in every workspace
+npm run typecheck    # types
 npm run build        # type check and production build
 npm test             # every page at 1440px and 400px: heading, no sideways scroll, no console errors
 ```
 
-The first time, install the test browser with `npx -w web-starter playwright install chromium`. The tests find your pages through the side navigation, so a page you add to `NAV` is tested without changes to the tests.
+The first time, install the test browser with `npx playwright install chromium`. The tests find your pages through the side navigation, so a page you add to `NAV` is tested without changes to the tests.
 
-Before you open a pull request, read the [design rules](design-rules.md) once. They are short.
+Before you ask for a review, read the [design rules](design-rules.md) once. They are short.
 
 ## Update the design system
 
-The components and tokens in `packages/` are copies. When the design system changes, update them:
+The components and tokens are npm packages. Each template release publishes both, with the same version. To take a new release:
 
 ```sh
-# the design system repository sits next to yours
-npm run sync:ds -- ../inno-trec-design-system
+npm outdated @inno-trec/ui-web @inno-trec/tokens   # what is new
+npm update @inno-trec/ui-web @inno-trec/tokens     # within the version range in package.json
 ```
 
-You can also set `INNO_TREC_DS=/path/to/design-system` once and run `npm run sync:ds`.
+`npm update` brings every release with the same major version, for example from 1.0.0 to 1.4.2. Design system updates and fixes come this way. A new major version (2.0.0) means you must change your own code: read its section in the [changelog](https://github.com/inno-trec/inno-trec-web-template/blob/main/CHANGELOG.md) first, then install it with `npm install @inno-trec/ui-web@latest @inno-trec/tokens@latest`. Then:
 
-The script rewrites `packages/tokens/`, `packages/ui-web/` and `docs/reference/`, and updates `design-system.lock.json` with the design system version it copied. Then:
+1. Run `npm run build`. A type error usually means a component prop changed.
+2. Look at your pages in the browser, and run `npm test`.
+3. Commit the update as its own commit, so the change is easy to review.
 
-1. Read the diff in `packages/` and `docs/reference/`. Generated files change often when the design system changes.
-2. Run `npm run build`. A type error usually means a component prop changed.
-3. Look at your pages in the browser.
-4. Commit the sync as its own commit, so the change is easy to review.
+Never change the packages inside `node_modules`. If something in the design system is wrong, tell the design system owners.
 
-Never edit the files the script writes. The next sync overwrites them. If something in the design system is wrong, change it in the design system repository.
+The pages, layouts and data code that `npm create` copied are yours, so an update does not change them. To take a fix to the starter's own pages, compare your file with the starter in the template repository (`apps/web-starter`).
 
 ## Deploy
 
-`npm run build -w web-starter` writes static files to `apps/web-starter/dist/`. Any static host can serve them.
+`npm run build` writes static files to `dist/`. Any static host can serve them.
 
 The app uses client-side routes such as `/wallets`. Configure the host to answer every unknown path with `index.html`, or opening `/wallets` directly returns a 404. If your host cannot do that, switch the router in `src/main.tsx` from `BrowserRouter` to `HashRouter`.
 
