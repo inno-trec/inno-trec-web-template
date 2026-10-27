@@ -1,0 +1,58 @@
+name: Release
+
+# Push a tag such as v1.1.0 (see "Releasing a version" in docs/contributing.md).
+#   checks        the same checks as ci.yml
+#   release       a GitHub release with the matching CHANGELOG.md section
+#   npm-publish   @inno-trec/tokens, @inno-trec/ui-web and @inno-trec/create-tool on npmjs.com
+on:
+  push:
+    tags: ['v[0-9]+.[0-9]+.[0-9]+']
+
+jobs:
+  checks:
+    uses: ./.github/workflows/ci.yml
+
+  release:
+    needs: checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Tag matches package.json and the changelog has an entry
+        id: notes
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          pkg=$(node -p 'require("./package.json").version')
+          if [ "$version" != "$pkg" ]; then echo "::error::Tag $GITHUB_REF_NAME does not match package.json version $pkg"; exit 1; fi
+          awk -v v="$version" '$0 ~ "^## \\[" v "\\]" {f=1; next} /^## \[/ {f=0} f' CHANGELOG.md > notes.md
+          if [ ! -s notes.md ]; then echo "::error::CHANGELOG.md has no section for [$version]"; exit 1; fi
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file notes.md --verify-tag
+
+  # npm trusted publishing: each package on npmjs.com trusts this workflow (release.yml) in the
+  # "npm" environment, so no token is stored. npm adds provenance to each version.
+  npm-publish:
+    if: github.repository == 'inno-trec/inno-trec-web-template'
+    needs: release
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          registry-url: https://registry.npmjs.org
+
+      - name: npm 11.5.1 or newer (trusted publishing)
+        run: npm install -g npm@^11.5.1
+
+      - run: node scripts/publish-packages.mjs
