@@ -23,3 +23,6 @@ apps/*/playwright-report/
 
 # Personal Claude Code files (settings, skills)
 .claude/
+
+# Packages staged by scripts/publish-packages.mjs
+.publish/

@@ -22,7 +22,8 @@
     "test": "npm run test --workspaces --if-present",
     "check:generated": "node scripts/check-generated.mjs",
     "docs:dev": "node scripts/build-gallery.mjs && vitepress dev docs",
-    "pages:build": "node scripts/build-pages.mjs"
+    "pages:build": "node scripts/build-pages.mjs",
+    "packages:pack": "node scripts/publish-packages.mjs --pack"
   },
   "devDependencies": {
     "vitepress": "1.6.4"

@@ -1,7 +1,8 @@
 # CI for the template (GitLab, gitlab.up.pt).
 #   checks        every merge request and every push to main: generated files, types, build, docs site, tests
-#   pages         after a push to main: the documentation website with the starter as demo/
+#   pages         after a push to main: the documentation website with the template demo as demo/
 #   release       after a vX.Y.Z tag: a GitLab release with the matching CHANGELOG.md section
+#   npm-publish   after a vX.Y.Z tag: @inno-trec/tokens, @inno-trec/ui-web and @inno-trec/create-tool on npmjs.com
 # See "Checks before a merge request" and "Releasing a version" in docs/contributing.md.
 
 workflow:
@@ -37,6 +38,8 @@ default:
     - npx vitepress build docs
     - npx -w web-starter playwright install --with-deps --only-shell chromium
     - npm test
+    # The npm packages can be built (scripts/publish-packages.mjs; nothing is published here).
+    - node scripts/publish-packages.mjs --pack
   artifacts:
     when: on_failure
     expire_in: 14 days
@@ -93,3 +96,15 @@ release:
     tag_name: $CI_COMMIT_TAG
     name: $CI_COMMIT_TAG
     description: ./notes.md
+
+# Needs a masked, protected CI/CD variable NPM_TOKEN (an npm granular token that can publish @inno-trec),
+# and protected vX.Y.Z tags, so only maintainers can publish.
+npm-publish:
+  stage: publish
+  rules:
+    - if: $CI_COMMIT_TAG && $CI_PROJECT_PATH == "inno-trec/inno-trec-web-template"
+  needs: [checks, release-notes]
+  script:
+    - test -n "$NPM_TOKEN" || { echo "Set the NPM_TOKEN CI/CD variable first."; exit 1; }
+    - npm config set //registry.npmjs.org/:_authToken "$NPM_TOKEN"
+    - node scripts/publish-packages.mjs

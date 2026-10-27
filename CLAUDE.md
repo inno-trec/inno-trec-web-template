@@ -30,11 +30,12 @@ npm run build -w web-starter         # build one app
 npm run tokens                       # rebuild packages/tokens/dist from tokens.json
 npm run sync:ds [-- <path-to-ds>]    # copy the design system in (or set INNO_TREC_DS)
 npm run export:tokens -- <folder>    # copy tokens into another project (e.g. the Expo app)
+npm run packages:pack                # build the npm packages into .publish/ (no publish)
 ```
 
 There is no linter and no unit test runner. CI (`.gitlab-ci.yml`, gitlab.up.pt) runs `check:generated`, `typecheck`, `build`, the docs site build and `npm test` on Node 24 (required, keep in step with `.nvmrc`) and on the newest Node (warning only). The `pages` job publishes the docs site with `template-demo` as `demo/`. The smoke tests in each app's `e2e/` open every page listed in the side navigation at 1440px and 400px wide and fail on sideways scroll, a missing heading or a console error. They read the pages from the rendered nav, so a new `NAV` entry is tested automatically. A wide table in its own scroll container does not count as sideways scroll.
 
-Versions: the template version is the root `package.json` version, recorded in `CHANGELOG.md` (Keep a Changelog). Pushing a `vX.Y.Z` tag runs the `release-notes` and `release` jobs, which check the tag against `package.json` and `CHANGELOG.md` and create the GitLab release. Add every user-visible change under `## [Unreleased]` in `CHANGELOG.md`.
+Versions: the template version is the root `package.json` version, recorded in `CHANGELOG.md` (Keep a Changelog). Pushing a `vX.Y.Z` tag runs the `release-notes` and `release` jobs, which check the tag against `package.json` and `CHANGELOG.md` and create the GitLab release, and `npm-publish`, which publishes `@inno-trec/tokens`, `@inno-trec/ui-web` and `@inno-trec/create-tool` to npmjs.com with the root version (`scripts/publish-packages.mjs`, needs the `NPM_TOKEN` variable). Add every user-visible change under `## [Unreleased]` in `CHANGELOG.md`.
 
 Node: `.nvmrc` pins the newest LTS release (24); `engines` requires >= 24. The policy is "newest stable": each copy starts with the longest support window.
 
@@ -120,7 +121,7 @@ Credit screens only:
 - Stay on Tailwind 3.4. NativeWind 4 (mobile) needs `tailwindcss ~3`, and web and mobile share the preset. Never run `npm audit fix --force`, because it upgrades to Tailwind 4.
 - Web and mobile share tokens, not components. The Expo app lives in a separate repository and receives tokens via `export:tokens`.
 - Use Vite with client-side routing, not a framework. Deployment is static; for sub-path hosting set `base` in `vite.config.ts` (the router and nav links follow it).
-- The packages are copied into each team's repository, not published.
+- Teams start with `npm create @inno-trec/tool` (`packages/create-tool`, which carries a copy of `apps/web-starter` when published) and install `@inno-trec/tokens` and `@inno-trec/ui-web` from npmjs.com. Keep `apps/web-starter` free of anything that needs the monorepo: it must run on its own after `npm create`.
 - Charts use Apache ECharts with tree-shaken imports, loaded on demand. They live in `template-demo`, not in the starter.
 - The starter stays minimal; a new pattern goes in an example app.
 
