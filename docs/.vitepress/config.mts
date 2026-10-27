@@ -16,19 +16,12 @@ copyFileSync(path.join(here, '../../packages/ui-web/assets/logos/logo-landscape-
 
 const REPO = 'https://gitlab.up.pt/inno-trec/inno-trec-web-template';
 
-/**
- * Internal pages stay out of the public site. They remain in the (private) repository, and links to them
- * from other pages open the file on gitlab.up.pt, which asks for a sign-in.
- */
-const INTERNAL = ['decisions.md', 'tracking.md', 'reference/open-questions.md'];
-
 export default defineConfig({
   title: 'INNO-TREC template',
   description: 'Starter template for INNO-TREC web tools, built on the INNO-TREC design system.',
   lang: 'en-US',
   base: process.env.DOCS_BASE ?? '/inno-trec-template/',
   cleanUrls: true,
-  srcExclude: INTERNAL,
   ignoreDeadLinks: 'localhostLinks',
   lastUpdated: false,
   // The design system has one light theme.
@@ -88,15 +81,14 @@ export default defineConfig({
   },
   markdown: {
     config(md) {
-      // Links to source files (../apps/…) and to internal pages point at the repository on gitlab.up.pt.
+      // Links to source files (../apps/…) point at the repository on gitlab.up.pt.
       const render = md.renderer.rules.link_open ?? ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options));
       md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
         const href = tokens[idx].attrGet('href');
         if (href && !/^([a-z]+:|#|\/)/i.test(href)) {
           const target = path.posix.normalize(path.posix.join('docs', path.posix.dirname(env.relativePath), href));
           const [file, hash] = target.split('#');
-          const internal = INTERNAL.some((page) => file === `docs/${page}`);
-          if (!target.startsWith('docs/') || internal) tokens[idx].attrSet('href', `${REPO}/-/blob/main/${file}${hash ? `#${hash}` : ''}`);
+          if (!target.startsWith('docs/')) tokens[idx].attrSet('href', `${REPO}/-/blob/main/${file}${hash ? `#${hash}` : ''}`);
         }
         return render(tokens, idx, options, env, self);
       };

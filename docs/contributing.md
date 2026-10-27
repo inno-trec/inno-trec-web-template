@@ -58,7 +58,7 @@ Add a line for your change under `## [Unreleased]` in `CHANGELOG.md`.
 
 ## The website and the demo
 
-The `pages` job in `.gitlab-ci.yml` publishes `docs/` and the starter (under `demo/`) to GitLab Pages after every push to `main`. It runs only in the template project (`CI_PROJECT_PATH`); the site's path comes from the project's Pages address. Internal pages stay out of the site: `INTERNAL` in `docs/.vitepress/config.mts` lists them (decisions, tracking, ECMS open questions), and links to them open the file on gitlab.up.pt, which asks for a sign-in. Add a page there when it should not be on the site. Who can see the site is set in the project under **Settings → General → Visibility → Pages**.
+The `pages` job in `.gitlab-ci.yml` publishes `docs/` and the starter (under `demo/`) to GitLab Pages after every push to `main`. It runs only in the template project (`CI_PROJECT_PATH`); the site's path comes from the project's Pages address. Who can see the site is set in the project under **Settings → General → Visibility → Pages**.
 
 ## How teams copy the template
 
@@ -80,9 +80,9 @@ The template version is the `version` in the root `package.json`. It follows sem
 
 ## Keeping versions current
 
-The template uses the newest stable release of Node and of every dependency (decision 7 in [Decisions](decisions.md)).
+The template uses the newest stable release of Node and of every dependency, so each copy starts with the longest support window.
 
-- **Dependencies.** Once a month, run `npm outdated`, update minor and patch versions together in one merge request, and each major update in its own. Merge when CI passes. Read the changelog of a major update first. Never move to Tailwind 4 (decision 3).
+- **Dependencies.** Once a month, run `npm outdated`, update minor and patch versions together in one merge request, and each major update in its own. Merge when CI passes. Read the changelog of a major update first. Never move to Tailwind 4: the mobile app's NativeWind 4 needs Tailwind 3.
 - **Node.** When a new LTS release comes out (each October), change `.nvmrc`, `engines.node` in `package.json` and the image in `.gitlab-ci.yml` to the new major version, and update the Node version in `README.md` and `docs/getting-started.md`. The `checks-node-current` job shows problems with newer Node releases early.
 
 ## Telling teams about changes

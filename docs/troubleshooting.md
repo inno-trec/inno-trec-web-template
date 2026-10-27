@@ -66,13 +66,13 @@ Problems that have already come up, with the cause and the fix.
 
 **Cause.** The reports come from development tools, mostly the packages Tailwind 3 uses to read files. `npm audit --omit=dev` reports none for the code that ships.
 
-**Fix.** There is nothing to fix in your tool. Do not run `npm audit fix --force`: it installs Tailwind 4, a breaking change that the preset and the mobile app do not support yet. The warnings go away when the project moves to Tailwind 4. See [Decisions](decisions.md).
+**Fix.** There is nothing to fix in your tool. Do not run `npm audit fix --force`: it installs Tailwind 4, a breaking change that the preset and the mobile app do not support yet. The warnings go away when the project moves to Tailwind 4.
 
 ## A component shows English text I need in another language
 
 **Cause.** The components contain fixed English text ("Send credits", "Credits sent", "Step 1 of 3").
 
-**Fix.** There is no translation setting yet. This is an open item in [Decisions](decisions.md). If your tool needs another language, tell the design system owners before you work around it.
+**Fix.** There is no translation setting. If your tool needs another language, tell the design system owners before you work around it.
 
 ## `npm test` says the browser executable does not exist
 

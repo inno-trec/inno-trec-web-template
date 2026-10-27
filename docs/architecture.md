@@ -10,7 +10,7 @@ INNO-TREC design system repository          (source of truth: tokens, components
 ┌──────────────────────────── this repository ────────────────────────────┐
 │  packages/tokens     tokens.json → Tailwind preset, CSS variables, JS    │
 │  packages/ui-web     components as an ES module + one stylesheet + logos │
-│  docs/reference      brand book, component guide, open questions         │
+│  docs/reference      brand book, component guide                         │
 │                                                                          │
 │  apps/web-starter    starter app: page frame, accounts, one example page │
 │  apps/template-demo  example pages: monitoring, PV, maintenance, charts  │
@@ -103,4 +103,4 @@ apps/web-starter/src/
 
 ## Web and mobile
 
-The components in `ui-web` are DOM-based React and run on the web only. The mobile app, built with Expo and NativeWind, does not use them. Web and mobile share the tokens, so both look the same, and each has its own components. See [Decisions](decisions.md) for the reasoning.
+The components in `ui-web` are DOM-based React and run on the web only. The mobile app, built with Expo and NativeWind, does not use them. Web and mobile share the tokens, so both look the same, and each has its own components.

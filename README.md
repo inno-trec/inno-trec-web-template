@@ -64,10 +64,7 @@ The two packages are generated from the design system repository. Do not edit th
 | [Architecture](docs/architecture.md) | Understand how the repository fits together |
 | [Troubleshooting](docs/troubleshooting.md) | Fix a problem someone has already hit |
 | [Contributing](docs/contributing.md) | Change the template itself |
-| [Decisions](docs/decisions.md) | Learn why it is built this way, and what is still open |
-| [Tracking](docs/tracking.md) | See what is still pending and which decisions wait for an owner (provisional) |
 | [Mobile](docs/mobile.md) | See how the mobile app shares tokens with the web tools |
-| [Open questions](docs/reference/open-questions.md) | See where the ECMS specification is ambiguous. Components do not decide these. |
 
 ## Commands
 
@@ -88,10 +85,10 @@ The two packages are generated from the design system repository. Do not edit th
 ## What this template does not include
 
 - **A mobile app.** The mobile app lives elsewhere and shares only the tokens. See [Mobile](docs/mobile.md).
-- **A real backend or identity provider.** The account screens, the session and the data run on a sample backend in `src/data/`. Replace it with your backend; each system owns its data API (decision 12).
+- **A real backend or identity provider.** The account screens, the session and the data run on a sample backend in `src/data/`. Replace it with your backend; each system owns its data API.
 - **Unit tests.** The starter has browser smoke tests (`npm test`), not unit tests. Add a unit test runner when your tool has logic of its own.
 - **Deployment setup for your tool.** `npm run build` produces static files. Where they go is your team's choice. (The template publishes only its own documentation site.)
 
 ## Versions this was verified with
 
-Node 24 (LTS) and 26, npm 11, React 19.3, Vite 8, TypeScript 7, Tailwind 3.4, React Router 8, Apache ECharts 6.1. The design system components were written for React 18 and render correctly on 19 in the starter. See [Decisions](docs/decisions.md) for why Tailwind stays on 3.4.
+Node 24 (LTS) and 26, npm 11, React 19.3, Vite 8, TypeScript 7, Tailwind 3.4, React Router 8, Apache ECharts 6.1. The design system components were written for React 18 and render correctly on 19 in the starter. Tailwind stays on 3.4 because the mobile app's NativeWind 4 needs Tailwind 3, and web and mobile share the preset.
