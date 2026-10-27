@@ -68,7 +68,7 @@ Teams copy the repository into a new project of their own ([Getting started](get
 
 The template version is the `version` in the root `package.json`. It follows semantic versioning: a minor version for new patterns, docs or a design system sync, a major version when a team must change its own code to take the update.
 
-1. On `main`, move the entries under `## [Unreleased]` in `CHANGELOG.md` into a new section, for example `## [0.2.0] - 2026-11-03`, and commit.
+1. On `main`, move the entries under `## [Unreleased]` in `CHANGELOG.md` into a new section, for example `## [1.1.0] - 2026-11-03`, and commit.
 2. Bump the version and create the tag:
 
    ```sh

@@ -119,7 +119,7 @@ npm outdated @inno-trec/ui-web @inno-trec/tokens   # what is new
 npm update @inno-trec/ui-web @inno-trec/tokens     # within the version range in package.json
 ```
 
-`npm update` stays within the range in `package.json` (for example `^0.2.0`). For a larger step, install the new version (`npm install @inno-trec/ui-web@latest @inno-trec/tokens@latest`) and read its section in the [changelog](https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/blob/main/CHANGELOG.md) first. Then:
+`npm update` brings every release with the same major version, for example from 1.0.0 to 1.4.2. Design system updates and fixes come this way. A new major version (2.0.0) means you must change your own code: read its section in the [changelog](https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/blob/main/CHANGELOG.md) first, then install it with `npm install @inno-trec/ui-web@latest @inno-trec/tokens@latest`. Then:
 
 1. Run `npm run build`. A type error usually means a component prop changed.
 2. Look at your pages in the browser, and run `npm test`.
