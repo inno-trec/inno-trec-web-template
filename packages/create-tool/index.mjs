@@ -13,7 +13,7 @@ import { createInterface } from 'node:readline/promises';
 import { fileURLToPath } from 'node:url';
 
 const template = path.join(path.dirname(fileURLToPath(import.meta.url)), 'template');
-const DOCS = 'https://glpages.up.pt/inno-trec/inno-trec-web-template/';
+const DOCS = 'https://inno-trec.github.io/inno-trec-web-template/';
 
 /** npm drops some dotfiles from packages, so the template stores them under another name. */
 const RENAME = { _gitignore: '.gitignore', _nvmrc: '.nvmrc' };

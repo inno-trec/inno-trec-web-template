@@ -22,7 +22,7 @@ When you change one of the three scripts, run the sync and look at the diff of t
 
 The sync script stops with a message when the design system's `bundle.js` changes shape. Fix the script, not the generated file.
 
-## Checks before a merge request
+## Checks before a pull request
 
 ```sh
 npm run check:generated   # generated files match the last sync
@@ -31,7 +31,7 @@ npm run build
 npm test                  # every page at 1440px and 400px wide
 ```
 
-CI (`.gitlab-ci.yml`) runs the same four commands, and builds the documentation site, on every merge request and every push to `main`: the `checks` job on the Node in the image (keep it in step with `.nvmrc`), and `checks-node-current` on the newest Node. Only `checks` blocks a merge; a failure on the newest Node is an early warning to look into.
+CI (`.github/workflows/ci.yml`) runs the same four commands, builds the documentation site and the npm packages, on every pull request and every push to `main`: once on the Node in `.nvmrc` and once on the newest Node. Only the `.nvmrc` run blocks a merge; a failure on the newest Node is an early warning to look into. Changes reach `main` only through a pull request whose checks pass.
 
 `npm test` opens every page in the side navigation at 1440px and 400px wide. It fails when the page scrolls sideways (a wide table in its own container is fine), when the heading is missing, or when the console shows an error. It cannot judge whether a pattern reads well, so still click through a changed pattern with `npm run dev`.
 
@@ -58,36 +58,39 @@ Add a line for your change under `## [Unreleased]` in `CHANGELOG.md`.
 
 ## The website and the demo
 
-The `pages` job in `.gitlab-ci.yml` publishes `docs/` and the starter (under `demo/`) to GitLab Pages after every push to `main`. It runs only in the template project (`CI_PROJECT_PATH`); the site's path comes from the project's Pages address. Who can see the site is set in the project under **Settings → General → Visibility → Pages**.
+`.github/workflows/pages.yml` publishes `docs/` and the template demo (under `demo/`) to GitHub Pages after every push to `main`, at <https://inno-trec.github.io/inno-trec-web-template/>. It runs only in the template repository; the site's path is the repository name.
 
 ## How teams copy the template
 
-Teams copy the repository into a new project of their own ([Getting started](getting-started.md#1-create-your-repository-from-the-template)) and keep the template as a second remote named `template`. They do not receive updates automatically, because their copy has diverged. They learn about changes from the releases.
+Teams do not copy the repository. They create a tool with `npm create @inno-trec/tool` ([Getting started](getting-started.md#1-create-your-tool)), which copies `apps/web-starter`, and install the design system packages from npm. The pages that `npm create` copied are theirs, so a release does not change them. They learn about changes from the releases.
 
 ## Releasing a version
 
 The template version is the `version` in the root `package.json`. It follows semantic versioning: a minor version for new patterns, docs or a design system sync, a major version when a team must change its own code to take the update.
 
-1. On `main`, move the entries under `## [Unreleased]` in `CHANGELOG.md` into a new section, for example `## [1.1.0] - 2026-11-03`, and commit.
-2. Bump the version and create the tag:
+1. On a branch, move the entries under `## [Unreleased]` in `CHANGELOG.md` into a new section, for example `## [1.1.0] - 2026-11-03`, and set the same version in the root `package.json` (`npm version minor --no-git-tag-version`, or `patch` / `major`). Open a pull request and merge it.
+2. Tag the merged `main` and push the tag:
 
    ```sh
-   npm version minor -m "Release v%s"    # or patch / major
-   git push --follow-tags
+   git switch main && git pull
+   git tag v1.1.0
+   git push origin v1.1.0
    ```
 
-3. The tag pipeline runs all checks, confirms that the tag matches `package.json` and that `CHANGELOG.md` has a section for it (`release-notes`), creates a GitLab release with that section as its notes (`release`), and publishes the npm packages (`npm-publish`).
+   Only organization admins can create `v*` tags, and a pushed tag cannot be moved or deleted.
+
+3. The tag runs `.github/workflows/release.yml`: all checks, then a check that the tag matches `package.json` and that `CHANGELOG.md` has a section for it, a GitHub release with that section as its notes (`release`), and the npm packages (`npm-publish`).
 
 The `npm-publish` job runs `scripts/publish-packages.mjs`. It publishes `@inno-trec/tokens`, `@inno-trec/ui-web` and `@inno-trec/create-tool` with the root `package.json` version; the `version` inside each package folder is not used. It copies each package to `.publish/` and publishes the copy, so the repository does not change. `@inno-trec/create-tool` carries `apps/web-starter` as its template, with its README and `.gitignore` from `packages/create-tool/files/`. Run `npm run packages:pack` to build the packages into `.publish/` and try them before a release.
 
-The job needs the CI/CD variable `NPM_TOKEN` (masked and protected): an npm granular access token that can publish the `@inno-trec` scope. Protect the `v*` tags in **Settings → Repository → Protected tags**, so only maintainers can start a release. A version that is already on npm is skipped, so the job can run again.
+The job uses npm trusted publishing: on npmjs.com, each of the three packages trusts `release.yml` in the repository's `npm` environment, so no token is stored anywhere, and npm adds provenance to each version. A version that is already on npm is skipped, so the job can run again.
 
 ## Keeping versions current
 
 The template uses the newest stable release of Node and of every dependency, so each copy starts with the longest support window.
 
-- **Dependencies.** Once a month, run `npm outdated`, update minor and patch versions together in one merge request, and each major update in its own. Merge when CI passes. Read the changelog of a major update first. Never move to Tailwind 4: the mobile app's NativeWind 4 needs Tailwind 3.
-- **Node.** When a new LTS release comes out (each October), change `.nvmrc`, `engines.node` in `package.json` and the image in `.gitlab-ci.yml` to the new major version, and update the Node version in `README.md` and `docs/getting-started.md`. The `checks-node-current` job shows problems with newer Node releases early.
+- **Dependencies.** Once a month, run `npm outdated`, update minor and patch versions together in one pull request, and each major update in its own. Merge when CI passes. Read the changelog of a major update first. Never move to Tailwind 4: the mobile app's NativeWind 4 needs Tailwind 3.
+- **Node.** When a new LTS release comes out (each October), change `.nvmrc` and `engines.node` in `package.json` to the new major version (the workflows read `.nvmrc`), and update the Node version in `README.md` and `docs/getting-started.md`. The `checks-node-current` job shows problems with newer Node releases early.
 
 ## Telling teams about changes
 

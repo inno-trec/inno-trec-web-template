@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitepress';
 
 /**
- * The documentation site (GitLab Pages). The pages are the Markdown files in docs/, so the site and the
+ * The documentation site (GitHub Pages). The pages are the Markdown files in docs/, so the site and the
  * repository never disagree. `npm run docs:dev` previews it; `npm run pages:build` builds it with the demo.
  */
 
@@ -14,7 +14,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 mkdirSync(path.join(here, '../public'), { recursive: true });
 copyFileSync(path.join(here, '../../packages/ui-web/assets/logos/logo-landscape-colour.png'), path.join(here, '../public/logo.png'));
 
-const REPO = 'https://gitlab.up.pt/inno-trec/inno-trec-web-template';
+const REPO = 'https://github.com/inno-trec/inno-trec-web-template';
 
 export default defineConfig({
   title: 'INNO-TREC template',
@@ -81,7 +81,7 @@ export default defineConfig({
   },
   markdown: {
     config(md) {
-      // Links to source files (../apps/…) point at the repository on gitlab.up.pt.
+      // Links to source files (../apps/…) point at the repository on GitHub.
       const render = md.renderer.rules.link_open ?? ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options));
       md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
         const href = tokens[idx].attrGet('href');

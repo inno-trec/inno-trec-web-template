@@ -4,6 +4,13 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-27
+
+### Changed
+
+- **The template moved to GitHub** (`inno-trec/inno-trec-web-template`). CI, the documentation site (now at <https://inno-trec.github.io/inno-trec-web-template/>), releases and npm publishing run in GitHub Actions. The packages are published with npm provenance, through trusted publishing. The old addresses on gitlab.up.pt send you to the new ones.
+- The package pages on npmjs.com link to the GitHub repository and the new documentation site, and `npm create @inno-trec/tool` prints the new guide address.
+
 ## [1.0.0] - 2026-10-27
 
 The first version on npmjs.com. It has the same content as 0.2.0, which was never published to npm. From 1.0.0 on, `npm update` brings every minor release (design system updates, new patterns), and only a major release asks teams to change their own code.
@@ -73,7 +80,8 @@ First release of the template.
 
 - Node 24 LTS or newer, npm 11.
 
-[Unreleased]: https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/compare/v1.0.0...main
-[1.0.0]: https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/compare/v0.2.0...v1.0.0
-[0.2.0]: https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/compare/v0.1.0...v0.2.0
-[0.1.0]: https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/tags/v0.1.0
+[Unreleased]: https://github.com/inno-trec/inno-trec-web-template/compare/v1.0.1...main
+[1.0.1]: https://github.com/inno-trec/inno-trec-web-template/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/inno-trec/inno-trec-web-template/compare/v0.2.0...v1.0.0
+[0.2.0]: https://github.com/inno-trec/inno-trec-web-template/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/inno-trec/inno-trec-web-template/releases/tag/v0.1.0

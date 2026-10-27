@@ -40,7 +40,7 @@ Do these four things first.
 
 The starter also holds the account screens (sign in, ask for an account, invitation, password reset, the person's account) and the Users page. Keep them, or delete the ones your identity provider replaces.
 
-For complete pages, copy from the example apps in the [template repository](https://gitlab.up.pt/inno-trec/inno-trec-web-template):
+For complete pages, copy from the example apps in the [template repository](https://github.com/inno-trec/inno-trec-web-template):
 
 - `apps/template-demo` holds the monitoring, PV performance and maintenance pages: an energy overview with charts, PV performance, data checks, alerts and assets. The demo on this site runs it. A page with a chart also needs `src/charts/`, `src/time/zone.ts` and the `echarts` dependency.
 - `apps/credits-example` holds the credit screens. Read the [credit rules](design-rules.md#energy-credits) before you use them.
@@ -108,7 +108,7 @@ npm test             # every page at 1440px and 400px: heading, no sideways scro
 
 The first time, install the test browser with `npx playwright install chromium`. The tests find your pages through the side navigation, so a page you add to `NAV` is tested without changes to the tests.
 
-Before you open a merge request, read the [design rules](design-rules.md) once. They are short.
+Before you ask for a review, read the [design rules](design-rules.md) once. They are short.
 
 ## Update the design system
 
@@ -119,7 +119,7 @@ npm outdated @inno-trec/ui-web @inno-trec/tokens   # what is new
 npm update @inno-trec/ui-web @inno-trec/tokens     # within the version range in package.json
 ```
 
-`npm update` brings every release with the same major version, for example from 1.0.0 to 1.4.2. Design system updates and fixes come this way. A new major version (2.0.0) means you must change your own code: read its section in the [changelog](https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/blob/main/CHANGELOG.md) first, then install it with `npm install @inno-trec/ui-web@latest @inno-trec/tokens@latest`. Then:
+`npm update` brings every release with the same major version, for example from 1.0.0 to 1.4.2. Design system updates and fixes come this way. A new major version (2.0.0) means you must change your own code: read its section in the [changelog](https://github.com/inno-trec/inno-trec-web-template/blob/main/CHANGELOG.md) first, then install it with `npm install @inno-trec/ui-web@latest @inno-trec/tokens@latest`. Then:
 
 1. Run `npm run build`. A type error usually means a component prop changed.
 2. Look at your pages in the browser, and run `npm test`.

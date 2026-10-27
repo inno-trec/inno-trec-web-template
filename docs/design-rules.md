@@ -92,7 +92,7 @@ These rules apply to screens that show energy credits (the ECMS). [`apps/credits
 - **A balance below zero is not an error.** Community and dependent wallets are normally below zero. Show the minus sign in normal text. Never color it red.
 - Components never apply a valuation factor and never predict a balance.
 
-## A short checklist before a merge request
+## A short checklist before a review
 
 - [ ] One primary button per screen
 - [ ] No shadows, gradients or rounded corners that you added

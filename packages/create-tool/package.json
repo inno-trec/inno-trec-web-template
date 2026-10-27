@@ -6,10 +6,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.up.pt/inno-trec/inno-trec-web-template.git",
+    "url": "git+https://github.com/inno-trec/inno-trec-web-template.git",
     "directory": "packages/create-tool"
   },
-  "homepage": "https://glpages.up.pt/inno-trec/inno-trec-web-template/",
+  "homepage": "https://inno-trec.github.io/inno-trec-web-template/",
   "files": [
     "index.mjs",
     "template"

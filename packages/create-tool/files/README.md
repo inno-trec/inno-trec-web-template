@@ -30,4 +30,4 @@ The components come from [`@inno-trec/ui-web`](https://www.npmjs.com/package/@in
 npm update @inno-trec/ui-web @inno-trec/tokens
 ```
 
-Guides, design rules, page patterns and every component running: <https://glpages.up.pt/inno-trec/inno-trec-web-template/>
+Guides, design rules, page patterns and every component running: <https://inno-trec.github.io/inno-trec-web-template/>

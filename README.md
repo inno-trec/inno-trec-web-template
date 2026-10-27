@@ -3,9 +3,10 @@
 </p>
 
 <p align="center">
-  <a href="https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/pipelines?ref=main"><img src="https://gitlab.up.pt/inno-trec/inno-trec-web-template/badges/main/pipeline.svg" alt="Pipeline status"></a>
-  <a href="https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/releases"><img src="https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/badges/release.svg" alt="Latest release"></a>
-  <a href="https://glpages.up.pt/inno-trec/inno-trec-web-template/"><img src="https://img.shields.io/badge/docs-website-0a6ebd" alt="Documentation website"></a>
+  <a href="https://github.com/inno-trec/inno-trec-web-template/actions/workflows/ci.yml"><img src="https://github.com/inno-trec/inno-trec-web-template/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+  <a href="https://github.com/inno-trec/inno-trec-web-template/releases"><img src="https://img.shields.io/github/v/release/inno-trec/inno-trec-web-template" alt="Latest release"></a>
+  <a href="https://www.npmjs.com/package/@inno-trec/ui-web"><img src="https://img.shields.io/npm/v/@inno-trec/ui-web" alt="npm version of @inno-trec/ui-web"></a>
+  <a href="https://inno-trec.github.io/inno-trec-web-template/"><img src="https://img.shields.io/badge/docs-website-0a6ebd" alt="Documentation website"></a>
   <a href=".nvmrc"><img src="https://img.shields.io/badge/node-%E2%89%A524-339933" alt="Node 24 or newer"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey" alt="MIT license"></a>
 </p>
@@ -41,7 +42,7 @@ npm run dev:demo     # template demo: energy overview with charts, PV performanc
 npm run dev:credits  # credit screens (ECMS): ledger overview, wallets, send flow, member wallet
 ```
 
-The documentation is also a website with the template demo as a live demo and every component running in the component guide (GitLab Pages). Preview it with `npm run docs:dev`.
+The documentation is also a website with the template demo as a live demo and every component running in the component guide (GitHub Pages). Preview it with `npm run docs:dev`.
 
 The template serves the INNO-TREC web tools: energy monitoring (consumption, PV, storage), PV yield and performance, asset maintenance, and the energy credit system.
 

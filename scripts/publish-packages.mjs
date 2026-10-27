@@ -7,7 +7,7 @@
  *   @inno-trec/ui-web        the components
  *   @inno-trec/create-tool   `npm create @inno-trec/tool`, with a copy of apps/web-starter as its template
  *
- *   node scripts/publish-packages.mjs          publish (the npm-publish job, on a vX.Y.Z tag; needs NPM_TOKEN)
+ *   node scripts/publish-packages.mjs          publish (the npm-publish job in release.yml, on a vX.Y.Z tag; npm trusted publishing)
  *   node scripts/publish-packages.mjs --pack   write the .tgz files to .publish/ instead, to test them
  *
  * The repository does not change: each package is copied to .publish/, and its manifest is set there

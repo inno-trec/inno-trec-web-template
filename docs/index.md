@@ -26,7 +26,7 @@ features:
 
 ## Use the template
 
-1. Create an empty project on gitlab.up.pt and copy the template into it, as in [Getting started](getting-started.md).
+1. Create your tool with `npm create @inno-trec/tool my-tool`, as in [Getting started](getting-started.md).
 2. Follow [Getting started](getting-started.md): install, run, rename the tool, and replace the sample backend in `src/data/`.
 3. Keep the rules in [Design rules](design-rules.md) and the shapes in [Page patterns](page-patterns.md).
 

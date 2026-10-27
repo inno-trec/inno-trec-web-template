@@ -1,5 +1,5 @@
 /**
- * Builds the documentation site (GitLab Pages): the documentation (VitePress, from docs/) with the component gallery
+ * Builds the documentation site (GitHub Pages): the documentation (VitePress, from docs/) with the component gallery
  * (scripts/build-gallery.mjs) and the template demo app (apps/template-demo) as a live demo under demo/. The result is docs/.vitepress/dist.
  *
  * Pages has no rewrites, so an address inside the demo (…/demo/alerts) would get the site's 404

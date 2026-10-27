@@ -42,7 +42,7 @@ Problems that have already come up, with the cause and the fix.
 
 **Cause.** A component prop was added, renamed or removed in the design system.
 
-**Fix.** Read the release's section in the [changelog](https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/blob/main/CHANGELOG.md) and the [component guide](reference/components.md), then update your pages. Commit the update separately so the cause is easy to find.
+**Fix.** Read the release's section in the [changelog](https://github.com/inno-trec/inno-trec-web-template/blob/main/CHANGELOG.md) and the [component guide](reference/components.md), then update your pages. Commit the update separately so the cause is easy to find.
 
 ## `Cannot find module '@inno-trec/ui-web'`
 
