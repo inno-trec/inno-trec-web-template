@@ -4,6 +4,8 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-27
+
 ### Changed
 
 - **The starter is minimal, and the complete tool moved to `apps/template-demo`.** `web-starter` now holds the page frame, the account screens, the Users page, the client for the backend and one example page (`HomePage`) with the loading, empty and error states. It no longer depends on ECharts. The monitoring, PV performance, data checks, alerts and assets pages, the charts and the synthetic data are in `apps/template-demo` (`npm run dev:demo`), which the documentation site shows as the demo.
@@ -67,5 +69,6 @@ First release of the template.
 
 - Node 24 LTS or newer, npm 11.
 
-[Unreleased]: https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/compare/v0.1.0...main
+[Unreleased]: https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/compare/v0.2.0...main
+[0.2.0]: https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/compare/v0.1.0...v0.2.0
 [0.1.0]: https://gitlab.up.pt/inno-trec/inno-trec-web-template/-/tags/v0.1.0
