@@ -24,8 +24,8 @@ A minor release: nothing breaks. `npm update` brings the new `UserMenu` and the 
 
 1. Run `npm update @inno-trec/tokens @inno-trec/ui-web` to get `UserMenu` and the dividing lines.
 2. **Menu sections.** Copy the `NAV_SECTIONS` list and the `navSections` code from `apps/web-starter/src/layouts/ToolShell.tsx`, and move your pages from `NAV` into the `items` of a section. Without a `title`, a section shows a dividing line after the first one.
-3. **User menu.** In the same file, replace the "Account" and "Sign out" buttons in `topActions` with `userMenu`. Copy `isPlainClick` too: it leaves Ctrl, Cmd and Shift clicks to the browser.
-4. **Notifications** (optional). Copy `src/notifications/`, `src/pages/NotificationsPage.tsx` and `NOTIFICATIONS_REFRESH_MS` from `src/config.ts`. Add the route in `src/App.tsx`, wrap `ToolShell` in `NotificationsProvider`, and connect `listNotifications`, `markNotificationRead` and `markAllNotificationsRead` in `src/data/api.ts` to your backend. Without notifications, remove the "Notifications" item from `userMenu`.
+3. **User menu.** In the same file, replace the "Account" and "Sign out" buttons in `topActions` with `userMenu`, and copy `isPlainClick`: it leaves Ctrl, Cmd and Shift clicks to the browser. Without notifications, use `userMenu` with the Account and Sign out items only, and without `count` and `countLabel`.
+4. **Notifications** (optional). Copy `src/notifications/`, `src/pages/NotificationsPage.tsx` and `NOTIFICATIONS_REFRESH_MS` from `src/config.ts`. Copy `UserNotification` into `src/data/types.ts` and re-export it from `src/data/api.ts`, and connect `listNotifications`, `markNotificationRead` and `markAllNotificationsRead` in `src/data/api.ts` to your backend. In `src/App.tsx`, add the route and wrap `ToolShell` in `NotificationsProvider`. In `ToolShell.tsx`, add `const { unread } = useNotifications();`, the "Notifications" item and the `/notifications` entry in `OTHER_PAGES`, and pass `count: unread` and `countLabel: 'unread notifications'` to `userMenu`.
 5. Tests: open "Account" and "Sign out" through the user menu (`chooseFromUserMenu` in `e2e/helpers.ts`).
 
 ### Fixed
