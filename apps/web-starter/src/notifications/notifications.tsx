@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useSession } from '../auth/session';
 import { NOTIFICATIONS_REFRESH_MS } from '../config';
 import { listNotifications, markAllNotificationsRead, markNotificationRead, type UserNotification } from '../data/api';
 
@@ -8,6 +9,10 @@ import { listNotifications, markAllNotificationsRead, markNotificationRead, type
  * refreshes it (every NOTIFICATIONS_REFRESH_MS and when the browser tab becomes visible again) and marks
  * messages as read. For push updates, replace the refresh with your backend's channel (for example
  * Server-Sent Events) and keep `useNotifications` as it is.
+ *
+ * Several requests can be in flight at once, so a slow answer must not undo a newer one. `generation`
+ * counts them: only the answer of the latest refresh is used, and a confirmed change makes every refresh
+ * that started earlier obsolete.
  */
 
 type Load = { state: 'loading' } | { state: 'error' } | { state: 'ready'; items: UserNotification[] };
@@ -24,32 +29,42 @@ interface NotificationsContext {
 const Context = createContext<NotificationsContext | null>(null);
 
 export function NotificationsProvider({ children }: { children: ReactNode }) {
+  const { session } = useSession();
+  // The backend knows who asks from the session. The sample backend needs the id.
+  const userId = session!.userId;
   const [load, setLoad] = useState<Load>({ state: 'loading' });
   const ready = useRef(false);
+  const generation = useRef(0);
 
-  const reload = useCallback(() => {
-    listNotifications().then(
+  const refresh = useCallback(() => {
+    const mine = ++generation.current;
+    listNotifications(userId).then(
       (items) => {
+        if (mine !== generation.current) return;
         ready.current = true;
         setLoad({ state: 'ready', items });
       },
       // A failed refresh keeps the list the person already has. Only a failed first load is an error.
       () => {
-        if (!ready.current) setLoad({ state: 'error' });
+        if (mine === generation.current && !ready.current) setLoad({ state: 'error' });
       },
     );
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
-    reload();
-    const timer = window.setInterval(reload, NOTIFICATIONS_REFRESH_MS);
-    const onVisible = () => document.visibilityState === 'visible' && reload();
+    // Start again for each person, so one person never sees the list of the previous one.
+    ready.current = false;
+    setLoad({ state: 'loading' });
+    refresh();
+    const timer = window.setInterval(refresh, NOTIFICATIONS_REFRESH_MS);
+    const onVisible = () => document.visibilityState === 'visible' && refresh();
     document.addEventListener('visibilitychange', onVisible);
     return () => {
+      generation.current++;
       window.clearInterval(timer);
       document.removeEventListener('visibilitychange', onVisible);
     };
-  }, [reload]);
+  }, [refresh]);
 
   const value = useMemo<NotificationsContext>(
     () => ({
@@ -58,19 +73,21 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
       reload: () => {
         ready.current = false;
         setLoad({ state: 'loading' });
-        reload();
+        refresh();
       },
       markRead: async (id) => {
-        const changed = await markNotificationRead(id);
+        const changed = await markNotificationRead(userId, id);
+        generation.current++;
         setLoad((current) => (current.state === 'ready' ? { state: 'ready', items: current.items.map((n) => (n.id === id ? changed : n)) } : current));
       },
       markAllRead: async () => {
-        await markAllNotificationsRead();
+        await markAllNotificationsRead(userId);
+        generation.current++;
         const now = new Date().toISOString();
         setLoad((current) => (current.state === 'ready' ? { state: 'ready', items: current.items.map((n) => ({ ...n, readAt: n.readAt ?? now })) } : current));
       },
     }),
-    [load, reload],
+    [load, refresh, userId],
   );
 
   return <Context.Provider value={value}>{children}</Context.Provider>;

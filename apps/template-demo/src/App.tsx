@@ -21,7 +21,7 @@ import { UsersPage } from './pages/UsersPage';
  * Add a page in three steps:
  *   1. create it in src/pages/
  *   2. add a <Route> below (inside ToolShell for signed-in pages)
- *   3. add an entry to NAV in src/layouts/ToolShell.tsx
+ *   3. add an entry to a section of NAV_SECTIONS in src/layouts/ToolShell.tsx
  */
 export function App() {
   return (

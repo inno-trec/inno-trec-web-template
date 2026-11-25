@@ -354,32 +354,35 @@ export async function listAssets(): Promise<{ assets: Asset[] }> {
 
 /* ---------- Notifications ---------- */
 
-let notifications: UserNotification[] = [
+const NOTIFICATIONS: UserNotification[] = [
   { id: 'n-1', title: 'Inverter 3 stopped with fault F07', message: 'A corrective alert is open. Send a technician.', createdAt: ago(3 * HOUR), readAt: null, href: '/alerts' },
   { id: 'n-2', title: 'Performance ratio below normal for 5 days', message: 'A predictive alert is open for one roof.', createdAt: ago(DAY), readAt: null, href: '/alerts' },
   { id: 'n-3', title: 'No readings from 03:00 to 04:00', message: 'The missing values are estimated.', createdAt: ago(4 * DAY), readAt: null, href: '/alerts' },
   { id: 'n-4', title: 'Welcome', message: 'Your account is ready.', createdAt: ago(30 * DAY), readAt: ago(29 * DAY), href: null },
 ];
 
+/** When each person read each notification, by `userId:notificationId`. Reading belongs to the person. */
+const readAt = new Map<string, string>();
+const forPerson = (userId: string): UserNotification[] =>
+  NOTIFICATIONS.map((n) => ({ ...n, readAt: n.readAt ?? readAt.get(`${userId}:${n.id}`) ?? null }));
+
 /** The newest first. The list is the person's own; the backend decides who sees what. */
-export async function listNotifications(): Promise<{ notifications: UserNotification[] }> {
+export async function listNotifications(userId: string): Promise<{ notifications: UserNotification[] }> {
   await respond(300);
-  return { notifications: demo() === 'empty' ? [] : [...notifications].sort((a, b) => b.createdAt.localeCompare(a.createdAt)) };
+  return { notifications: demo() === 'empty' ? [] : forPerson(userId).sort((a, b) => b.createdAt.localeCompare(a.createdAt)) };
 }
 
-export async function markNotificationRead(id: string): Promise<UserNotification> {
+export async function markNotificationRead(userId: string, id: string): Promise<UserNotification> {
   await respond(200);
-  const found = notifications.find((n) => n.id === id);
-  if (!found) throw new ApiError('not_found');
-  const next = { ...found, readAt: found.readAt ?? iso(Date.now()) };
-  notifications = notifications.map((n) => (n.id === id ? next : n));
-  return next;
+  if (!NOTIFICATIONS.some((n) => n.id === id)) throw new ApiError('not_found');
+  if (!readAt.has(`${userId}:${id}`)) readAt.set(`${userId}:${id}`, iso(Date.now()));
+  return forPerson(userId).find((n) => n.id === id)!;
 }
 
-export async function markAllNotificationsRead(): Promise<void> {
+export async function markAllNotificationsRead(userId: string): Promise<void> {
   await respond(300);
   const now = iso(Date.now());
-  notifications = notifications.map((n) => ({ ...n, readAt: n.readAt ?? now }));
+  for (const n of NOTIFICATIONS) if (!readAt.has(`${userId}:${n.id}`)) readAt.set(`${userId}:${n.id}`, now);
 }
 
 /* ---------- Users ---------- */

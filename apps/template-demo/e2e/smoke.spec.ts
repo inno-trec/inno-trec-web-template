@@ -9,7 +9,7 @@ test.beforeEach(async ({ page }) => {
   });
 });
 
-/** Pages come from the side navigation, so a new NAV entry is tested without editing this file. */
+/** Pages come from the side navigation, so a new NAV_SECTIONS entry is tested without editing this file. */
 async function navPages(page: Page) {
   await page.goto('/');
   const links = page.locator('.it-sidenav a[href]');
@@ -26,7 +26,7 @@ test('every page renders its heading and footer without sideways scroll or conso
     await test.step(href, async () => {
       await page.goto(href);
       await expect(page.locator('.it-shell-main > h1')).toHaveText(label);
-      // The heading comes from NAV, so also check that a route renders a real page, not the fallback.
+      // The heading comes from NAV_SECTIONS, so also check that a route renders a real page, not the fallback.
       await expect(page.locator('[data-not-found]'), `no route for ${href} in App.tsx`).toHaveCount(0);
       // Every INNO-TREC tool shows the EU funding emblem in the footer.
       await expect(page.getByRole('img', { name: 'Funded by the European Union' })).toBeVisible();
@@ -227,4 +227,50 @@ test('the side navigation groups pages under headings', async ({ page, viewport 
   test.skip((viewport?.width ?? 0) < 720, 'headings are hidden when the navigation becomes a row');
   await page.goto('/');
   await expect(page.locator('.it-sidenav .it-nav-section').first()).toBeVisible();
+});
+
+test('a modified click on the user menu leaves navigation to the browser', async ({ page, context }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: /^Ana Ribeiro/ }).click();
+  const opened = context.waitForEvent('page');
+  await page.getByRole('menuitem', { name: 'Notifications' }).click({ modifiers: ['ControlOrMeta'] });
+  const tab = await opened;
+  // The sample session lives in one tab's storage, so the new tab may ask to sign in. It still aims at the page.
+  await expect(tab).toHaveURL(/notifications/);
+  // The first tab did not navigate.
+  await expect(page).toHaveURL(/\/$/);
+});
+
+test('a menu opened with Enter focuses its first item, and a choice returns focus to the button', async ({ page }) => {
+  await page.goto('/');
+  const trigger = page.getByRole('button', { name: /^Ana Ribeiro/ });
+  await trigger.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('menuitem', { name: 'Account' })).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(trigger).toBeFocused();
+
+  // Choosing an item closes the menu and leaves focus on the button, where the person was.
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/\/account$/);
+  await expect(page.getByRole('menu')).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+});
+
+test('notifications are read per person', async ({ page }) => {
+  await page.goto('/notifications');
+  await expect(page.getByText('3 unread')).toBeVisible();
+  await page.getByRole('button', { name: 'Mark all as read' }).click();
+  await expect(page.getByText('All read')).toBeVisible();
+
+  // Another person signs in without a page reload: their messages are still unread.
+  await chooseFromUserMenu(page, 'Sign out');
+  await expect(page.getByText('You are signed out.')).toBeVisible();
+  await page.getByRole('textbox', { name: 'Email' }).fill('manuel.ferreira@example.org');
+  await page.getByLabel(/^Password/).fill('sample-password');
+  await page.getByRole('button', { name: 'Sign in' }).click();
+  await page.getByRole('button', { name: /^Manuel Ferreira/ }).click();
+  await page.getByRole('menuitem', { name: 'Notifications' }).click();
+  await expect(page.getByText('3 unread')).toBeVisible();
 });
