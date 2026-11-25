@@ -21,8 +21,5 @@ apps/*/playwright-report/
 # Project instructions for AI agents are shared with every team
 !CLAUDE.md
 
-# Personal Claude Code files (settings, skills)
-.claude/
-
 # Packages staged by scripts/publish-packages.mjs
 .publish/
