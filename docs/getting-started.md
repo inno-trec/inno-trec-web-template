@@ -103,9 +103,9 @@ The person's name in the top bar opens a menu with Account, Notifications and Si
 The number on the avatar is the count of unread notifications. `src/notifications/notifications.tsx` loads the list from `listNotifications` in `src/data/api.ts` and refreshes it every minute (`NOTIFICATIONS_REFRESH_MS` in `src/config.ts`). The page `src/pages/NotificationsPage.tsx` lists them. Your backend decides what a notification is, who receives it and how it reaches the tool (email, push). The tool only shows the list and marks messages as read. To receive updates without polling, replace the refresh in `notifications.tsx` with your backend's channel. If your tool has no notifications, remove them in this order, so the tool still compiles after each step:
 
 1. In `src/layouts/ToolShell.tsx`: remove the `useNotifications` import and the `const { unread } = useNotifications();` line, the `count` and `countLabel` lines of `userMenu`, the "Notifications" item of `userMenu`, and the `/notifications` entry of `OTHER_PAGES`.
-2. In `src/App.tsx`: remove the `/notifications` route, the `NotificationsPage` import, and the `NotificationsProvider` that wraps `ToolShell`.
+2. In `src/App.tsx`: remove the `/notifications` route, the `NotificationsPage` import, the `NotificationsProvider` import, and the `NotificationsProvider` element that wraps `ToolShell`.
 3. Delete `src/notifications/` and `src/pages/NotificationsPage.tsx`.
-4. Remove `NOTIFICATIONS_REFRESH_MS` from `src/config.ts`, the notification calls from `src/data/api.ts`, `UserNotification` from `src/data/types.ts` and the sample data from `src/data/fakeServer.ts`.
+4. Remove the rest of the notification code: `NOTIFICATIONS_REFRESH_MS` from `src/config.ts`; the three notification functions and the `UserNotification` re-export from `src/data/api.ts`; `UserNotification` from `src/data/types.ts`; and, in `src/data/fakeServer.ts`, the `UserNotification` import and the notification section (the sample data and its three functions).
 
 The design system has one rule here: **the interface displays what the backend reports and collects input.** Energy totals, shares, performance indicators, credit amounts and balances all come from the API. Do not calculate them in a component. The [design rules](design-rules.md#numbers-and-units) explain why.
 

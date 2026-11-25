@@ -196,6 +196,13 @@ test('a menu opened with Enter focuses its first item, and a choice returns focu
   await expect(page.getByRole('menuitem', { name: 'Account' })).toBeFocused();
   await page.keyboard.press('Escape');
   await expect(trigger).toBeFocused();
+
+  // Choosing an item closes the menu and leaves focus on the button, where the person was.
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/\/account$/);
+  await expect(page.getByRole('menu')).toHaveCount(0);
+  await expect(trigger).toBeFocused();
 });
 
 test('notifications are read per person', async ({ page }) => {
