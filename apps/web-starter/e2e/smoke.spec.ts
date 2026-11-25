@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { collectErrors, expectNoSidewaysScroll } from './helpers';
+import { chooseFromUserMenu, collectErrors, expectNoSidewaysScroll } from './helpers';
 
 /** These tests start signed in as an administrator. The sign-in screens are tested in accounts.spec.ts. */
 test.beforeEach(async ({ page }) => {
@@ -104,7 +104,7 @@ test('a user can be invited and deactivated', async ({ page }) => {
 test('the account page saves the profile and checks the current password', async ({ page }) => {
   const errors = collectErrors(page);
   await page.goto('/');
-  await page.getByRole('link', { name: 'Account' }).click();
+  await chooseFromUserMenu(page, 'Account');
   await expect(page.locator('.it-shell-main > h1')).toHaveText('Your account');
 
   await page.getByRole('textbox', { name: 'Name' }).fill('Ana M. Ribeiro');
@@ -118,3 +118,60 @@ test('the account page saves the profile and checks the current password', async
   expect(errors).toEqual([]);
 });
 
+test('the user menu holds Account, Notifications and Sign out, and works with the keyboard', async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto('/');
+  const trigger = page.getByRole('button', { name: /^Ana Ribeiro/ });
+  await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+
+  // The arrow key opens the menu and moves to the first item; Esc closes it and returns to the button.
+  await trigger.focus();
+  await page.keyboard.press('ArrowDown');
+  await expect(page.getByRole('menuitem', { name: 'Account' })).toBeFocused();
+  await page.keyboard.press('ArrowDown');
+  await expect(page.getByRole('menuitem', { name: 'Notifications' })).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('menu')).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+
+  // A click outside closes it.
+  await trigger.click();
+  await expect(page.getByRole('menuitem')).toHaveText(['Account', 'Notifications', 'Sign out']);
+  await page.locator('.it-shell-main').click({ position: { x: 4, y: 4 } });
+  await expect(page.getByRole('menu')).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test('the notifications page lists messages, and marking them read updates the count', async ({ page }) => {
+  const errors = collectErrors(page);
+  await page.goto('/');
+  // The count is on the avatar and in the button's name.
+  const trigger = page.getByRole('button', { name: /3 unread notifications$/ });
+  await expect(trigger).toBeVisible();
+
+  await chooseFromUserMenu(page, 'Notifications');
+  await expect(page.locator('.it-shell-main > h1')).toHaveText('Notifications');
+  await expect(page.getByText('3 unread')).toBeVisible();
+
+  await page.getByRole('button', { name: /^Mark “.*” as read$/ }).first().click();
+  await expect(page.getByText('2 unread')).toBeVisible();
+  await expect(page.getByRole('button', { name: /2 unread notifications$/ })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Mark all as read' }).click();
+  await expect(page.getByText('All read')).toBeVisible();
+  // With nothing unread, the button's name carries no count.
+  await expect(page.getByRole('button', { name: 'Ana Ribeiro, Administrator', exact: true })).toBeVisible();
+
+  await page.goto('/notifications?demo=empty');
+  await expect(page.getByRole('heading', { name: 'No notifications' })).toBeVisible();
+  await page.goto('/notifications?demo=error');
+  await expect(page.getByText('The notifications could not be loaded')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Try again' })).toBeVisible();
+  expect(errors.filter((e) => !/Failed to load resource/.test(e))).toEqual([]);
+});
+
+test('the side navigation groups pages under headings', async ({ page, viewport }) => {
+  test.skip((viewport?.width ?? 0) < 720, 'headings are hidden when the navigation becomes a row');
+  await page.goto('/');
+  await expect(page.locator('.it-sidenav .it-nav-section').first()).toBeVisible();
+});

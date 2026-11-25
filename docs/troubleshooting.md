@@ -22,9 +22,9 @@ Problems that have already come up, with the cause and the fix.
 
 ## The top bar overflows on a phone
 
-**Cause.** The design system's `TopBar` does not shrink: the tool name and the user's name and role do not fit below about 560px.
+**Cause.** The design system's `TopBar` does not shrink: the tool name does not fit below about 560px. The user menu already hides the name and role by itself.
 
-**Fix.** The starter hides them below 560px in `src/index.css`. This is a gap in the design system. Remove the workaround when the design system handles it.
+**Fix.** The starter hides the tool name below 560px in `src/index.css`. This is a gap in the design system. Remove the workaround when the design system handles it.
 
 ## Opening a page directly gives a 404 in production
 

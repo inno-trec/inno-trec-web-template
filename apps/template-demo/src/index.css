@@ -14,11 +14,11 @@ body {
   background: var(--surface-muted);
 }
 
-/* Known gap in the design system: on phones the top bar does not fit the tool name and the user.
-   Hide them below 560px until the design system handles it. Remove when it does. */
+/* Known gap in the design system: on phones the top bar does not fit the tool name.
+   Hide it below 560px until the design system handles it. Remove when it does.
+   The user menu hides its own name and role at that width. */
 @media (max-width: 560px) {
-  .it-topbar-title,
-  .it-user > span:last-child {
+  .it-topbar-title {
     display: none;
   }
 }

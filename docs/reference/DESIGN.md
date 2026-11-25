@@ -190,6 +190,16 @@ components:
     textColor: "{colors.ink}"
     height: 64px
     padding: 16px
+  user-menu:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.none}"
+    padding: 10px
+  count-badge:
+    backgroundColor: "{colors.danger}"
+    textColor: "{colors.surface}"
+    rounded: "{rounded.full}"
+    height: 20px
   side-nav:
     backgroundColor: "{colors.surface-muted}"
     textColor: "{colors.ink}"
@@ -393,7 +403,7 @@ React 18 components are published under the global `InnoTrec`; the values above 
 
 **Lists and messages:** Tabs (views of one page's content; the active tab has a 4px `green` bar and bold text), Pagination ("1–10 of 42 alerts" with Previous and Next; the backend counts and pages), EmptyState (an icon, what is missing, one sentence and an optional action), Toast (one sentence on `ink` at the bottom of the window after a change is saved; closes after 6 seconds; never for errors), FileUpload (a dashed drop area with a Choose files button, and the list of chosen files with size and Remove).
 
-**Shell:** TopBar, SideNav (icon plus label per item; four or five items for members), Footer (EU funding emblem, funding statement and legal links on `ink`), AppShell, and AuthLayout (screens without a session: TopBar, one centered panel of at most 440px on `surface`, the same Footer).
+**Shell:** TopBar, UserMenu (the signed-in person as a menu with Account, Notifications and Sign out; a count on the avatar shows unread items), SideNav (icon plus label per item; four or five items for members; section headings or dividing lines for larger menus), Footer (EU funding emblem, funding statement and legal links on `ink`), AppShell, and AuthLayout (screens without a session: TopBar, one centered panel of at most 440px on `surface`, the same Footer).
 
 ## Do's and Don'ts
 

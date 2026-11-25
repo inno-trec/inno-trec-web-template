@@ -21,6 +21,7 @@ import type {
   SystemPerformance,
   User,
   Session,
+  UserNotification,
   UserChanges,
 } from './types';
 
@@ -349,6 +350,36 @@ export async function listAssets(): Promise<{ assets: Asset[] }> {
   await respond(400);
   if (demo() === 'empty') return { assets: [] };
   return { assets: ASSETS.map((a) => ({ ...a, openAlerts: alerts.filter((al) => al.assetId === a.id && al.state !== 'resolved') })) };
+}
+
+/* ---------- Notifications ---------- */
+
+let notifications: UserNotification[] = [
+  { id: 'n-1', title: 'Inverter 3 stopped with fault F07', message: 'A corrective alert is open. Send a technician.', createdAt: ago(3 * HOUR), readAt: null, href: '/alerts' },
+  { id: 'n-2', title: 'Performance ratio below normal for 5 days', message: 'A predictive alert is open for one roof.', createdAt: ago(DAY), readAt: null, href: '/alerts' },
+  { id: 'n-3', title: 'No readings from 03:00 to 04:00', message: 'The missing values are estimated.', createdAt: ago(4 * DAY), readAt: null, href: '/alerts' },
+  { id: 'n-4', title: 'Welcome', message: 'Your account is ready.', createdAt: ago(30 * DAY), readAt: ago(29 * DAY), href: null },
+];
+
+/** The newest first. The list is the person's own; the backend decides who sees what. */
+export async function listNotifications(): Promise<{ notifications: UserNotification[] }> {
+  await respond(300);
+  return { notifications: demo() === 'empty' ? [] : [...notifications].sort((a, b) => b.createdAt.localeCompare(a.createdAt)) };
+}
+
+export async function markNotificationRead(id: string): Promise<UserNotification> {
+  await respond(200);
+  const found = notifications.find((n) => n.id === id);
+  if (!found) throw new ApiError('not_found');
+  const next = { ...found, readAt: found.readAt ?? iso(Date.now()) };
+  notifications = notifications.map((n) => (n.id === id ? next : n));
+  return next;
+}
+
+export async function markAllNotificationsRead(): Promise<void> {
+  await respond(300);
+  const now = iso(Date.now());
+  notifications = notifications.map((n) => ({ ...n, readAt: n.readAt ?? now }));
 }
 
 /* ---------- Users ---------- */

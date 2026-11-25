@@ -151,7 +151,8 @@ export interface InlineAlertProps {
 export declare function InlineAlert(props: InlineAlertProps): React.ReactElement;
 
 export type IconName = 'sun' | 'wind' | 'plug' | 'battery' | 'clock' | 'wallet' | 'coins' | 'panel' | 'wrench' | 'heart' | 'star' | 'exchange'
-  | 'arrowIn' | 'arrowOut' | 'person' | 'check' | 'info' | 'alert' | 'search' | 'chevron' | 'back' | 'upload' | 'file';
+  | 'arrowIn' | 'arrowOut' | 'person' | 'check' | 'info' | 'alert' | 'search' | 'chevron' | 'back' | 'upload' | 'file'
+  | 'bell' | 'signOut' | 'chevronDown';
 export interface IconProps { name: IconName; size?: number; strokeWidth?: number; /** Set only when the icon is the sole content. */ label?: string; className?: string }
 export declare function Icon(props: IconProps): React.ReactElement;
 
@@ -332,10 +333,45 @@ export interface AccountListProps {
 export declare function AccountList(props: AccountListProps): React.ReactElement;
 
 export interface User { name: string; role?: string }
-export interface TopBarProps { logoSrc?: string; title?: React.ReactNode; user?: User; actions?: React.ReactNode; className?: string }
+export interface MenuItem {
+  id: string;
+  label: string;
+  icon?: IconName;
+  /** Makes the item a link. Without it the item is a button. */
+  href?: string;
+  /** Draws a line above the item, to group items. */
+  divider?: boolean;
+}
+export interface UserMenuProps {
+  user: User;
+  items: MenuItem[];
+  /** Called when an item is chosen. For a link, call `event.preventDefault()` to navigate without a page load. */
+  onSelect?: (id: string, event: React.MouseEvent) => void;
+  /** A number on the avatar, for example unread notifications. Hidden when 0 or missing. */
+  count?: number;
+  /** Words for `count` in the button's name for screen readers. Default "unread". */
+  countLabel?: string;
+  /** Name of the menu for screen readers. Default "Your account". */
+  label?: string;
+  /** Starts open (for previews). */
+  defaultOpen?: boolean;
+  className?: string;
+}
+export declare function UserMenu(props: UserMenuProps): React.ReactElement;
+
+export interface TopBarProps {
+  logoSrc?: string;
+  title?: React.ReactNode;
+  user?: User;
+  /** With `user`, shows the person as a menu button instead of plain text. */
+  userMenu?: Omit<UserMenuProps, 'user'>;
+  actions?: React.ReactNode;
+  className?: string;
+}
 export declare function TopBar(props: TopBarProps): React.ReactElement;
 
 export interface NavItem { id: string; label: string; href?: string; icon?: IconName }
+/** A group of items. With `title` the group gets a heading. Without it, every group after the first gets a dividing line. */
 export interface NavSection { title?: string; items: NavItem[] }
 export interface SideNavProps {
   items?: NavItem[];
@@ -364,6 +400,8 @@ export interface AppShellProps {
   logoSrc?: string;
   title?: React.ReactNode;
   user?: User;
+  /** See TopBar. */
+  userMenu?: Omit<UserMenuProps, 'user'>;
   topActions?: React.ReactNode;
   navItems?: NavItem[];
   navSections?: NavSection[];
