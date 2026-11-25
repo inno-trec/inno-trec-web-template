@@ -30,9 +30,10 @@ export const listRecords = () => call(() => server.listRecords()).then((r) => r.
 
 /* ---------- Notifications ---------- */
 
-export const listNotifications = () => call(() => server.listNotifications()).then((r) => r.notifications);
-export const markNotificationRead = (id: string) => call(() => server.markNotificationRead(id));
-export const markAllNotificationsRead = () => call(() => server.markAllNotificationsRead());
+/** The notifications of one person. A real backend knows who asks from the session and needs no `userId`. */
+export const listNotifications = (userId: string) => call(() => server.listNotifications(userId)).then((r) => r.notifications);
+export const markNotificationRead = (userId: string, id: string) => call(() => server.markNotificationRead(userId, id));
+export const markAllNotificationsRead = (userId: string) => call(() => server.markAllNotificationsRead(userId));
 
 /* ---------- Users ---------- */
 

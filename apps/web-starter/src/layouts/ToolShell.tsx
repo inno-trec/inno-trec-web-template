@@ -1,6 +1,7 @@
 import { AppShell, Footer, InlineAlert, type NavItem, type NavSection } from '@inno-trec/ui-web';
 import euEmblem from '@inno-trec/ui-web/assets/funding/eu-funded-negative.png';
 import logo from '@inno-trec/ui-web/assets/logos/logo-landscape-colour.png';
+import type { MouseEvent } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router';
 import { allowed, useSession } from '../auth/session';
 import { FOOTER_LINKS, TOOL_NAME } from '../config';
@@ -22,6 +23,12 @@ const NAV_SECTIONS: Section[] = [
   { title: 'Administration', items: [{ id: '/users', href: '/users', label: 'Users', icon: 'person', roles: ['admin', 'manager'] }] },
 ];
 const NAV = NAV_SECTIONS.flatMap((section) => section.items);
+
+/**
+ * True for a plain left click. A click with Ctrl, Cmd, Shift or Alt, or with the middle button, belongs to
+ * the browser (a new tab or window), so the router leaves it alone.
+ */
+const isPlainClick = (event: MouseEvent) => event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
 
 /** Links include the base path (`base` in vite.config.ts), so they also work when opened in a new tab. */
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -65,6 +72,7 @@ export function ToolShell() {
         count: unread,
         countLabel: 'unread notifications',
         onSelect: (id, event) => {
+          if (!isPlainClick(event)) return;
           event.preventDefault();
           navigate(id);
         },
@@ -73,6 +81,7 @@ export function ToolShell() {
       activeId={active?.id}
       heading={active?.label ?? 'Page not found'}
       onNavigate={(id, event) => {
+        if (!isPlainClick(event)) return;
         event.preventDefault();
         navigate(id);
       }}

@@ -246,7 +246,7 @@ Rules for this pattern:
 - **Do not help an attacker.** Say "The email or password is wrong", not which one. After a reset request, show the same message whether the email exists or not.
 - **Say why the person is on the sign-in screen**: signed out, session ended, or new password saved (`?reason=`). After signing in, return to the page they asked for (`?next=`), and only within the tool.
 - **An expired link is a normal state**: say what happened and link to the step that sends a new one.
-- **Roles hide pages, the backend enforces them.** A page with `roles` in `NAV` disappears from the navigation for other roles, and its address explains that access is missing.
+- **Roles hide pages, the backend enforces them.** A page with `roles` in `NAV_SECTIONS` disappears from the navigation for other roles, and its address explains that access is missing.
 
 ## 11. Notifications
 

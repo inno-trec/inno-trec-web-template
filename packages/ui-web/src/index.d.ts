@@ -345,7 +345,7 @@ export interface MenuItem {
 export interface UserMenuProps {
   user: User;
   items: MenuItem[];
-  /** Called when an item is chosen. For a link, call `event.preventDefault()` to navigate without a page load. */
+  /** Called when an item is chosen. For a link, call `event.preventDefault()` only for a plain left click, to navigate without a page load; leave Ctrl, Cmd and Shift clicks to the browser. */
   onSelect?: (id: string, event: React.MouseEvent) => void;
   /** A number on the avatar, for example unread notifications. Hidden when 0 or missing. */
   count?: number;

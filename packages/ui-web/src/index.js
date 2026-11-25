@@ -780,7 +780,9 @@ const innoTrec = (function () {
     return h("div", { className: cx("it-usermenu", props.className), ref: root, onKeyDown: onKeyDown },
       h("button", {
         type: "button", className: "it-usermenu-trigger", ref: trigger, "aria-haspopup": "menu", "aria-expanded": open,
-        "aria-controls": open ? id : undefined, "aria-label": label, onClick: function () { setOpen(!open); }
+        "aria-controls": open ? id : undefined, "aria-label": label,
+        // A click with `detail` 0 comes from Enter or Space: move focus into the menu, as the arrow keys do.
+        onClick: function (e) { if (!open && e.detail === 0) want.current = "first"; setOpen(!open); }
       },
         h("span", { className: "it-usermenu-avatar" },
           h("span", { className: "it-avatar", "aria-hidden": "true" }, initials(u.name)),
@@ -791,7 +793,8 @@ const innoTrec = (function () {
         items.map(function (it, i) {
           var attrs = {
             className: "it-menu-item", role: "menuitem", tabIndex: -1,
-            onClick: function (e) { setOpen(false); if (props.onSelect) props.onSelect(it.id, e); }
+            // Focus goes back to the button first, so it does not fall to the page when the item closes. `onSelect` may move it again.
+            onClick: function (e) { setOpen(false); trigger.current.focus(); if (props.onSelect) props.onSelect(it.id, e); }
           };
           var kids = [it.icon ? h(Icon, { key: "i", name: it.icon, size: 20 }) : null, h("span", { key: "l" }, it.label)];
           return h(React.Fragment, { key: it.id },

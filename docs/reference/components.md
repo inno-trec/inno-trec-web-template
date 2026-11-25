@@ -388,8 +388,8 @@ Use UserMenu in the top bar to show who is signed in and to group the actions ab
 - Provide: `user` (`{name, role}`), `items` (`[{id, label, icon?, href?, divider?}]`) and `onSelect(id, event)`. Put "Sign out" last, with `divider: true`.
 - Usually you do not render it yourself: pass `userMenu` (the same props without `user`) to `TopBar` or `AppShell`.
 - `count` puts a number on the avatar, for example unread notifications ("99+" above 99). The button's name says it in words ("Ana Ribeiro, Administrator, 3 unread"); `countLabel` changes the word. Leave `count` out when the number is unknown: an unknown count is not zero.
-- Items with `href` are links; pass `event.preventDefault()` in `onSelect` to navigate with a router. Items without `href` are buttons.
-- Keyboard: Enter, Space or the arrow keys open the menu; the arrow keys, Home and End move; Esc closes and returns to the button; Tab closes.
+- Items with `href` are links; to navigate with a router, call `event.preventDefault()` in `onSelect` only for a plain left click (no Ctrl, Cmd, Shift or Alt), so the browser can still open the link in a new tab. Items without `href` are buttons.
+- Keyboard: Enter or Space opens the menu and focuses the first item; ArrowDown and ArrowUp open it and focus the first or last item; the arrow keys, Home and End move; Esc closes and returns to the button; Tab closes. Choosing an item returns focus to the button first, then calls `onSelect`, which may move focus again (for example into a dialog).
 - The menu has a border and no shadow. Under 560px wide only the avatar and the arrow stay visible.
 
 ## SideNav

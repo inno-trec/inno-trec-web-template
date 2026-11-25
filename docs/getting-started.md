@@ -35,7 +35,7 @@ Do these four things first.
 
 1. **Set the tool name.** In `src/config.ts`, change `TOOL_NAME`. It appears in the top bar and on the sign-in screens. Set `PRIVACY_URL` and `FOOTER_LINKS` in the same file.
 2. **Set the page title and icon.** In `index.html`, change `<title>` and add your icon.
-3. **Replace the example page.** `src/pages/HomePage.tsx` lists sample records and shows the loading, empty and error states. Make it your tool's first page, or delete it with its route in `src/App.tsx` and its entry in `NAV` in `src/layouts/ToolShell.tsx`.
+3. **Replace the example page.** `src/pages/HomePage.tsx` lists sample records and shows the loading, empty and error states. Make it your tool's first page, or delete it with its route in `src/App.tsx` and its entry in `NAV_SECTIONS` in `src/layouts/ToolShell.tsx`.
 4. **Keep the footer** in `ToolShell.tsx`: it carries the EU funding emblem and statement.
 
 The starter also holds the account screens (sign in, ask for an account, invitation, password reset, the person's account) and the Users page. Keep them, or delete the ones your identity provider replaces.
@@ -70,7 +70,7 @@ export function SettlementsPage() {
 <Route path="settlements" element={<SettlementsPage />} />
 ```
 
-**3. Add the menu entry** in the `NAV` list in `src/layouts/ToolShell.tsx`:
+**3. Add the menu entry** to the `items` of a section in the `NAV_SECTIONS` list in `src/layouts/ToolShell.tsx`:
 
 ```tsx
 { id: '/settlements', href: '/settlements', label: 'Settlements', icon: 'exchange' },
@@ -78,7 +78,7 @@ export function SettlementsPage() {
 
 The `label` is also the page heading. The shell draws it, so your page does not render its own title.
 
-To organize a longer menu, put the entry in a section of `NAV_SECTIONS`. A section with a `title` shows a heading above its pages. A section without a `title`, after the first one, shows a dividing line. Use sections when the menu has more than about five pages.
+Every page is an entry in the `items` of one section. `NAV_SECTIONS` always has at least one section. Headings and dividing lines are optional: a section with a `title` shows a heading above its pages, and a section without a `title`, after the first one, shows a dividing line. For a short menu, keep one section without a `title`. Use more sections when the menu has more than about five pages.
 
 For the shape of common pages (overview, list with detail, step flow), see [Page patterns](page-patterns.md). For which component to pick, see the [component guide](reference/components.md).
 
@@ -94,13 +94,18 @@ Keep the loading, empty and error states that the pages show.
 
 ### Accounts and sign-in
 
-The screens without a session are in `src/pages/auth/` (sign in, ask for an account, accept an invitation, forgot and reset password); the person's own account is `src/pages/AccountPage.tsx`. `src/auth/session.tsx` holds who is signed in, sends people without a session to `/sign-in`, and hides pages by role (`roles` in `NAV`). The sample keeps the session in the browser; replace it with what your backend or identity provider gives you, and delete the "Sample accounts" note on the sign-in screen. If your tools share an OpenID Connect provider such as Keycloak, its sign-in pages replace these screens, and these screens are the design for its theme.
+The screens without a session are in `src/pages/auth/` (sign in, ask for an account, accept an invitation, forgot and reset password); the person's own account is `src/pages/AccountPage.tsx`. `src/auth/session.tsx` holds who is signed in, sends people without a session to `/sign-in`, and hides pages by role (`roles` in `NAV_SECTIONS`). The sample keeps the session in the browser; replace it with what your backend or identity provider gives you, and delete the "Sample accounts" note on the sign-in screen. If your tools share an OpenID Connect provider such as Keycloak, its sign-in pages replace these screens, and these screens are the design for its theme.
 
 ### Top bar menu and notifications
 
 The person's name in the top bar opens a menu with Account, Notifications and Sign out (`userMenu` in `src/layouts/ToolShell.tsx`). Add an item there for anything else about the person, such as "Help".
 
-The number on the avatar is the count of unread notifications. `src/notifications/notifications.tsx` loads the list from `listNotifications` in `src/data/api.ts` and refreshes it every minute (`NOTIFICATIONS_REFRESH_MS` in `src/config.ts`). The page `src/pages/NotificationsPage.tsx` lists them. Your backend decides what a notification is, who receives it and how it reaches the tool (email, push). The tool only shows the list and marks messages as read. To receive updates without polling, replace the refresh in `notifications.tsx` with your backend's channel. If your tool has no notifications, remove the "Notifications" item, the `/notifications` route and `NotificationsProvider`.
+The number on the avatar is the count of unread notifications. `src/notifications/notifications.tsx` loads the list from `listNotifications` in `src/data/api.ts` and refreshes it every minute (`NOTIFICATIONS_REFRESH_MS` in `src/config.ts`). The page `src/pages/NotificationsPage.tsx` lists them. Your backend decides what a notification is, who receives it and how it reaches the tool (email, push). The tool only shows the list and marks messages as read. To receive updates without polling, replace the refresh in `notifications.tsx` with your backend's channel. If your tool has no notifications, remove them in this order, so the tool still compiles after each step:
+
+1. In `src/layouts/ToolShell.tsx`: remove the `useNotifications` import and the `const { unread } = useNotifications();` line, the `count` and `countLabel` lines of `userMenu`, the "Notifications" item of `userMenu`, and the `/notifications` entry of `OTHER_PAGES`.
+2. In `src/App.tsx`: remove the `/notifications` route, the `NotificationsPage` import, and the `NotificationsProvider` that wraps `ToolShell`.
+3. Delete `src/notifications/` and `src/pages/NotificationsPage.tsx`.
+4. Remove `NOTIFICATIONS_REFRESH_MS` from `src/config.ts`, the notification calls from `src/data/api.ts`, `UserNotification` from `src/data/types.ts` and the sample data from `src/data/fakeServer.ts`.
 
 The design system has one rule here: **the interface displays what the backend reports and collects input.** Energy totals, shares, performance indicators, credit amounts and balances all come from the API. Do not calculate them in a component. The [design rules](design-rules.md#numbers-and-units) explain why.
 
@@ -114,7 +119,7 @@ npm run build        # type check and production build
 npm test             # every page at 1440px and 400px: heading, no sideways scroll, no console errors
 ```
 
-The first time, install the test browser with `npx playwright install chromium`. The tests find your pages through the side navigation, so a page you add to `NAV` is tested without changes to the tests.
+The first time, install the test browser with `npx playwright install chromium`. The tests find your pages through the side navigation, so a page you add to `NAV_SECTIONS` is tested without changes to the tests.
 
 Before you ask for a review, read the [design rules](design-rules.md) once. They are short.
 

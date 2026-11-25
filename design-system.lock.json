@@ -1,8 +1,8 @@
 {
   "designSystem": "inno-trec-design-system",
-  "publishedVersion": "1795607924-702f",
+  "publishedVersion": "1795611586-21c3",
   "publishedAt": "2026-11-25",
-  "syncedAt": "2026-11-25T11:59:05.497Z",
+  "syncedAt": "2026-11-25T13:01:07.001Z",
   "components": 41,
   "logos": 8,
   "funding": 2,
@@ -13,7 +13,7 @@
   ],
   "files": {
     "docs/reference/brand-book.md": "dfc02ea281aa23a21b8b9f7581888c3ba78a03348fe78e4c25be63b53b223f6f",
-    "docs/reference/components.md": "7613e2a3f672113518187d99b480877e3073534cfba31def185ac766481171c6",
+    "docs/reference/components.md": "6e0329af32bb75c366fb9df3ccb106dec75c4e47ecc84fc9f183194f33dd561d",
     "docs/reference/DESIGN.md": "b53c7667030f1c82ac9a390296bba095771a35194116eee26f904f78f68ee0c1",
     "docs/reference/previews/AccountCard.html": "3a5ba9bc04653ca6a9d54cd58b3049c07a055f2026c9fec9754d2a35136fa976",
     "docs/reference/previews/AccountList.html": "51404006363051c5b29a95b6ae290ffe2e41c6c05b7077126c06ebf5eb5ce227",
@@ -72,8 +72,8 @@
     "packages/ui-web/assets/logos/logo-stacked-grey.png": "cca5d979368c73df54a20642e07db02d70b9dd658c59a17cb5a8cbfd7128bed5",
     "packages/ui-web/assets/logos/logo-vertical-colour.png": "640143aaed84821f97e8843405fc20a42450cbaa662b565b40a523b1f083ca6e",
     "packages/ui-web/assets/logos/logo-vertical-grey.png": "4944b8ba4c71b8289cf0f47ee24628643c1dd3fdcf91b5e1b4697bbffe44f35d",
-    "packages/ui-web/src/index.d.ts": "eaabe8ee3850a26c69aeda0229ef3deb3dd9a68e73e93a58d25c87d256c20aaa",
-    "packages/ui-web/src/index.js": "5af3ad3f8ece0992e8ff403ab0218fa89b15e0deb309fc6152bfea9d4494026a",
+    "packages/ui-web/src/index.d.ts": "8a09242bf936e01501108498824b920e3d1fa5fa88a2737031977d8f04fa1f56",
+    "packages/ui-web/src/index.js": "4e13548736b9fe721c531648fea551986f6cfe8aceb27fe5f624ec5265f0fcc2",
     "packages/ui-web/src/styles.css": "25a13216d29b669b3f0e4cc141e62640002b63d6b99ed3bfb4920aa646419ffc"
   }
 }
