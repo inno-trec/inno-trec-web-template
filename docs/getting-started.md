@@ -119,7 +119,7 @@ npm run build        # type check and production build
 npm test             # every page at 1440px and 400px: heading, no sideways scroll, no console errors
 ```
 
-The first time, install the test browser with `npx playwright install chromium`. The tests find your pages through the side navigation, so a page you add to `NAV_SECTIONS` is tested without changes to the tests.
+The first time, install the test browser with `npx playwright install chromium`. The tests find your pages through the side navigation and the user menu, so a page you add to `NAV_SECTIONS`, or an item you add to `userMenu`, is tested without changes to the tests.
 
 Before you ask for a review, read the [design rules](design-rules.md) once. They are short.
 

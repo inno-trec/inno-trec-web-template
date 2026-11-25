@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { chooseFile, chooseFromUserMenu, collectErrors, expectNoSidewaysScroll } from './helpers';
+import { chooseFile, chooseFromUserMenu, collectErrors, expectLoaded, expectNoSidewaysScroll } from './helpers';
 
 /** These tests start signed in as an administrator. The sign-in screens are tested in accounts.spec.ts. */
 test.beforeEach(async ({ page }) => {
@@ -30,6 +30,37 @@ test('every page renders its heading and footer without sideways scroll or conso
       await expect(page.locator('[data-not-found]'), `no route for ${href} in App.tsx`).toHaveCount(0);
       // Every INNO-TREC tool shows the EU funding emblem in the footer.
       await expect(page.getByRole('img', { name: 'Funded by the European Union' })).toBeVisible();
+      await expectLoaded(page);
+      await expectNoSidewaysScroll(page);
+    });
+  }
+
+  expect(errors).toEqual([]);
+});
+
+/** Pages in the user menu (Account, Notifications, ...), without Sign out. A new menu item is tested without editing this file. */
+async function userMenuPages(page: Page) {
+  await page.goto('/');
+  await page.getByRole('button', { name: /^Ana Ribeiro/ }).click();
+  const items = page.getByRole('menuitem');
+  await expect(items.first()).toBeVisible();
+  const hrefs = await items.evaluateAll((els) => els.map((el) => el.getAttribute('href')));
+  return hrefs.filter((href): href is string => !!href && !href.endsWith('/sign-out'));
+}
+
+test('every page in the user menu renders its heading and footer without sideways scroll or console errors', async ({ page }) => {
+  const errors = collectErrors(page);
+  const hrefs = await userMenuPages(page);
+  expect(hrefs.length).toBeGreaterThan(0);
+
+  for (const href of hrefs) {
+    await test.step(href, async () => {
+      await page.goto(href);
+      // The heading comes from OTHER_PAGES, and it need not equal the menu item's label ("Account" opens "Your account").
+      await expect(page.locator('.it-shell-main > h1')).toHaveText(/\S/);
+      await expect(page.locator('[data-not-found]'), `no route for ${href} in App.tsx`).toHaveCount(0);
+      await expect(page.getByRole('img', { name: 'Funded by the European Union' })).toBeVisible();
+      await expectLoaded(page);
       await expectNoSidewaysScroll(page);
     });
   }
