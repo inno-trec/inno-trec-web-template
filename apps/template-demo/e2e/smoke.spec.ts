@@ -205,6 +205,7 @@ test('the notifications page lists messages, and marking them read updates the c
   await chooseFromUserMenu(page, 'Notifications');
   await expect(page.locator('.it-shell-main > h1')).toHaveText('Notifications');
   await expect(page.getByText('3 unread')).toBeVisible();
+  await expectNoSidewaysScroll(page);
 
   // A link in a notification uses the brand blue, not the browser's default.
   await expect(page.locator('.it-shell-main a').first()).toHaveCSS('color', 'rgb(25, 120, 184)');

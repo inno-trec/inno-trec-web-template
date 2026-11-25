@@ -4,6 +4,12 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ## [Unreleased]
 
+## [1.1.2] - 2026-11-25
+
+### Fixed
+
+- The notifications page scrolled sideways on a phone (400px wide). The hidden "Actions" column heading was positioned outside the table's own scroll area, which widened the page. The heading is now the visible word "Action". The notifications test checks for sideways scroll at both widths. A tool that copied `NotificationsPage.tsx` from 1.1.0 or 1.1.1 should change the `header` of the last column from `<span className="sr-only">Actions</span>` to `'Action'`.
+
 ## [1.1.1] - 2026-11-25
 
 ### Fixed
@@ -115,7 +121,8 @@ First release of the template.
 
 - Node 24 LTS or newer, npm 11.
 
-[Unreleased]: https://github.com/inno-trec/inno-trec-web-template/compare/v1.1.1...main
+[Unreleased]: https://github.com/inno-trec/inno-trec-web-template/compare/v1.1.2...main
+[1.1.2]: https://github.com/inno-trec/inno-trec-web-template/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/inno-trec/inno-trec-web-template/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/inno-trec/inno-trec-web-template/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/inno-trec/inno-trec-web-template/compare/v1.0.0...v1.0.1
