@@ -45,7 +45,7 @@ export function NotificationsPage() {
     { key: 'createdAt', header: 'Received', render: (n) => formatRelative(n.createdAt) },
     {
       key: 'action',
-      header: <span className="sr-only">Actions</span>,
+      header: 'Action',
       align: 'right',
       render: (n) =>
         n.readAt === null ? (
