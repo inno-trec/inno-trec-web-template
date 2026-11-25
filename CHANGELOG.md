@@ -4,6 +4,10 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ## [Unreleased]
 
+### Changed
+
+- The smoke tests also open the pages of the user menu (Account and Notifications) at 1440px and 400px wide, and check the heading, the footer, sideways scroll and the console. Both smoke tests now wait until the page has loaded its data (`expectLoaded` in `e2e/helpers.ts`) before they measure, so a table that appears later is checked too. A new `userMenu` item is tested without changes to the tests. Before, only pages in the side navigation were covered, so the sideways scroll on the notifications page (fixed in 1.1.2) went unnoticed.
+
 ## [1.1.2] - 2026-11-25
 
 ### Fixed

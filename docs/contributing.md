@@ -33,7 +33,7 @@ npm test                  # every page at 1440px and 400px wide
 
 CI (`.github/workflows/ci.yml`) runs the same four commands, builds the documentation site and the npm packages, on every pull request and every push to `main`: once on the Node in `.nvmrc` and once on the newest Node. Only the `.nvmrc` run blocks a merge; a failure on the newest Node is an early warning to look into. Changes reach `main` only through a pull request whose checks pass.
 
-`npm test` opens every page in the side navigation at 1440px and 400px wide. It fails when the page scrolls sideways (a wide table in its own container is fine), when the heading is missing, or when the console shows an error. It cannot judge whether a pattern reads well, so still click through a changed pattern with `npm run dev`.
+`npm test` opens every page in the side navigation and in the user menu (except Sign out) at 1440px and 400px wide. It fails when the page scrolls sideways (a wide table in its own container is fine), when the heading is missing, or when the console shows an error. It cannot judge whether a pattern reads well, so still click through a changed pattern with `npm run dev`.
 
 Add a line for your change under `## [Unreleased]` in `CHANGELOG.md`.
 

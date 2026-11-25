@@ -34,3 +34,8 @@ export async function chooseFromUserMenu(page: Page, item: string) {
   await page.getByRole('button', { name: /^Ana Ribeiro/ }).click();
   await page.getByRole('menuitem', { name: item }).click();
 }
+
+/** Waits until the page has loaded its data. Pages show "Loading …" (role="status") first, so a check made earlier sees a half-built page. */
+export async function expectLoaded(page: Page) {
+  await expect(page.getByRole('status').filter({ hasText: /^Loading/ })).toHaveCount(0);
+}
