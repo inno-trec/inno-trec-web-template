@@ -23,7 +23,7 @@ import type {
  */
 
 export { ApiError };
-export type { Alert, AlertPageDto, AlertQuery, AlertShow, Asset, Indicator, PerformancePeriod, PvPerformanceReport, Role, RoleId, Session, SystemPerformance, User } from './types';
+export type { Alert, AlertPageDto, AlertQuery, AlertShow, Asset, Indicator, PerformancePeriod, PvPerformanceReport, Role, RoleId, Session, SystemPerformance, User, UserNotification } from './types';
 
 /** Runs a request. A backend error passes through; anything else (no network, a crash) becomes `network`. */
 async function call<T>(request: () => Promise<T>): Promise<T> {
@@ -121,6 +121,12 @@ export const acknowledgeAlert = (id: string): Promise<Alert> => call(() => serve
 export const resolveAlert = (id: string, resolution: string, photos: File[] = []): Promise<Alert> =>
   call(() => server.resolveAlert(id, resolution, photos.map((f) => ({ name: f.name, sizeBytes: f.size, type: f.type }))));
 export const listAssets = () => call(() => server.listAssets()).then((r) => r.assets);
+
+/* ---------- Notifications ---------- */
+
+export const listNotifications = () => call(() => server.listNotifications()).then((r) => r.notifications);
+export const markNotificationRead = (id: string) => call(() => server.markNotificationRead(id));
+export const markAllNotificationsRead = () => call(() => server.markAllNotificationsRead());
 
 /* ---------- Users ---------- */
 

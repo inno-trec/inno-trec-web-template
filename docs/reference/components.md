@@ -374,7 +374,23 @@ Group: Shell
 Use TopBar at the top of every INNO-TREC web tool.
 
 - Provide: `logoSrc` (use `assets/Logos/logo-landscape-colour.png` on this white bar), `title` (the tool's name), optional `user` (`{name, role}`) and `actions`.
+- Pass `userMenu` (`{items, onSelect, count?}`) to turn the user into a UserMenu with Account, Notifications and Sign out, instead of separate buttons in `actions`.
 - Keep the logo at 32px tall; its clearspace (height ÷ 4 = 8px) is covered by the bar's padding.
+
+## UserMenu
+
+Group: Shell
+
+<ComponentPreview name="UserMenu" :height="250" />
+
+Use UserMenu in the top bar to show who is signed in and to group the actions about that person (Account, Notifications, Sign out) in one menu.
+
+- Provide: `user` (`{name, role}`), `items` (`[{id, label, icon?, href?, divider?}]`) and `onSelect(id, event)`. Put "Sign out" last, with `divider: true`.
+- Usually you do not render it yourself: pass `userMenu` (the same props without `user`) to `TopBar` or `AppShell`.
+- `count` puts a number on the avatar, for example unread notifications ("99+" above 99). The button's name says it in words ("Ana Ribeiro, Administrator, 3 unread"); `countLabel` changes the word. Leave `count` out when the number is unknown: an unknown count is not zero.
+- Items with `href` are links; pass `event.preventDefault()` in `onSelect` to navigate with a router. Items without `href` are buttons.
+- Keyboard: Enter, Space or the arrow keys open the menu; the arrow keys, Home and End move; Esc closes and returns to the button; Tab closes.
+- The menu has a border and no shadow. Under 560px wide only the avatar and the arrow stay visible.
 
 ## SideNav
 
@@ -385,6 +401,7 @@ Group: Shell
 Use SideNav for a tool's main navigation.
 
 - Provide: `items` or `sections` (`[{title, items: [{id, label, href?, icon?}]}]`), `activeId`, `onNavigate`.
+- Give a section a `title` to show a heading. A section without a `title` after the first one shows a dividing line. Use headings or lines only in tools with many pages; member apps do not need them.
 - Member apps: four or five items at most, each with an `icon` and a plain label ("My credits", "Send credits", "History").
 - The current item gets `aria-current="page"` and a highlighted row. Under 720px wide it becomes a horizontal row.
 
@@ -411,6 +428,7 @@ Group: Shell
 Use AppShell as the page frame of an INNO-TREC web tool: TopBar, SideNav, a main area on `surface-muted` and an optional Footer.
 
 - Provide: `logoSrc`, `title`, `user`, `navItems` or `navSections`, `activeId`, `onNavigate`, `heading` (the page's h1) and `children` (the page content, usually Cards and StatTiles).
+- Pass `userMenu` for the account menu in the top bar (see UserMenu). Give `navSections` a `title` for a heading, or leave it out for a dividing line.
 - Pass a Footer as `footer`. It sits below the side navigation and the main area, and the main area grows so the footer stays at the bottom of the window.
 - Give the shell a full-height parent (`height: 100%` on html and body) so the side navigation runs to the bottom.
 

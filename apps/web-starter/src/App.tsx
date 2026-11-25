@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router';
 import { RequireSession, SignOut } from './auth/session';
+import { NotificationsProvider } from './notifications/notifications';
 import { ToolShell } from './layouts/ToolShell';
 import { AccountPage } from './pages/AccountPage';
 import { HomePage } from './pages/HomePage';
@@ -9,6 +10,7 @@ import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
 import { SignInPage } from './pages/auth/SignInPage';
 import { SignUpPage } from './pages/auth/SignUpPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { NotificationsPage } from './pages/NotificationsPage';
 import { UsersPage } from './pages/UsersPage';
 
 /**
@@ -32,13 +34,16 @@ export function App() {
       <Route
         element={
           <RequireSession>
-            <ToolShell />
+            <NotificationsProvider>
+              <ToolShell />
+            </NotificationsProvider>
           </RequireSession>
         }
       >
         <Route index element={<HomePage />} />
         <Route path="users" element={<UsersPage />} />
         <Route path="account" element={<AccountPage />} />
+        <Route path="notifications" element={<NotificationsPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

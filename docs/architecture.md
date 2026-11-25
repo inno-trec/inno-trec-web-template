@@ -83,9 +83,10 @@ apps/web-starter/src/
   index.css             Tailwind, and one workaround for the top bar on phones
   config.ts             the tool's name and legal links
   auth/session.tsx      who is signed in, the redirect to sign in, roles per page
-  layouts/ToolShell.tsx top bar (Account, Sign out), side navigation, page heading, footer
+  notifications/        the signed-in person's notifications: the list, the unread count, mark as read
+  layouts/ToolShell.tsx top bar (user menu: Account, Notifications, Sign out), side navigation with sections, page heading, footer
   layouts/SignedOutFrame.tsx  the frame of the screens without a session (AuthLayout)
-  pages/                one file per screen (Home, Users, Your account, not found)
+  pages/                one file per screen (Home, Users, Your account, Notifications, not found)
   pages/auth/           sign in, ask for an account, accept an invitation, forgot and reset password
   forms/useSubmit.ts    sends a form and keeps the backend's messages per field
   data/api.ts           the client the pages call; replace its calls with fetch

@@ -1,31 +1,50 @@
-import { AppShell, Button, Footer, InlineAlert, type NavItem } from '@inno-trec/ui-web';
+import { AppShell, Footer, InlineAlert, type NavItem, type NavSection } from '@inno-trec/ui-web';
 import euEmblem from '@inno-trec/ui-web/assets/funding/eu-funded-negative.png';
 import logo from '@inno-trec/ui-web/assets/logos/logo-landscape-colour.png';
-import { Link, Outlet, useLocation, useNavigate } from 'react-router';
+import { Outlet, useLocation, useNavigate } from 'react-router';
 import { allowed, useSession } from '../auth/session';
 import { FOOTER_LINKS, TOOL_NAME } from '../config';
 import type { RoleId } from '../data/api';
+import { useNotifications } from '../notifications/notifications';
 
 type Page = NavItem & { href: string; roles?: RoleId[] };
+
+type Section = { title?: string; items: Page[] };
 
 /**
  * `id` is the route path. `label` is also the page heading. `roles` limits who sees the page (no list:
  * everyone). Manager tools may use more than five items; member tools should not.
+ * Sections organize a longer menu. A `title` shows a heading above the section. A section without a
+ * `title`, after the first one, shows a dividing line. A section with no visible item disappears.
  */
-const NAV: Page[] = [
-  { id: '/', href: '/', label: 'Overview', icon: 'sun' },
-  { id: '/performance', href: '/performance', label: 'PV performance', icon: 'panel' },
-  { id: '/data-checks', href: '/data-checks', label: 'Data checks', icon: 'check' },
-  { id: '/alerts', href: '/alerts', label: 'Alerts', icon: 'alert' },
-  { id: '/assets', href: '/assets', label: 'Assets', icon: 'wrench' },
-  { id: '/users', href: '/users', label: 'Users', icon: 'person', roles: ['admin', 'manager'] },
+const NAV_SECTIONS: Section[] = [
+  {
+    title: 'Monitoring',
+    items: [
+      { id: '/', href: '/', label: 'Overview', icon: 'sun' },
+      { id: '/performance', href: '/performance', label: 'PV performance', icon: 'panel' },
+      { id: '/data-checks', href: '/data-checks', label: 'Data checks', icon: 'check' },
+    ],
+  },
+  {
+    title: 'Maintenance',
+    items: [
+      { id: '/alerts', href: '/alerts', label: 'Alerts', icon: 'alert' },
+      { id: '/assets', href: '/assets', label: 'Assets', icon: 'wrench' },
+    ],
+  },
+  { title: 'Administration', items: [{ id: '/users', href: '/users', label: 'Users', icon: 'person', roles: ['admin', 'manager'] }] },
 ];
+const NAV = NAV_SECTIONS.flatMap((section) => section.items);
 
 /** Links include the base path (`base` in vite.config.ts), so they also work when opened in a new tab. */
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 /** Pages reached from the top bar instead of the side navigation. */
-const OTHER_PAGES: Page[] = [{ id: '/account', href: '/account', label: 'Your account' }];
+const OTHER_PAGES: Page[] = [
+  { id: '/account', href: '/account', label: 'Your account' },
+  { id: '/notifications', href: '/notifications', label: 'Notifications' },
+];
 
 /**
  * The page frame every tool shares: top bar, side navigation, a pale gray main area and the footer.
@@ -37,7 +56,11 @@ export function ToolShell() {
   const navigate = useNavigate();
   const { session } = useSession();
   const role = session!.role;
-  const nav = NAV.filter((item) => allowed(role, item.roles)).map((item) => ({ ...item, href: BASE + item.href }));
+  const { unread } = useNotifications();
+  const navSections: NavSection[] = NAV_SECTIONS.map((section) => ({
+    title: section.title,
+    items: section.items.filter((item) => allowed(role, item.roles)).map((item) => ({ ...item, href: BASE + item.href })),
+  })).filter((section) => section.items.length > 0);
   const active = [...NAV, ...OTHER_PAGES].find((item) => item.href === pathname);
   const permitted = !active || allowed(role, active.roles);
 
@@ -46,17 +69,21 @@ export function ToolShell() {
       logoSrc={logo}
       title={TOOL_NAME}
       user={{ name: session!.name, role: session!.roleLabel }}
-      topActions={
-        <>
-          <Link className="it-btn it-btn-ghost it-btn-sm no-underline" to="/account">
-            Account
-          </Link>
-          <Button variant="ghost" size="sm" onClick={() => navigate('/sign-out')}>
-            Sign out
-          </Button>
-        </>
-      }
-      navItems={nav}
+      userMenu={{
+        items: [
+          { id: '/account', href: `${BASE}/account`, label: 'Account', icon: 'person' },
+          { id: '/notifications', href: `${BASE}/notifications`, label: 'Notifications', icon: 'bell' },
+          { id: '/sign-out', href: `${BASE}/sign-out`, label: 'Sign out', icon: 'signOut', divider: true },
+        ],
+        // `unread` is undefined while the count is unknown, and then no number shows.
+        count: unread,
+        countLabel: 'unread notifications',
+        onSelect: (id, event) => {
+          event.preventDefault();
+          navigate(id);
+        },
+      }}
+      navSections={navSections}
       activeId={active?.id}
       heading={active?.label ?? 'Page not found'}
       onNavigate={(id, event) => {

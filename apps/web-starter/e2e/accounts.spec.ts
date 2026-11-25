@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { collectErrors, expectNoSidewaysScroll } from './helpers';
+import { chooseFromUserMenu, collectErrors, expectNoSidewaysScroll } from './helpers';
 
 /** Screens without a session. Each test starts signed out. */
 const SCREENS = [
@@ -42,7 +42,7 @@ test('a page without a session asks to sign in, then opens', async ({ page }) =>
   await signIn(page, 'ana.ribeiro@example.org', 'sample-password');
   await expect(page.locator('.it-shell-main > h1')).toHaveText('Users');
 
-  await page.getByRole('button', { name: 'Sign out' }).click();
+  await chooseFromUserMenu(page, 'Sign out');
   await expect(page.getByText('You are signed out.')).toBeVisible();
   expect(errors).toEqual([]);
 });

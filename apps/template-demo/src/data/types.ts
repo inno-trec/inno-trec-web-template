@@ -196,6 +196,19 @@ export interface UserChanges {
   status?: 'active' | 'deactivated';
 }
 
+/* ---------- Notifications ---------- */
+
+/** A message for the signed-in person. `readAt` is `null` until the person has read it. */
+export interface UserNotification {
+  id: string;
+  title: string;
+  message: string;
+  createdAt: string;
+  readAt: string | null;
+  /** A page of this tool that the message is about, for example `/users`. */
+  href: string | null;
+}
+
 /** The person who is signed in. */
 export interface Session {
   userId: string;

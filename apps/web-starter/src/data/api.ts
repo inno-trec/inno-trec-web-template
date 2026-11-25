@@ -12,7 +12,7 @@ import type { Invitation, RoleId, UserChanges } from './types';
  */
 
 export { ApiError };
-export type { ExampleRecord, Role, RoleId, Session, User } from './types';
+export type { ExampleRecord, Role, RoleId, Session, User, UserNotification } from './types';
 
 /** Runs a request. A backend error passes through; anything else (no network, a crash) becomes `network`. */
 async function call<T>(request: () => Promise<T>): Promise<T> {
@@ -27,6 +27,12 @@ async function call<T>(request: () => Promise<T>): Promise<T> {
 /* ---------- Example ---------- */
 
 export const listRecords = () => call(() => server.listRecords()).then((r) => r.records);
+
+/* ---------- Notifications ---------- */
+
+export const listNotifications = () => call(() => server.listNotifications()).then((r) => r.notifications);
+export const markNotificationRead = (id: string) => call(() => server.markNotificationRead(id));
+export const markAllNotificationsRead = () => call(() => server.markAllNotificationsRead());
 
 /* ---------- Users ---------- */
 

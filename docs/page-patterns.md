@@ -248,6 +248,20 @@ Rules for this pattern:
 - **An expired link is a normal state**: say what happened and link to the step that sends a new one.
 - **Roles hide pages, the backend enforces them.** A page with `roles` in `NAV` disappears from the navigation for other roles, and its address explains that access is missing.
 
+## 11. Notifications
+
+Sources: [`NotificationsPage.tsx`](../apps/web-starter/src/pages/NotificationsPage.tsx) and [`notifications.tsx`](../apps/web-starter/src/notifications/notifications.tsx)
+
+Use it for messages addressed to the signed-in person. The top bar shows how many are unread. The page is reached from the user menu, not from the side navigation.
+
+Rules for this pattern:
+
+- **The count has a name in words.** The number on the avatar is also in the button's name ("Ana Ribeiro, Administrator, 3 unread notifications").
+- **An unknown count shows no number.** While the list loads, or when it fails to load, the avatar shows nothing. A missing count is never 0.
+- **An unread message shows the word "New"** in a `Badge`, and its title in bold. Color never carries the state alone.
+- **The backend owns the messages.** The tool shows them, marks them as read and opens the page they are about (`href`).
+- **A failed refresh keeps the list.** Only a failed first load shows the error state.
+
 ## Loading, empty and error
 
 Data from a backend arrives late, can be empty and can fail. Every page that loads data in both apps shows all three. Add `?demo=empty` or `?demo=error` to the address to see them.
@@ -274,4 +288,5 @@ Manager screens may be denser and may show identifiers, codes and data quality. 
 - The shell turns its side navigation into a horizontal row below 720px and reduces the page padding to 16px.
 - Use Tailwind breakpoints for your own grids: `sm:` (640px), `lg:` (1024px), `xl:` (1280px).
 - Wide tables scroll inside their own container. The page itself must not scroll sideways. Check at 400px wide.
-- The top bar does not fit a long tool name and user on phones. `index.css` hides them below 560px. See [Troubleshooting](troubleshooting.md).
+- The top bar does not fit a long tool name on phones. `index.css` hides it below 560px. See [Troubleshooting](troubleshooting.md). The user menu shows only the avatar and the arrow below 560px.
+- The section headings and dividing lines of the side navigation are hidden when it becomes a row (below 720px).

@@ -4,6 +4,18 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ## [Unreleased]
 
+### Added
+
+- **Section headings and dividing lines in the side navigation.** `ToolShell` now builds `navSections` from a `NAV_SECTIONS` list. A section with a `title` shows a heading. A section without a `title`, after the first, shows a dividing line. A section with no visible item (for example, pages for other roles) disappears. The starter groups Users under "Administration", and `template-demo` groups its pages under "Monitoring", "Maintenance" and "Administration".
+- **User menu in the top bar.** The new design system component `UserMenu` replaces the "Account" and "Sign out" buttons. The person's avatar, name and role open a menu with Account, Notifications and Sign out. It works with the keyboard (arrow keys, Home, End, Esc) and has no shadow. Below 560px wide only the avatar and the arrow stay visible. The design system adds the icons `bell`, `signOut` and `chevronDown`.
+- **Notifications.** The top bar shows the number of unread notifications on the avatar (and in the button's name for screen readers). The new page `/notifications` lists them, marks one or all as read, and shows the loading, empty and error states. `src/notifications/notifications.tsx` loads and refreshes the list (`NOTIFICATIONS_REFRESH_MS` in `src/config.ts`, and when the browser tab becomes visible again). `types.ts`, `api.ts` and `fakeServer.ts` have example shapes (`UserNotification`); each system provides the real notifications and how they reach the tool. While the count is unknown, no number shows.
+- Smoke tests for the user menu, the notifications page and the navigation headings in `web-starter` and `template-demo`.
+
+### Changed
+
+- The design system sync brings `UserMenu` (41 components) and `SideNav` dividing lines.
+- Tests open "Account" and "Sign out" through the user menu.
+
 ### Fixed
 
 - Links from the documentation site to source files (for example the example pages) opened a 404 on GitHub. They now open the file.

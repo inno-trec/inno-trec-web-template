@@ -28,3 +28,9 @@ export async function chooseFile(input: Locator, name: string, sizeBytes: number
     { name, sizeBytes, type },
   );
 }
+
+/** Opens the menu in the top bar (the person's name and avatar) and chooses an item. */
+export async function chooseFromUserMenu(page: Page, item: string) {
+  await page.getByRole('button', { name: /^Ana Ribeiro/ }).click();
+  await page.getByRole('menuitem', { name: item }).click();
+}

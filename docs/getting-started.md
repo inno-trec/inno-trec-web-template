@@ -78,6 +78,8 @@ export function SettlementsPage() {
 
 The `label` is also the page heading. The shell draws it, so your page does not render its own title.
 
+To organize a longer menu, put the entry in a section of `NAV_SECTIONS`. A section with a `title` shows a heading above its pages. A section without a `title`, after the first one, shows a dividing line. Use sections when the menu has more than about five pages.
+
 For the shape of common pages (overview, list with detail, step flow), see [Page patterns](page-patterns.md). For which component to pick, see the [component guide](reference/components.md).
 
 ## 4. Connect your backend
@@ -93,6 +95,12 @@ Keep the loading, empty and error states that the pages show.
 ### Accounts and sign-in
 
 The screens without a session are in `src/pages/auth/` (sign in, ask for an account, accept an invitation, forgot and reset password); the person's own account is `src/pages/AccountPage.tsx`. `src/auth/session.tsx` holds who is signed in, sends people without a session to `/sign-in`, and hides pages by role (`roles` in `NAV`). The sample keeps the session in the browser; replace it with what your backend or identity provider gives you, and delete the "Sample accounts" note on the sign-in screen. If your tools share an OpenID Connect provider such as Keycloak, its sign-in pages replace these screens, and these screens are the design for its theme.
+
+### Top bar menu and notifications
+
+The person's name in the top bar opens a menu with Account, Notifications and Sign out (`userMenu` in `src/layouts/ToolShell.tsx`). Add an item there for anything else about the person, such as "Help".
+
+The number on the avatar is the count of unread notifications. `src/notifications/notifications.tsx` loads the list from `listNotifications` in `src/data/api.ts` and refreshes it every minute (`NOTIFICATIONS_REFRESH_MS` in `src/config.ts`). The page `src/pages/NotificationsPage.tsx` lists them. Your backend decides what a notification is, who receives it and how it reaches the tool (email, push). The tool only shows the list and marks messages as read. To receive updates without polling, replace the refresh in `notifications.tsx` with your backend's channel. If your tool has no notifications, remove the "Notifications" item, the `/notifications` route and `NotificationsProvider`.
 
 The design system has one rule here: **the interface displays what the backend reports and collects input.** Energy totals, shares, performance indicators, credit amounts and balances all come from the API. Do not calculate them in a component. The [design rules](design-rules.md#numbers-and-units) explain why.
 

@@ -1,5 +1,5 @@
 import { ApiError } from './errors';
-import type { ExampleRecord, Invitation, Role, Session, User, UserChanges } from './types';
+import type { ExampleRecord, Invitation, Role, Session, User, UserChanges, UserNotification } from './types';
 
 /**
  * FAKE BACKEND. It answers with sample data in the shapes of types.ts, so the client in api.ts can later
@@ -39,6 +39,36 @@ const RECORDS: ExampleRecord[] = [
 export async function listRecords(): Promise<{ records: ExampleRecord[] }> {
   await respond(400);
   return { records: demo() === 'empty' ? [] : RECORDS };
+}
+
+/* ---------- Notifications ---------- */
+
+let notifications: UserNotification[] = [
+  { id: 'n-1', title: 'New account request', message: 'Paulo Costa asked for an account.', createdAt: ago(3 * HOUR), readAt: null, href: '/users' },
+  { id: 'n-2', title: 'Invitation not yet accepted', message: 'José Pinto has not accepted the invitation from last week.', createdAt: ago(DAY), readAt: null, href: '/users' },
+  { id: 'n-3', title: 'Access ends soon', message: 'Carla Sousa’s access ends on 31 March 2027.', createdAt: ago(4 * DAY), readAt: null, href: null },
+  { id: 'n-4', title: 'Welcome', message: 'Your account is ready.', createdAt: ago(30 * DAY), readAt: ago(29 * DAY), href: null },
+];
+
+/** The newest first. The list is the person's own; the backend decides who sees what. */
+export async function listNotifications(): Promise<{ notifications: UserNotification[] }> {
+  await respond(300);
+  return { notifications: demo() === 'empty' ? [] : [...notifications].sort((a, b) => b.createdAt.localeCompare(a.createdAt)) };
+}
+
+export async function markNotificationRead(id: string): Promise<UserNotification> {
+  await respond(200);
+  const found = notifications.find((n) => n.id === id);
+  if (!found) throw new ApiError('not_found');
+  const next = { ...found, readAt: found.readAt ?? iso(Date.now()) };
+  notifications = notifications.map((n) => (n.id === id ? next : n));
+  return next;
+}
+
+export async function markAllNotificationsRead(): Promise<void> {
+  await respond(300);
+  const now = iso(Date.now());
+  notifications = notifications.map((n) => ({ ...n, readAt: n.readAt ?? now }));
 }
 
 /* ---------- Users ---------- */
