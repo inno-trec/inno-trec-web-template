@@ -27,7 +27,11 @@ export function NotificationsPage() {
         <div>
           <div className={n.readAt === null ? 'font-bold' : undefined}>
             {n.href ? (
-              <Link to={n.href} onClick={() => n.readAt === null && run(() => markRead(n.id))}>
+              <Link
+                className="text-light-blue underline underline-offset-2"
+                to={n.href}
+                onClick={() => n.readAt === null && run(() => markRead(n.id))}
+              >
                 {n.title}
               </Link>
             ) : (

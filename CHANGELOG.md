@@ -4,6 +4,12 @@ All notable changes to the template are listed here. The format follows [Keep a 
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-11-25
+
+### Fixed
+
+- The notifications page showed the title of a notification that links to a page in the browser's default blue (and purple after a visit). It now uses `text-light-blue` with an underline, the brand blue that the sign-in screens use for links. A tool that copied `NotificationsPage.tsx` from 1.1.0 should add `className="text-light-blue underline underline-offset-2"` to the `Link` in the title.
+
 ## [1.1.0] - 2026-11-25
 
 A minor release: nothing breaks. `npm update` brings the new `UserMenu` and the dividing lines in `SideNav`. A tool made with `npm create @inno-trec/tool` does not update its own pages. To take the news, see "Taking the news into a tool you already have" below.
@@ -109,7 +115,8 @@ First release of the template.
 
 - Node 24 LTS or newer, npm 11.
 
-[Unreleased]: https://github.com/inno-trec/inno-trec-web-template/compare/v1.1.0...main
+[Unreleased]: https://github.com/inno-trec/inno-trec-web-template/compare/v1.1.1...main
+[1.1.1]: https://github.com/inno-trec/inno-trec-web-template/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/inno-trec/inno-trec-web-template/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/inno-trec/inno-trec-web-template/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/inno-trec/inno-trec-web-template/compare/v0.2.0...v1.0.0

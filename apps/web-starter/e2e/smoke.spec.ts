@@ -153,6 +153,9 @@ test('the notifications page lists messages, and marking them read updates the c
   await expect(page.locator('.it-shell-main > h1')).toHaveText('Notifications');
   await expect(page.getByText('3 unread')).toBeVisible();
 
+  // A link in a notification uses the brand blue, not the browser's default.
+  await expect(page.locator('.it-shell-main a').first()).toHaveCSS('color', 'rgb(25, 120, 184)');
+
   await page.getByRole('button', { name: /^Mark “.*” as read$/ }).first().click();
   await expect(page.getByText('2 unread')).toBeVisible();
   await expect(page.getByRole('button', { name: /2 unread notifications$/ })).toBeVisible();
